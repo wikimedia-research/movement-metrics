@@ -4,5 +4,5 @@ select
 from neilpquinn.new_editors
 where cohort >= "{start}"
 group by cohort
-order by cohort asc
+order by month asc
 limit 1000
