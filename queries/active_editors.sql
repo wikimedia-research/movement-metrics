@@ -1,6 +1,10 @@
 select 
     month, 
     count(*) as active_editors,
+    sum(extract(year_month from reg) not in (
+        extract(year_month from month),
+        extract(year_month from date_sub(month, interval 1 month))
+    )) as existing_active_editors,
     sum(extract(year_month from reg) = extract(year_month from month)) as new_active_editors,
     sum(extract(year_month from reg) = extract(year_month from date_sub(month, interval 1 month))) as second_month_active_editors
 from (
