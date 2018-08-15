@@ -32,7 +32,7 @@ from revision
 left join page on rev_page = page_id
 left join tag_summary on rev_id = ts_rev_id
 left join datasets.content_namespaces cn on database() = wiki and page_namespace = namespace
-where rev_timestamp >= "{start}" and rev_timestamp < "{end}"
+where rev_timestamp between "{start}" and "{end}"
 group by left(rev_timestamp, 6), rev_user
 
 union all
@@ -53,7 +53,7 @@ select
 from archive
 left join tag_summary on ar_rev_id = ts_rev_id
 left join datasets.content_namespaces cn on database() = wiki and ar_namespace = namespace
-where ar_timestamp >= "{start}" and ar_timestamp < "{end}"
+where ar_timestamp between "{start}" and "{end}"
 group by left(ar_timestamp, 6), ar_user
 ) revs
 left join user on local_user_id = user_id
