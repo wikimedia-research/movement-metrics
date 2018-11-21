@@ -10,7 +10,7 @@ from (
         max(bot_flag) as bot_flag
     from staging.editor_month
     where 
-        month >= "{start}"
+        month = "{metrics_month_first_day}"
     group by month, name
 ) global_edits
 where

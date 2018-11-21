@@ -17,7 +17,7 @@ from (
         min(user_registration) as reg
     from staging.editor_month
     where 
-        month >= "{start}" and
+        month = "{metrics_month_first_day}" and
         local_user_id != 0
     group by month, name
 ) global_edits

@@ -16,7 +16,7 @@ from (
     where
         event_entity = "revision" and
         event_type = "create" and
-        event_timestamp >= "{start}" and
-        snapshot = "{snapshot}"
+        event_timestamp between "{metrics_month_start}" and "{metrics_month_end}" and
+        snapshot = "{mediawiki_history_snapshot}"
 ) edits
 group by date_format(event_timestamp, "yyyy-MM-01")
