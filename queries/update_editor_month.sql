@@ -21,16 +21,17 @@ select
   count(*) as `edits`,
   sum(page_namespace = 0 or cn.namespace is not null) as content_edits,
   sum(
-    ts_tags like "%mobile edit%" and
-    (ts_tags like "%mobile web edit%" or ts_tags not like "%mobile app edit%")
+    ctd_name = "mobile edit" and
+    (ctd_name = "mobile web edit" or ctd_name != "mobile app edit")
   ) as mobile_web_edits,
-  sum(ts_tags like "%mobile app edit%") as mobile_app_edits,
-  sum(ts_tags like "%visualeditor%" and ts_tags not like "%visualeditor-wikitext%") as visual_edits,
-  sum(ts_tags like "%visualeditor-wikitext%") as ve_source_edits,
+  sum(ctd_name = "mobile app edit") as mobile_app_edits,
+  sum(ctd_name = "visualeditor" and ctd_name != "visualeditor-wikitext") as visual_edits,
+  sum(ctd_name = "visualeditor-wikitext") as ve_source_edits,
   0 as `deleted`
 from revision
 left join page on rev_page = page_id
-left join tag_summary on rev_id = ts_rev_id
+left join change_tag on rev_id = ct_rev_id
+left join change_tag_def on ct_tag_id = ctd_id
 left join datasets.content_namespaces cn on database() = wiki and page_namespace = namespace
 where rev_timestamp between "{start}" and "{end}"
 group by left(rev_timestamp, 6), rev_user
@@ -41,17 +42,17 @@ select
   left(ar_timestamp, 6) as `rev_month`,
   ar_user as `local_user_id`,
   count(*) as `edits`,
-  sum(ar_namespace = 0 or cn.namespace is not null) as content_edits,
   sum(
-    ts_tags like "%mobile edit%" and
-    (ts_tags like "%mobile web edit%" or ts_tags not like "%mobile app edit%")
+    ctd_name = "mobile edit" and
+    (ctd_name = "mobile web edit" or ctd_name != "mobile app edit")
   ) as mobile_web_edits,
-  sum(ts_tags like "%mobile app edit%") as mobile_app_edits,
-  sum(ts_tags like "%visualeditor%" and ts_tags not like "%visualeditor-wikitext%") as visual_edits,
-  sum(ts_tags like "%visualeditor-wikitext%") as ve_source_edits,
+  sum(ctd_name = "mobile app edit") as mobile_app_edits,
+  sum(ctd_name = "visualeditor" and ctd_name != "visualeditor-wikitext") as visual_edits,
+  sum(ctd_name = "visualeditor-wikitext") as ve_source_edits,
   1 as `deleted`
 from archive
-left join tag_summary on ar_rev_id = ts_rev_id
+left join change_tag on ar_rev_id = ct_rev_id
+left join change_tag_def on ct_tag_id = ctd_id
 left join datasets.content_namespaces cn on database() = wiki and ar_namespace = namespace
 where ar_timestamp between "{start}" and "{end}"
 group by left(ar_timestamp, 6), ar_user
