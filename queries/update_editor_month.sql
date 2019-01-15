@@ -30,8 +30,16 @@ select
   0 as `deleted`
 from revision
 left join page on rev_page = page_id
-left join tag_summary on rev_id = ts_rev_id
-left join datasets.content_namespaces cn on database() = wiki and page_namespace = namespace
+left join (
+    select
+        ct_rev_id as ts_rev_id,
+        group_concat(ctd_name) as ts_tags
+    from change_tag
+    left join change_tag_def
+    on ct_tag_id = ctd_id
+    group by ts_rev_id
+) tag_summary on rev_id = ts_rev_id
+left join staging.content_namespaces cn on database() = wiki and page_namespace = namespace
 where rev_timestamp between "{start}" and "{end}"
 group by left(rev_timestamp, 6), rev_user
 
@@ -51,8 +59,16 @@ select
   sum(ts_tags like "%visualeditor-wikitext%") as ve_source_edits,
   1 as `deleted`
 from archive
-left join tag_summary on ar_rev_id = ts_rev_id
-left join datasets.content_namespaces cn on database() = wiki and ar_namespace = namespace
+left join (
+    select
+        ct_rev_id as ts_rev_id,
+        group_concat(ctd_name) as ts_tags
+    from change_tag
+    left join change_tag_def
+    on ct_tag_id = ctd_id
+    group by ts_rev_id
+) tag_summary on ar_rev_id = ts_rev_id
+left join staging.content_namespaces cn on database() = wiki and ar_namespace = namespace
 where ar_timestamp between "{start}" and "{end}"
 group by left(ar_timestamp, 6), ar_user
 ) revs
