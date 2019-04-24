@@ -10,15 +10,17 @@ from (
         user_name,
         cast(add_months(month, -1) as date) as prev_month,
         sum(content_edits) as content_edits,
-        max(bot) as bot,
+        max(bot_by_group) as bot_by_group,
         cast(trunc(min(user_registration), "MONTH") as date) as registration_month
     from neilpquinn.editor_month
     where
         month = "{metrics_month_first_day}" and
-        local_user_id != 0
+        user_id != 0
     group by month, user_name
 ) global_edits
 where
     content_edits >= 5 and
-    (not bot or user_name in ("Paucabot", "Niabot", "Marbot"))
+    not bot_by_group and
+    user_name not regexp "bot\\b"
 group by month
+                              
