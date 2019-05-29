@@ -1,14 +1,12 @@
 select
     month,
     count(*) as active_editors,
-    sum(cast(registration_month not in (month, prev_month) as int)) as existing_active_editors,
-    sum(cast(registration_month = month as int)) as new_active_editors,
-    sum(cast(registration_month = prev_month as int)) as second_month_active_editors
+    sum(cast(registration_month != month as int)) as returning_active_editors,
+    sum(cast(registration_month = month as int)) as new_active_editors
 from (
     select
         cast(month as date) as month,
         user_name,
-        cast(add_months(month, -1) as date) as prev_month,
         sum(content_edits) as content_edits,
         max(bot_by_group) as bot_by_group,
         cast(trunc(min(user_registration), "MONTH") as date) as registration_month
