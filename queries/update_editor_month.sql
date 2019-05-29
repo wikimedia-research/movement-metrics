@@ -10,11 +10,7 @@ select
     NULL as mobile_app_edits,
     NULL as visual_edits,
     NULL as `2017_wikitext_edits`,
-    (
-        max(event_user_is_bot_by_name) or 
-        max(array_contains(event_user_groups, "bot")) or
-        max(array_contains(event_user_groups_historical, "bot"))
-    ) as bot_by_group,
+    max(size(event_user_is_bot_by) > 0 or size(event_user_is_bot_by_historical) > 0) as bot_by_group,
     min(event_user_creation_timestamp) as user_registration
 from wmf.mediawiki_history mwh
 inner join canonical_data.wikis 

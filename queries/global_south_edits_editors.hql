@@ -3,7 +3,7 @@ with gs_editors as (
         sum(edit_count) as edit_count,
         sum(namespace_zero_edit_count) as namespace_zero_edit_count,
         -- Treat the user as a bot if it matches on any wiki
-        max(is_bot_by_name or array_contains(user_groups, "bot")) as bot
+        max(size(is_bot_by) > 0 or size(is_bot_by_historical) > 0) as bot
     from wmf.geoeditors_daily gd
     left join canonical_data.countries cdc
     on gd.country_code = cdc.iso_code

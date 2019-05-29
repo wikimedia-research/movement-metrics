@@ -2,7 +2,7 @@ with mh_editors as (
     select
         count(*) as edits,
         sum(cast(page_namespace_is_content_historical as int)) as content_edits,
-        max(event_user_is_bot_by_name or array_contains(event_user_groups, "bot")) as bot
+        max(size(event_user_is_bot_by) > 0 or size(event_user_is_bot_by_historical) > 0) as bot
     from wmf.mediawiki_history mh
     inner join canonical_data.mobile_heavy_wikis mhw
     on mh.wiki_db = mhw.database_code
