@@ -1,8 +1,8 @@
 select
     month,
     count(*) as active_editors,
-    sum(cast(registration_month != month as int)) as returning_active_editors,
-    sum(cast(registration_month = month as int)) as new_active_editors
+    sum(cast(registration_month = month as int)) as new_active_editors,
+    count(*) - sum(cast(registration_month = month as int)) as returning_active_editors
 from (
     select
         cast(month as date) as month,
