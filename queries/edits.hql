@@ -3,7 +3,7 @@ select
     count(*) as total_edits,
     sum(cast(upload as int)) as uploads,
     sum(cast(mobile_edit as int)) as mobile_edits,
-    sum(cast(data_edit as int)) as data_edits,
+    sum(cast(data_edit as int)) as wikidata_edits,
     sum(cast(nonbot_edit and not data_edit and not upload and not mobile_edit as int)) as other_nonbot_edits,
     sum(cast(reverted as int)) / sum(cast(nonbot_edit as int)) as revert_rate
 from (
