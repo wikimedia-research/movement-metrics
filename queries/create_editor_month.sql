@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS neilpquinn.editor_month (
   `mobile_app_edits` BIGINT,
   `visual_edits` BIGINT,
   `2017_wikitext_edits` BIGINT,
-  `bot_by_group` BOOLEAN,
+  `bot_by_group` BOOLEAN, -- This should just be `bot` since this field is based on both group and name
   `user_registration` TIMESTAMP
 ) 
 STORED AS PARQUET
