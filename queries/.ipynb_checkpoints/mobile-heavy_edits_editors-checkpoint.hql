@@ -1,5 +1,3 @@
-
-
 with mh_editors as (
     select
         count(*) as edits,
