@@ -13,10 +13,10 @@ with gs_new_editors as (
     where
         ne.cohort = "{retention_cohort}" and
         gd.month = "{retention_cohort}" and
-        economic_region = "Global South"
+        economic_region = "Global North"
     group by user_name, wiki, 1st_month_edits, 2nd_month_edits
 )
 select
     "{metrics_month_first_day}" as month,
-    sum(cast(2nd_month_edits >= 1 as int)) / count(*) as global_south_new_editor_retention 
+    sum(cast(2nd_month_edits >= 1 as int)) / count(*) as global_north_new_editor_retention 
 from gs_new_editors
