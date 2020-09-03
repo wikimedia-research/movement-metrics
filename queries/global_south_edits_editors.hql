@@ -8,12 +8,6 @@ with gs_editors as (
     from wmf.editors_daily gd
     left join canonical_data.countries cdc
     on gd.country_code = cdc.iso_code
-    --left join wmf.mediawiki_user_history muh
-    --on
-    --    gd.wiki_db = muh.wiki_db and
-    --    gd.user_fingerprint_or_id = muh.user_id and
-    --    muh.snapshot = "{mediawiki_history_snapshot}" and
-    --    muh.end_timestamp is null
     where
         month = "{metrics_month}" and
         economic_region = "Global South" and
