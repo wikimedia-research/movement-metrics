@@ -25,5 +25,5 @@ select
     "{metrics_month_first_day}" as month,
     sum(edit_count) as global_north_edits,
     sum(if(not bot, edit_count, 0)) as global_north_nonbot_edits,
-    sum(cast(namespace_zero_edit_count >= 5 as int)) as global_north_active_editors
+    sum(cast(namespace_zero_edit_count >= 5 and not bot as int)) as global_north_active_editors
 from gs_editors

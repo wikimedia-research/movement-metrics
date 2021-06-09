@@ -17,7 +17,7 @@ with gs_editors as (
 )
 select
     "{metrics_month_first_day}" as month,
-    sum(edit_count) as Global_South_edits,
-    sum(if(not bot, edit_count, 0)) as Global_South_nonbot_edits,
-    sum(cast(namespace_zero_edit_count >= 5 as int)) as Global_South_active_editors
+    sum(edit_count) as global_south_edits,
+    sum(if(not bot, edit_count, 0)) as global_south_nonbot_edits,
+    sum(cast(namespace_zero_edit_count >= 5 and not bot as int)) as global_south_active_editors
 from gs_editors
