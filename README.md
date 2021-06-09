@@ -5,7 +5,7 @@ This repo contains all the code needed to calculate the monthly Wikimedia moveme
 
 For more details about our monthly reporting process, see [mw:Product Analytics/Movement metrics](https://www.mediawiki.org/wiki/Product_Analytics/Movement_metrics).
 
-For a full list of metric definitions, see [mw:Wikimedia Product/Data dictionary](https://www.mediawiki.org/wiki/Wikimedia_Product/Data_dictionary).
+For a full list of metric definitions, see [mw:Wikimedia Product/Data glossary](https://www.mediawiki.org/wiki/Wikimedia_Product/Data_glossary).
 
 # Usage
 1. Clone this onto one of the [SWAP](https://wikitech.wikimedia.org/wiki/SWAP) hosts.
