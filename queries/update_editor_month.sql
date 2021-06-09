@@ -1,4 +1,4 @@
-insert into neilpquinn.editor_month
+INSERT into neilpquinn.editor_month
 select
     trunc(event_timestamp, "MONTH") as month,
     wiki_db as wiki,
