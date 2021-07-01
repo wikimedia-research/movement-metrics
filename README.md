@@ -17,7 +17,7 @@ This repo contains all the code needed to calculate the monthly Wikimedia moveme
     * [02a-calculation.ipynb](02a-calculation.ipynb), which actually calculates the metrics and inserts them into metrics.tsv.
     * [02b-diversity-calculation.ipynb](02b-diversity-calculation.ipynb), which calculates the diversity metrics and inserts them into diversity_metrics.tsv.
 4. Run the notebook [03-report.ipynb](03-report.ipynb), which does a few simple transformations on the metrics and produces the table of values needed for the final report, as well as a graph of each metric.
-5. Run the notebook [04-Visualiaztion.ipynb](03-Visualzation.ipynb), which provides YoY charts for metrics in the metrics deck.
+5. Run the notebook [04-Visualiaztion.ipynb](04-Visualzation.ipynb) using R, which provides YoY charts for metrics in the metrics deck.
 6. Do any other analysis needed to understand major trends. 
 
 ## Data Definitions
