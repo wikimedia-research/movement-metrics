@@ -2,7 +2,7 @@ with gs_new_editors as (
     select 
         1st_month_edits,
         2nd_month_edits
-    from cchen.new_editors ne
+    from wmf_product.new_editors ne
     left join wmf.editors_daily gd
     on
         ne.user_id = gd.user_fingerprint_or_id and
