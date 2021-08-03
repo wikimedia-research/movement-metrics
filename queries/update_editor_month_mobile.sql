@@ -1,4 +1,4 @@
-INSERT INTO cchen.editor_month
+INSERT INTO wmf_product.editor_month
 select
     trunc(event_timestamp, "MONTH") as month,
     wiki_db as wiki,
