@@ -1,4 +1,4 @@
-INSERT OVERWRITE TABLE cchen.gs_pageviews_corrected
+INSERT OVERWRITE TABLE wmf_product.gs_pageviews_corrected
 PARTITION (year, month, day)
 
 SELECT dayy,
