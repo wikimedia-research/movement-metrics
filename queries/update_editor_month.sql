@@ -1,3 +1,4 @@
+--Note: this file uses a deprecated table: neilpquinn.editor_month
 INSERT into neilpquinn.editor_month
 select
     trunc(event_timestamp, "MONTH") as month,
