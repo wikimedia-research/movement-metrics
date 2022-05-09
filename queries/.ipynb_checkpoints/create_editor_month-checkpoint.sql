@@ -1,3 +1,4 @@
+--Note: this file uses a deprecated table: neilpquinn.editor_month
 CREATE TABLE IF NOT EXISTS neilpquinn.editor_month (
   `month` TIMESTAMP, -- Hive 1.1 does not support the DATE type
   `wiki` STRING,

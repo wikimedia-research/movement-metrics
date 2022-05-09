@@ -10,7 +10,7 @@ from (
         sum(content_edits) as content_edits,
         max(bot_by_group) as bot_by_group,
         cast(trunc(min(user_registration), "MONTH") as date) as registration_month
-    from neilpquinn.editor_month
+    from wmf_product.editor_month
     where
         month = "{metrics_month_first_day}" and
         user_id != 0

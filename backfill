@@ -1,0 +1,3 @@
+#!/bin/bash
+source /usr/lib/anaconda-wmf/bin/activate
+python backfill.py
