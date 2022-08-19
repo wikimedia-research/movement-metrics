@@ -19,7 +19,7 @@ with gs_editors as (
         economic_region = "Global North" and
         not user_is_anonymous and 
         gd.action_type = 0
-    group by user_fingerprint_or_id
+    group by user_fingerprint_or_name
 )
 select
     "{metrics_month_first_day}" as month,

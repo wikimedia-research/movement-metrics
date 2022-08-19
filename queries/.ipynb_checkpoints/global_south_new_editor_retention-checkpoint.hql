@@ -5,7 +5,7 @@ with gs_new_editors as (
     from wmf_product.new_editors ne
     left join wmf.editors_daily gd
     on
-        ne.user_id = gd.user_fingerprint_or_id and
+        ne.user_id = gd.user_fingerprint_or_name and
         ne.wiki = gd.wiki_db and
         ne.cohort = gd.month
     left join canonical_data.countries cdc
