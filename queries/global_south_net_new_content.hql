@@ -4,7 +4,7 @@ select
 from wmf.mediawiki_history ne
 left join wmf.editors_daily gd
     on
-        ne.event_user_id = gd.user_fingerprint_or_id and
+        ne.event_user_text = gd.user_fingerprint_or_name and
         ne.wiki_db = gd.wiki_db and
         gd.month = '{metrics_month}'
     left join canonical_data.countries cdc
