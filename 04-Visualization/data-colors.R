@@ -1,0 +1,23 @@
+wmf_colors <- list(
+    "Base100" = "#ffffff",
+    "Base90" = "#f8f9fa",
+    "Base80" = "#eaecf0",
+    "Base70" = "#c8ccd1",
+    "Base50" = "#a2a9b1",
+    "Base30" = "#72777d",
+    "Base20" = "#54595d",
+    "Base10" = "#222222",
+    "Base0" = "#000000",
+    "Accent50" = "#3366cc",
+    "Accent30" = "#2a4b8d",
+    "Accent90" = "#eaf3ff",
+    "Red90" = "#fee7e6",
+    "Red50" = "#dd3333",
+    "Red30" = "#b32424",
+    "Green90" = "#d5fdf4",
+    "Green50" = "#00af89",
+    "Green30" = "#14866d",
+    "Yellow90" = "#fef6e7",
+    "Yellow50" = "#ffcc33",
+    "Yellow30" = "#ac6600"
+)
