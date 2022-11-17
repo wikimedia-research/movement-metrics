@@ -19,3 +19,11 @@ annotations <- metrics |>
     month = ymd(sprintf("%i-%02.0f-01", year, month(current_month))),
     prev_month = month - months(1)
   )
+
+# Adding new annotations per suggestion from Margeigh to highlight 2022 vs 2019
+hightlight_annotations <- metrics %>%
+  mutate(
+    hightlight_month = (month == current_month | month == current_month - years(3))
+  ) %>%
+  filter(hightlight_month) %>%
+  select(month,interactions_corrected)
