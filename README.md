@@ -14,7 +14,7 @@ This repo contains all the code needed to calculate the monthly Wikimedia moveme
     * [02a-calculation.ipynb](02a-calculation.ipynb), which actually calculates the metrics and inserts them into metrics.tsv.
     * [02b-diversity-calculation.ipynb](02b-diversity-calculation.ipynb), which calculates the diversity metrics and inserts them into diversity_metrics.tsv.
 3. Run the notebook [03-report.ipynb](03-report.ipynb), which does a few simple transformations on the metrics and produces the table of values needed for the final report, as well as a graph of each metric.
-4. Run the notebook [04-Visualiaztion.ipynb](04-Visualzation.ipynb) using R kernel, which provides YoY charts for metrics in the metrics deck.
+4. Run the scripts in [04-Visualization](04-Visualization) using R kernel or Rstudio, which provides trend charts for metrics in the Key Product metrics deck.
 5. Note: We have automated the two notebooks numbered 01 which runs in the first week of every month 
     * [01a-update_pageviews_table.ipynb](https://github.com/wikimedia-research/Readers-movement-metrics/blob/main/01a-update_pageviews_table.ipynb): creates or updates an intermediate pageviews_corrected table in the wmf_product Hive database.
     * [01b-update_diversity_table.ipynb](https://github.com/wikimedia-research/Readers-movement-metrics/blob/main/01b-update_diversity_table.ipynb): creates or updates an intermediate global_markets_pageviews tables in the wmf_product Hive database.
