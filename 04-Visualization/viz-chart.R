@@ -5,10 +5,13 @@ p <- metrics |>
   filter(period != "during dataloss") |>
   ggplot() +
   geom_point(
-    aes(x = month, y = to),
-    data = annotations,
+    aes(x = month, y = interactions_corrected),
+    data = hightlight_annotations,
+    # modified per suggestion from Margeigh to highlight 2022 vs 2019
     shape = 21, stroke = 1, size = 20,
-    color = wmf_colors$Yellow50, fill = wmf_colors$Yellow90,
+    color = wmf_colors$Yellow50, 
+    #fill = wmf_colors$Yellow90,
+    # removing per suggestion from Margeigh
     alpha = 0.5
   ) +
   ## Undercounted due to data loss:
@@ -57,5 +60,3 @@ p <- metrics |>
   ) 
   
 p + ggtitle("Content Interactions")
-
-
