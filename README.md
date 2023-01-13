@@ -6,16 +6,19 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 ## Content Interactions
 
-https://github.com/wikimedia-research/key_product_metrics/blob/main/content_interactions/charts/ContentInteractions_3_light.png
+![Content Interactions](content_interactions/charts/ContentInteractions_3_light.png)
 
 ## Active Editors
 
-https://github.com/wikimedia-research/key_product_metrics/blob/main/active_editors/charts/ActiveEditors_3.png
+
+![Active Editors](active_editors/charts/ActiveEditors_3.png)
 
 ## New and Returning Editors
 
-https://github.com/wikimedia-research/key_product_metrics/blob/main/new_returning/charts/NewReturning_2.png
+
+![New and Returning Editors](new_returning/charts/NewReturning_2.png)
 
 ## Net New Content
 
-https://github.com/wikimedia-research/key_product_metrics/blob/main/net_new_content/charts/NetNew_2_yoy.png
+
+![Net New Content](net_new_content/charts/NetNew_2_yoy.png)
