@@ -29,7 +29,7 @@ df = df[df["month"].isin(pd.date_range("2018-05-01", "2022-12-01"))]
 
 #---BREAK DATA INTO SUBSETS--
 #create subsets of data for easier plotting
-month_highlight_df = df[df['month'].dt.month == 12]
+monthly_df = df[df['month'].dt.month == 12]
 #subset to highlight the last two months
 yoy_highlight = pd.concat([df.iloc[-13,:],df.iloc[-1,:]],axis=1).T
 #subset to highlight specific months (manually entered)
@@ -71,15 +71,15 @@ plt.plot(df.month, df.net_new_Wikipedia_articles,
 	zorder=4)
 
 #draw circle on octobers by plotting scatter
-plt.scatter(month_highlight_df.month, month_highlight_df.net_new_Commons_content_pages,
+plt.scatter(monthly_df.month, monthly_df.net_new_Commons_content_pages,
 	label='_nolegend_',
 	color=wmf_colors['pink'],
 	zorder=5)
-plt.scatter(month_highlight_df.month, month_highlight_df.net_new_Wikidata_entities,
+plt.scatter(monthly_df.month, monthly_df.net_new_Wikidata_entities,
 	label='_nolegend_',
 	color=wmf_colors['brightgreen'],
 	zorder=5)
-plt.scatter(month_highlight_df.month, month_highlight_df.net_new_Wikipedia_articles,
+plt.scatter(monthly_df.month, monthly_df.net_new_Wikipedia_articles,
 	label='_nolegend_',
 	color=wmf_colors['purple'],
 	zorder=5)
@@ -105,11 +105,11 @@ plt.title('Net New Content',font='Montserrat',weight='bold',fontsize=24,loc='lef
 
 #add monthly x-axis labels
 date_labels = []
-for dl in month_highlight_df['month']:
+for dl in monthly_df['month']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b %Y'))
 #add major ticks
 #plt.rcParams["xtick.major.size"] = 20
-plt.xticks(ticks=month_highlight_df['month'],labels=date_labels,fontsize=14,minor=False)
+plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,minor=False)
 #add minor ticks
 #plt.rcParams["xtick.minor.size"] = 2
 #plt.xticks(ticks=df['month'],minor=True)
@@ -124,7 +124,6 @@ current_values = plt.gca().get_yticks()
 def y_label_formatter(value):
 	formatted_value = '{:1.1f}M'.format(value*1e-6)
 	formatted_value = formatted_value.replace('.0','')
-	print(formatted_value)
 	return formatted_value
 plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.xticks(fontname = 'Montserrat')
@@ -165,7 +164,6 @@ def legend_annotate(data_label, legend_label, label_color):
 legend_annotate('net_new_Commons_content_pages', 'Commons',wmf_colors['pink'])
 legend_annotate('net_new_Wikidata_entities', 'Wikidata',wmf_colors['brightgreen'])
 legend_annotate('net_new_Wikipedia_articles', 'Wikipedia',wmf_colors['purple'])
-
 
 #make YoY annotation
 def yoy_annotation(data_label,label_color):
