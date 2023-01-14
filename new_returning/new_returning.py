@@ -19,10 +19,10 @@ df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
 df['month'] = pd.to_datetime(df['month'])
 
 #---BREAK DATA INTO SUBSETS--
-#display only data since 2019
-truncated_df = df[df["month"].isin(pd.date_range("2019-01-01", "2022-12-01"))]
-#display octobers only
-october_df = truncated_df[truncated_df['month'].dt.month == 10]
+#only data since 2019
+df = df[df["month"].isin(pd.date_range("2019-01-01", "2022-12-01"))]
+#month of interest only
+monthly_df = df[df['month'].dt.month == 12]
 #highlight the last two months
 yoy_highlight = pd.concat([df.iloc[-13,:],df.iloc[-1,:]],axis=1).T
 #highlighted_months = df[df['month'].isin(['2021-10-01','2022-10-01'])]
@@ -39,29 +39,27 @@ wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','blue'
 #print list of font paths (for troubleshooting) — clear font cache in ~/.matplotlib when adding new font
 #matplotlib.font_manager.findSystemFonts(fontpaths=None, fontext='ttf')
 
-#put in fontsize formatting
-
 #add grid lines
 plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
 #linestyle = '--'
 
 #---PLOT---
 #plot active editor data
-plt.plot(truncated_df.month, truncated_df.returning_active_editors,
+plt.plot(df.month, df.returning_active_editors,
 	label='Returning Active Editors',
 	color=wmf_colors['blue'],
 	zorder=3)
-plt.plot(truncated_df.month, truncated_df.new_active_editors,
+plt.plot(df.month, df.new_active_editors,
 	label='New Active Editors',
 	color=wmf_colors['green50'],
 	zorder=3)
 
-#dots on Octobers
-plt.scatter(october_df.month, october_df.returning_active_editors,
+#dots on month of interest
+plt.scatter(monthly_df.month, monthly_df.returning_active_editors,
 	label='_nolegend_',
 	color=wmf_colors['blue'],
 	zorder=4)
-plt.scatter(october_df.month, october_df.new_active_editors,
+plt.scatter(monthly_df.month, monthly_df.new_active_editors,
 	label='_nolegend_',
 	color=wmf_colors['green50'],
 	zorder=4)
@@ -102,7 +100,7 @@ plt.legend(frameon=False,
 '''
 
 #expand bottom margin
-#plt.subplots_adjust(bottom=0.2)
+plt.subplots_adjust(bottom=0.2, left=0.1, right=0.75)
 
 #remove bounding box
 for pos in ['right', 'top', 'bottom', 'left']:
@@ -114,17 +112,38 @@ plt.gca().set_yticklabels(['{:1.0f}K'.format(x*1e-3) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 
-#add october x-axis labels
+#add monthly x-axis labels
 date_labels = []
-for dl in october_df['month']:
+for dl in monthly_df['month']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b %Y'))
-plt.xticks(ticks=october_df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
+plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
 
 #---ADD ANNOTATIONS---
+#add combined annoation
+def annotate(data_label, legend_label, label_color):
+	yoy_change_percent = ((yoy_highlight[data_label].iat[-1] - yoy_highlight[data_label].iat[0]) /  yoy_highlight[data_label].iat[0]) * 100
+	if yoy_change_percent > 0:
+		yoy_annotation = f" +{yoy_change_percent:.1f}% YoY"
+	else:
+		yoy_annotation = f" {yoy_change_percent:.1f}% YoY"
+	combined_label = legend_label + yoy_annotation
+	plt.annotate(combined_label,
+		xy = (df['month'].iat[-1],df[data_label].iat[-1]),
+		xytext = (20,-5),
+		xycoords = 'data',
+		textcoords = 'offset points',
+		color=label_color,
+		fontsize=14,
+		weight='bold',
+		family='Montserrat')
+annotate('new_active_editors', 'New',wmf_colors['green50'])
+annotate('returning_active_editors', 'Returning',wmf_colors['blue'])
+
+'''
 #add legend as data labels
 def legend_annotate(data_label, legend_label, label_color):
 	plt.annotate(legend_label,
-		xy = (truncated_df['month'].iat[-1],truncated_df[data_label].iat[-1]),
+		xy = (df['month'].iat[-1],df[data_label].iat[-1]),
 		xytext = (20,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
@@ -136,7 +155,7 @@ legend_annotate('new_active_editors', 'New',wmf_colors['green50'])
 legend_annotate('returning_active_editors', 'Returning',wmf_colors['blue'])
 
 #make YoY annotation
-def yoy_annotation(data_label):
+def yoy_annotation(data_label,label_color):
 	yoy_change_percent = ((yoy_highlight[data_label].iat[-1] - yoy_highlight[data_label].iat[0]) /  yoy_highlight[data_label].iat[0]) * 100
 	if yoy_change_percent > 0:
 		yoy_annotation = f"+{yoy_change_percent:.1f}% YoY"
@@ -144,19 +163,20 @@ def yoy_annotation(data_label):
 		yoy_annotation = f"{yoy_change_percent:.1f}% YoY"
 	plt.annotate(yoy_annotation,
 		xy = (yoy_highlight['month'].iat[-1],yoy_highlight[data_label].iat[-1]),
-		xytext = (-15,20),
+		xytext = (100,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
-		color='black',
+		color=label_color,
 		family='Montserrat',
 		fontsize=14,
 		weight='bold',
-		bbox=dict(pad=10, facecolor="white", edgecolor="none"))
-yoy_annotation('new_active_editors')
-yoy_annotation('returning_active_editors')
+		bbox=dict(pad=0, facecolor="white", edgecolor="none"))
+yoy_annotation('new_active_editors',wmf_colors['green50'])
+yoy_annotation('returning_active_editors',wmf_colors['blue'])
+'''
 #data notes
 plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
-plt.savefig('charts/NewReturning_1.png', dpi=300)
+plt.savefig('charts/Dec_3_sidelabels.png', dpi=300)
 plt.show()
