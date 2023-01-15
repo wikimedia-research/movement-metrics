@@ -5,7 +5,11 @@ import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import numpy as np
 
-#---READ IN DATA--
+#---PROMPT FOR INPUT---
+outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
+yoy_note = input('YoY annotation note (default is blank):\n') or " "
+
+#---READ IN DATA---
 df = pd.read_csv('../data/reader_metrics.tsv', sep='\t')
 corrected_df = pd.read_csv('../data/corrected_metrics.csv')
 
@@ -151,31 +155,34 @@ for pos in ['right', 'top', 'bottom', 'left']:
 #---ADD ANNOTATIONS---
 #YoY Change Annotation
 #calculate YoY change
-yoy_change_percent = ((yoy_highlight['interactions_corrected'].iat[-1] - yoy_highlight['interactions_corrected'].iat[0]) /  yoy_highlight['interactions_corrected'].iat[0]) * 100
-#make YoY annotation (add text her if relevant)
-if yoy_change_percent > 0:
-	yoy_annotation = f"+{yoy_change_percent:.1f}% YoY"
-else:
-	yoy_annotation = f"{yoy_change_percent:.1f}% YoY" 
-#annotate
-plt.annotate(yoy_annotation,
-	xy = (yoy_highlight['month'].iat[-1],yoy_highlight['interactions_corrected'].iat[-1]),
-	xytext = (20,-5),
-	xycoords = 'data',
-	textcoords = 'offset points',
-	color='black',
-	family='Montserrat',
-	fontsize=12,
-	weight='bold',
-	wrap=True,
-	bbox=dict(pad=10, facecolor="white", edgecolor="none"))
+def annotate():
+	yoy_change_percent = ((yoy_highlight['interactions_corrected'].iat[-1] - yoy_highlight['interactions_corrected'].iat[0]) /  yoy_highlight['interactions_corrected'].iat[0]) * 100
+	#make YoY annotation (add text her if relevant)
+	if yoy_change_percent > 0:
+		yoy_annotation = f"+{yoy_change_percent:.1f}% YoY" + " " + yoy_note
+	else:
+		yoy_annotation = f"{yoy_change_percent:.1f}% YoY" + " " + yoy_note
+	#annotate
+	plt.annotate(yoy_annotation,
+		xy = (yoy_highlight['month'].iat[-1],yoy_highlight['interactions_corrected'].iat[-1]),
+		xytext = (20,-5),
+		xycoords = 'data',
+		textcoords = 'offset points',
+		color='black',
+		family='Montserrat',
+		fontsize=12,
+		weight='bold',
+		wrap=True,
+		bbox=dict(pad=10, facecolor="white", edgecolor="none"))
+annotate()
 
 #data notes
 plt.figtext(0.1, 0.02, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Reader-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 #save as image
-plt.savefig('charts/Dec_1.png', dpi=300)
+save_file_name = "charts/" + outfile_name
+plt.savefig(save_file_name, dpi=300)
 #show in window
 plt.show()
 
