@@ -119,15 +119,14 @@ for dl in monthly_df['month']:
 plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
 
 #---ADD ANNOTATIONS---
-#add combined annoation
-def annotate(data_label, legend_label, label_color):
+#add combined annotation
+def annotate(data_label, legend_label, label_color, x_distance):
 	yoy_change_percent = ((yoy_highlight[data_label].iat[-1] - yoy_highlight[data_label].iat[0]) /  yoy_highlight[data_label].iat[0]) * 100
 	if yoy_change_percent > 0:
 		yoy_annotation = f" +{yoy_change_percent:.1f}% YoY"
 	else:
 		yoy_annotation = f" {yoy_change_percent:.1f}% YoY"
-	combined_label = legend_label + yoy_annotation
-	plt.annotate(combined_label,
+	plt.annotate(legend_label,
 		xy = (df['month'].iat[-1],df[data_label].iat[-1]),
 		xytext = (20,-5),
 		xycoords = 'data',
@@ -136,8 +135,17 @@ def annotate(data_label, legend_label, label_color):
 		fontsize=14,
 		weight='bold',
 		family='Montserrat')
-annotate('new_active_editors', 'New',wmf_colors['green50'])
-annotate('returning_active_editors', 'Returning',wmf_colors['blue'])
+	plt.annotate(yoy_annotation,
+		xy = (df['month'].iat[-1],df[data_label].iat[-1]),
+		xytext = (x_distance,-5),
+		xycoords = 'data',
+		textcoords = 'offset points',
+		color='black',
+		fontsize=14,
+		weight='bold',
+		family='Montserrat')
+annotate('new_active_editors', 'New',wmf_colors['green50'], 55)
+annotate('returning_active_editors', 'Returning',wmf_colors['blue'], 95)
 
 '''
 #add legend as data labels
@@ -178,5 +186,5 @@ yoy_annotation('returning_active_editors',wmf_colors['blue'])
 plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
-plt.savefig('charts/Dec_3_sidelabels.png', dpi=300)
+plt.savefig('charts/Dec_3_sidelabelsblack.png', dpi=300)
 plt.show()
