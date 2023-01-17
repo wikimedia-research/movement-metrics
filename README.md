@@ -11,12 +11,13 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 ## Active Editors
 
 
-![Active Editors](active_editors/charts/ActiveEditors_3.png)
+![Active Editors](active_editors/charts/Dec_1.png)
+
 
 ## New and Returning Editors
 
 
-![New and Returning Editors](new_returning/charts/NewReturning_2.png)
+![New and Returning Editors](new_returning/charts/Dec_3_sidelabelsblack.png)
 
 ## Net New Content
 

@@ -6,6 +6,9 @@ import matplotlib.font_manager
 import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 
+#---PROMPT FOR INPUT---
+outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
+
 #---READ IN DATA--
 df = pd.read_csv('../data/metrics.tsv', sep='\t')
 
@@ -191,7 +194,8 @@ plt.figtext(0.1, 0.1, "Graph Notes: Created by Hua Xi 12/12/22 using data from h
 
 #---SHOW GRAPH---
 #save as image
-plt.savefig('charts/NetNew_2_yoy.png', dpi=300)
+save_file_name = "charts/" + outfile_name
+plt.savefig(save_file_name, dpi=300)
 #show in window
 plt.show()
 
