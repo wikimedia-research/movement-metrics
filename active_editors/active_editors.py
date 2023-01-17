@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import numpy as np
 
+#---PROMPT FOR INPUT---
+outfile_name = input('Outfile_name:\n') or "Active_Editors_Chart.png"
+yoy_note = input('YoY annotation note (default is blank):\n') or " "
+
 #---READ IN DATA--
 df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
 
@@ -121,9 +125,9 @@ plt.xticks(ticks=df['month'],labels=date_labels,fontsize=14,fontname = 'Montserr
 yoy_change_percent = ((yoy_highlight['active_editors'].iat[-1] - yoy_highlight['active_editors'].iat[0]) /  yoy_highlight['active_editors'].iat[0]) * 100
 #make YoY annotation
 if yoy_change_percent > 0:
-	yoy_annotation = f"+{yoy_change_percent:.1f}% YoY"
+	yoy_annotation = f"+{yoy_change_percent:.1f}% YoY" + " " + yoy_note
 else:
-	yoy_annotation = f"{yoy_change_percent:.1f}% YoY"
+	yoy_annotation = f"{yoy_change_percent:.1f}% YoY" + " " + yoy_note
 plt.annotate(yoy_annotation,
 	xy = (yoy_highlight['month'].iat[-1],yoy_highlight['active_editors'].iat[-1]),
 	xytext = (20,-5),
@@ -133,11 +137,13 @@ plt.annotate(yoy_annotation,
 	family='Montserrat',
 	fontsize=14,
 	weight='bold',
+	wrap=True,
 	bbox=dict(pad=10, facecolor="white", edgecolor="none"))
 
 #data notes
 plt.figtext(0.1, 0.1, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
-plt.savefig('charts/Dec_1.png', dpi=300)
+save_file_name = "charts/" + outfile_name
+plt.savefig(save_file_name, dpi=300)
 plt.show()

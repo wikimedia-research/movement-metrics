@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import numpy as np
 
+#---PROMPT FOR INPUT---
+outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
+yoy_note = input('YoY annotation note (default is blank):\n') or " "
+
 #---READ IN DATA--
 df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
 
@@ -123,9 +127,9 @@ plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,fontname = '
 def annotate(data_label, legend_label, label_color, x_distance):
 	yoy_change_percent = ((yoy_highlight[data_label].iat[-1] - yoy_highlight[data_label].iat[0]) /  yoy_highlight[data_label].iat[0]) * 100
 	if yoy_change_percent > 0:
-		yoy_annotation = f" +{yoy_change_percent:.1f}% YoY"
+		yoy_annotation = f" +{yoy_change_percent:.1f}% YoY" + " " + yoy_note
 	else:
-		yoy_annotation = f" {yoy_change_percent:.1f}% YoY"
+		yoy_annotation = f" {yoy_change_percent:.1f}% YoY" + " " + yoy_note
 	plt.annotate(legend_label,
 		xy = (df['month'].iat[-1],df[data_label].iat[-1]),
 		xytext = (20,-5),
@@ -143,9 +147,10 @@ def annotate(data_label, legend_label, label_color, x_distance):
 		color='black',
 		fontsize=14,
 		weight='bold',
+		wrap=True,
 		family='Montserrat')
-annotate('new_active_editors', 'New',wmf_colors['green50'], 55)
-annotate('returning_active_editors', 'Returning',wmf_colors['blue'], 95)
+annotate('new_active_editors', 'New',wmf_colors['green50'], 60)
+annotate('returning_active_editors', 'Returning',wmf_colors['blue'], 100)
 
 '''
 #add legend as data labels
@@ -186,5 +191,6 @@ yoy_annotation('returning_active_editors',wmf_colors['blue'])
 plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
-plt.savefig('charts/Dec_3_sidelabelsblack.png', dpi=300)
+save_file_name = "charts/" + outfile_name
+plt.savefig(save_file_name, dpi=300)
 plt.show()
