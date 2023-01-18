@@ -5,7 +5,7 @@ import matplotlib.font_manager
 import numpy as np
 
 #---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
+outfile_name = input('Outfile_name:\n') or "New_Returning_Chart.png"
 yoy_note = input('YoY annotation note (default is blank):\n') or " "
 
 #---READ IN DATA--
