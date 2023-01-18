@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 
 #---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
+outfile_name = input('Outfile_name:\n') or "Net_New_Chart.png"
 
 #---READ IN DATA--
 df = pd.read_csv('../data/metrics.tsv', sep='\t')
