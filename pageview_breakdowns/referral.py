@@ -74,7 +74,7 @@ none_dataloss.sort_values(by='timestamp')
 none_dataloss['x_order'] = range(0, len(none_dataloss))
 
 #---ADJUST PLOT SIZE---
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(12, 7))
 
 #---PREPARE TO PLOT
 #create a dictionary for colors
@@ -145,7 +145,7 @@ plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pr
 plt.ylabel("Pageviews",font='Montserrat', fontsize=18,labelpad=10)
 
 #expand bottom margin
-plt.subplots_adjust(bottom=0.25, left=0.1, right=0.85)
+plt.subplots_adjust(bottom=0.275, left=0.1, right=0.85)
 
 #remove bounding box
 for pos in ['right', 'top', 'bottom', 'left']:
@@ -175,7 +175,7 @@ plt.legend(frameon=False,
 #add combined annotation
 def annotate(data_label, legend_label, label_color):
 	plt.annotate(legend_label,
-		xy = (df_21['x_order'].iat[-1],df_21[data_label].iat[-1]),
+		xy = (df_22['x_order'].iat[-1],df_22[data_label].iat[-1]),
 		xytext = (20,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
@@ -184,9 +184,11 @@ def annotate(data_label, legend_label, label_color):
 		weight='bold',
 		wrap = 'True',
 		family='Montserrat')
-annotate('external','External',wmf_colors['purple'])
-annotate('internal','Internal Web',wmf_colors['green'])
+annotate('external','External (Search Engine)',wmf_colors['purple'])
+annotate('internal','Internal',wmf_colors['green'])
 annotate('none','None',wmf_colors['orange'])
+#data losee note
+plt.figtext(0.5, 0.1, "Data between July 2021 and January 2022 corrected for data loss.", fontsize=8, family='Montserrat',color= 'black',horizontalalignment='center')
 #data notes
 plt.figtext(0.1, 0.05, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://docs.google.com/spreadsheets/d/1Aw5kjj47cEi-PSX0eApCUp3Ww9_XNyARxcdoL9QnHp4", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 

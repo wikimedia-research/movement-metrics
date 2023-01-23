@@ -72,7 +72,7 @@ plt.scatter(mom_highlight.timestamp, mom_highlight.mobile_web,
 
 #---FORMATTING---
 #add title and labels
-plt.title('Monthly Pageviews Source',font='Montserrat',weight='bold',fontsize=24,loc='left')
+plt.title('Monthly Automated Pageviews (Source)',font='Montserrat',weight='bold',fontsize=24,loc='left')
 plt.xlabel("2022",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
 plt.ylabel("Pageviews",font='Montserrat', fontsize=18,labelpad=10)
 
@@ -84,15 +84,24 @@ for pos in ['right', 'top', 'bottom', 'left']:
 	plt.gca().spines[pos].set_visible(False)
 
 #format y-axis labels
+def y_label_formatter(value):
+	if value >= 1e9:
+		formatted_value = '{:1.1f}B'.format(value*1e-9)
+		formatted_value = formatted_value.replace('.0','')
+	else:
+		formatted_value = '{:1.0f}M'.format(value*1e-6)
+	return formatted_value
+plt.yticks(range(200000000,2200000000,200000000))
 current_values = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.1f}B'.format(x*1e-9) for x in current_values])
+#plt.gca().set_yticklabels(['{:1.0f}M'.format(x*1e-6) for x in current_values])
+plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 #add monthly x-axis labels
 date_labels = []
 for dl in df['timestamp']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b'))
-plt.xticks(ticks=df_21['timestamp'],labels=date_labels,fontsize=10,fontname = 'Montserrat')
+plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=10,fontname = 'Montserrat')
 
 #---ADD ANNOTATIONS---
 #add combined annotation
@@ -107,13 +116,13 @@ def annotate(data_label, legend_label, label_color):
 		weight='bold',
 		wrap = 'True',
 		family='Montserrat')
-	change_percent = ((df[data_label].iat[-1] - df[data_label].iat[-2]) /  df[data_label].iat[-2]) * 100
-	if change_percent > 0:
-		mom_annotation = f"+{change_percent:.1f}% MoM"
+	pageviews = df[data_label].iat[-1]
+	if pageviews >= 1e9:
+		annotation = '{:1.2f}B Pageviews'.format(pageviews*1e-9)
 	else:
-		mom_annotation = f"{change_percent:.1f}% MoM"
-	plt.annotate(mom_annotation,
-		xy = (df['timestamp'].iat[-1],df[data_label].iat[-1]),
+		annotation = '{:1.0f}M Pageviews'.format(pageviews*1e-6)
+	plt.annotate(annotation,
+		xy = (df['timestamp'].iat[-1],pageviews),
 		xytext = (20,-25),
 		xycoords = 'data',
 		textcoords = 'offset points',
