@@ -83,7 +83,7 @@ plt.yticks(fontname = 'Montserrat',fontsize=14)
 date_labels = []
 for dl in df['timestamp']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b'))
-plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=10,fontname = 'Montserrat')
+plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
 
 #---ADD ANNOTATIONS---
 #add combined annotation
@@ -103,7 +103,7 @@ def annotate():
 annotate()
 
 #data notes
-plt.figtext(0.1, 0.015, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://docs.google.com/spreadsheets/d/1Aw5kjj47cEi-PSX0eApCUp3Ww9_XNyARxcdoL9QnHp4", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
+plt.figtext(0.1, 0.015, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://stats.wikimedia.org", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 save_file_name = "charts/" + outfile_name
