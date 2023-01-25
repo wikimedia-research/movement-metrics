@@ -158,7 +158,7 @@ plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 #add monthly x-axis labels
 date_labels = pd.date_range("2021-07-01", "2022-06-01", freq='MS').strftime("%b").tolist()
-plt.xticks(ticks=df_21['x_order'],labels=date_labels, fontsize=10,fontname = 'Montserrat')
+plt.xticks(ticks=df_21['x_order'],labels=date_labels, fontsize=14,fontname = 'Montserrat')
 
 #add legend
 #plt.legend(fontsize=18)
@@ -188,7 +188,7 @@ annotate('external','External (Search Engine)',wmf_colors['purple'])
 annotate('internal','Internal',wmf_colors['green'])
 annotate('none','None',wmf_colors['orange'])
 #data losee note
-plt.figtext(0.5, 0.1, "Data between July 2021 and January 2022 corrected for data loss.", fontsize=8, family='Montserrat',color= 'black',horizontalalignment='center')
+plt.figtext(0.5, 0.09, "Data between July 2021 and January 2022 corrected for data loss.", fontsize=14, family='Montserrat',color= wmf_colors['black25'],horizontalalignment='center')
 #data notes
 plt.figtext(0.1, 0.05, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://docs.google.com/spreadsheets/d/1Aw5kjj47cEi-PSX0eApCUp3Ww9_XNyARxcdoL9QnHp4", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 

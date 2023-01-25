@@ -101,7 +101,7 @@ plt.yticks(fontname = 'Montserrat',fontsize=14)
 date_labels = []
 for dl in df['timestamp']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b'))
-plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=10,fontname = 'Montserrat')
+plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
 
 #---ADD ANNOTATIONS---
 #add combined annotation
