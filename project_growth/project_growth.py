@@ -22,6 +22,9 @@ df_commons = pd.read_csv('../data/commons_growth.csv')
 #print(df.month.dtype)
 
 #convert string to datetime
+df_wikidata['month'] = df_wikidata['month'].apply(lambda x: x.rsplit("T")[0])
+df_wikipedia['month'] = df_wikipedia['month'].apply(lambda x: x.rsplit("T")[0])
+df_commons['month'] = df_commons['month'].apply(lambda x: x.rsplit("T")[0])
 df_wikidata['month'] = pd.to_datetime(df_wikidata['month'])
 df_wikipedia['month'] = pd.to_datetime(df_wikipedia['month'])
 df_commons['month'] = pd.to_datetime(df_commons['month'])
@@ -38,6 +41,9 @@ df_commons = df_commons.drop(columns=['timeRange.start', 'timeRange.end'])
 
 #merge into one dataframe
 df = pd.merge(pd.merge(df_wikidata,df_wikipedia,on='month'),df_commons,on='month')
+
+#truncate date
+df = df[df["month"].isin(pd.date_range("2014-01-01", "2022-12-01"))]
 
 #---PREPARE TO PLOT ---
 #adjust plot size
@@ -62,26 +68,26 @@ plt.grid(axis = 'y', color = wmf_colors['black25'], linewidth = 0.25)
 plt.plot(df.month, df.wikidata,
 	label='_nolegend_',
 	color=wmf_colors['pink'],
-	linewidth = 3,
+	linewidth = 4,
 	zorder=6)
 plt.plot(df.month, df.wikipedia,
 	label='_nolegend_',
-	color=wmf_colors['green'],
+	color=wmf_colors['yellow'],
 	zorder=5)
 plt.plot(df.month, df.commons,
 	label='_nolegend_',
-	color=wmf_colors['purple'],
+	color=wmf_colors['orange'],
 	zorder=4)
 
 #---FORMATTING---
 #add title and axis labels
-plt.title('Growth of Wikimedia Projects',font='Montserrat',weight='bold',fontsize=24,loc='left')
+plt.title('Growth of Wikimedia Projects: Content Items',font='Montserrat',weight='bold',fontsize=24,loc='left')
 #plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
-plt.ylabel("Items",font='Montserrat', fontsize=18)
+#plt.ylabel("Items",font='Montserrat', fontsize=18)
 
 #format axis labels
-current_values = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.0f}M'.format(x*1e-6) for x in current_values])
+current_yvalues = plt.gca().get_yticks()
+plt.gca().set_yticklabels(['{:1.0f}M'.format(x*1e-6) for x in current_yvalues])
 plt.xticks(fontsize=14,fontname = 'Montserrat')
 plt.yticks(fontsize=14,fontname = 'Montserrat')
 
@@ -118,11 +124,11 @@ def annotate(data_label, legend_label, label_color, x_distance):
 		wrap=True,
 		family='Montserrat')
 annotate('wikidata', 'Wikidata',wmf_colors['pink'], 92)
-annotate('wikipedia', 'Wikipedia',wmf_colors['green'], 100)
-annotate('commons', 'Commons',wmf_colors['brightblue'], 100)
+annotate('wikipedia', 'Wikipedia',wmf_colors['yellow'], 100)
+annotate('commons', 'Commons',wmf_colors['orange'], 100)
 
 #data notes
-plt.figtext(0.08, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Reader-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
+plt.figtext(0.08, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://stats.wikimedia.org/", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 #save as image
