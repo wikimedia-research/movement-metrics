@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
@@ -10,7 +11,7 @@ from matplotlib.ticker import FormatStrFormatter
 outfile_name = input('Outfile_name:\n') or "Net_New_Chart.png"
 
 #---READ IN DATA--
-df = pd.read_csv('../data/metrics.tsv', sep='\t')
+df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
 
 #display top rows for preview
 #df.head()
