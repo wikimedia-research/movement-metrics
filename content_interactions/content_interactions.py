@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
