@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import numpy as np
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Content_Interactions_Chart.png"
@@ -120,7 +121,7 @@ for dl in monthly_df['month']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b %Y'))
 
 #adjust axis ticks
-plt.yticks(fontsize=14)
+
 #add major ticks
 #plt.rcParams["xtick.major.size"] = 20
 plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,minor=False)
@@ -130,10 +131,15 @@ plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,minor=False)
 #print(plt.rcParams["xtick.major.size"])
 
 #format axis labels
+def y_label_formatter(value):
+	formatted_value = '{:1.0f}B'.format(value*1e-9)
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
 current_values = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.0f}B'.format(x*1e-9) for x in current_values])
-plt.xticks(fontname = 'Montserrat')
-plt.yticks(fontname = 'Montserrat')
+plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
+plt.yticks(fontname = 'Montserrat',fontsize=14)
+plt.xticks(fontsize=14, fontname = 'Montserrat')
 
 #add legend
 #plt.legend(fontsize=18)

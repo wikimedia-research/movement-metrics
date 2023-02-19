@@ -3,6 +3,7 @@ import datetime
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import numpy as np
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Pageviews_Source.png"
@@ -85,12 +86,13 @@ for pos in ['right', 'top', 'bottom', 'left']:
 
 #format y-axis labels
 def y_label_formatter(value):
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
 	if value >= 1e9:
 		formatted_value = '{:1.1f}B'.format(value*1e-9)
 		formatted_value = formatted_value.replace('.0','')
 	else:
 		formatted_value = '{:1.0f}M'.format(value*1e-6)
-	return formatted_value
+	return tail_dot_rgx.sub(r'\2',formatted_value)
 plt.yticks(range(200000000,2200000000,200000000))
 current_values = plt.gca().get_yticks()
 #plt.gca().set_yticklabels(['{:1.0f}M'.format(x*1e-6) for x in current_values])

@@ -3,6 +3,7 @@ import datetime
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import numpy as np
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Active_Editors_Chart.png"
@@ -19,14 +20,18 @@ df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
 #print(df.active_editors.dtype)
 #print(df.month.dtype)
 
+start_date = "2019-01-01"
+end_date = "2023-01-01"
+month_interest = 1
+
 #convert string to datetime
 df['month'] = pd.to_datetime(df['month'])
 
 #---BREAK DATA INTO SUBSETS--
 #truncate data to period of interst
-df = df[df["month"].isin(pd.date_range("2019-01-01", "2022-12-01"))]
+df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 #display data for month of interest only
-monthly_df = df[df['month'].dt.month == 12]
+monthly_df = df[df['month'].dt.month == month_interest]
 #for highlighting
 yoy_highlight = pd.concat([df.iloc[-13,:],df.iloc[-1,:]],axis=1).T
 #highlighted_months = df[df['month'].isin(['2021-10-01','2022-10-01'])]
@@ -50,13 +55,13 @@ plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
 #---PLOT---
 #plot active editor data
 plt.plot(df.month, df.active_editors,
-	label='Active Editors',
+	label='_nolegend_',
 	color=wmf_colors['blue'],
 	zorder=3)
 
 #dots on month of interest
 plt.scatter(monthly_df.month, monthly_df.active_editors,
-	label='_nolegend_',
+	label='January',
 	color=wmf_colors['blue'],
 	zorder=4)
 #note: due to a bug in matplotlib, the grid's zorder is fixed at 2.5 so everything plotted must be above 2.5
@@ -78,35 +83,51 @@ plt.title('Active Editors',font='Montserrat',weight='bold',fontsize=24,loc='left
 #plt.ylabel("Active Editors",font='Montserrat', fontsize=18)
 
 #add legend
-'''
 matplotlib.rcParams['legend.fontsize'] = 14
 plt.legend(frameon=False,
 	loc ="upper center",
-	bbox_to_anchor=(0.5, -0.15),
+	bbox_to_anchor=(0.5, -0.1),
 	fancybox=False, 
 	shadow=False, 
-	ncol=5,
+	ncol=1,
 	prop={"family":"Montserrat"},
 	fontsize=18)
-'''
 
 #expand bottom margin
-plt.subplots_adjust(bottom=0.2, left=0.1)
+plt.subplots_adjust(bottom=0.2, right = 0.85, left=0.1)
 
 #remove bounding box
 for pos in ['right', 'top', 'bottom', 'left']:
 	plt.gca().spines[pos].set_visible(False)
 
 #format y-axis labels
+def y_label_formatter(value):
+	formatted_value = '{:1.0f}K'.format(value*1e-3)
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
 current_values = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.0f}K'.format(x*1e-3) for x in current_values])
+plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
+#plt.gca().set_yticklabels(['{:1.0f}K'.format(x*1e-3) for x in current_values])
 
-#add monthly x-axis labels
+#format x-axis labels
+plt.xticks(fontname = 'Montserrat',fontsize=14)
+
+#monthly x-axis labels on highlighted month
+'''
 date_labels = []
 for dl in monthly_df['month']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b %Y'))
 plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
+'''
+
+#yearly x-axis labels on January
+date_labels = []
+date_labels_raw = pd.date_range(start_date, end_date, freq='AS-JAN')
+for dl in date_labels_raw:
+	date_labels.append(datetime.datetime.strftime(dl, '%Y'))
+plt.xticks(ticks=date_labels_raw,labels=date_labels)
 
 #add monthly x-axis labels with monthly ticks
 '''
@@ -141,7 +162,7 @@ plt.annotate(yoy_annotation,
 	bbox=dict(pad=10, facecolor="white", edgecolor="none"))
 
 #data notes
-plt.figtext(0.1, 0.1, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
+plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 save_file_name = "charts/" + outfile_name

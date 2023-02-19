@@ -3,6 +3,7 @@ import datetime
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import numpy as np
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Referral_Source.png"
@@ -152,8 +153,13 @@ for pos in ['right', 'top', 'bottom', 'left']:
 	plt.gca().spines[pos].set_visible(False)
 
 #format y-axis labels
+def y_label_formatter(value):
+	formatted_value = '{:1.0f}B'.format(value*1e-9)
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
 current_values = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.0f}B'.format(x*1e-9) for x in current_values])
+plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 #add monthly x-axis labels

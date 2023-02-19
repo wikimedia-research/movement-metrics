@@ -10,6 +10,7 @@ from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Unique_Devices.png"
@@ -35,8 +36,8 @@ df = df[df["month"].isin(pd.date_range("2018-05-01", "2022-12-01"))]
 df.drop(columns=['automated_pageviews','desktop','interactions','mobileweb','previews_seen','total_pageview'])
 
 #drop rows w data error
-df_a = df[df["month"].isin(pd.date_range("2018-02-01", "2021-02-01"))]
-df_b = df[df["month"].isin(pd.date_range("2022-06-01", "2022-12-01"))]
+df_a = df[df["month"].isin(pd.date_range("2018-02-01", "2021-01-01"))]
+df_b = df[df["month"].isin(pd.date_range("2022-07-01", "2022-12-01"))]
 
 #---PREPARE TO PLOT ---
 #adjust plot size
@@ -50,7 +51,6 @@ wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','base8
 
 #print list of available font names
 #matplotlib.font_manager.get_font_names()
-#print list of font paths (for troubleshooting) — clear font cache in ~/.matplotlib when adding new font
 #matplotlib.font_manager.findSystemFonts(fontpaths=None, fontext='ttf')
 
 #add grid lines
@@ -75,8 +75,8 @@ plt.plot(df_b.month, df_b.unique_devices,
 
 #---DRAW DATA ERROR AREA---
 #create rectangle x coordinates
-startTime = datetime.strptime("2021-02-01", '%Y-%m-%d')
-endTime = datetime.strptime("2022-06-01", '%Y-%m-%d')
+startTime = datetime.strptime("2021-01-01", '%Y-%m-%d')
+endTime = datetime.strptime("2022-07-01", '%Y-%m-%d')
 
 # convert to matplotlib date representation
 xstart = mdates.date2num(startTime)
@@ -87,31 +87,35 @@ width = xend - xstart
 ytick_values = plt.gca().get_yticks()
 ystart = ytick_values[0]
 height = ytick_values[-1] - ytick_values[0]
-'''
+
 pale_blue = '#c0e6ff'
 # Plot rectangle
 rect = Rectangle((xstart, ystart), width, height, 
-	color='black', 
+	color=wmf_colors['black25'], 
 	linewidth=0,
+	alpha=0.1,
+	fill=wmf_colors['black25'],
+	#hatch='///',
 	edgecolor=None,
-	fill=None, 
-	hatch='///',
-	alpha=0.10)
+	zorder=5)
+	#fill=None,
+	#hatch='///'
+	#fill='white',
 ax.add_patch(rect)  
-'''
 
 #---FORMATTING---
 #add title and axis labels
-plt.title('Unique Devices',font='Montserrat',weight='bold',fontsize=24,loc='left')
+plt.title('Unique Devices (Wikipedia only)',font='Montserrat',weight='bold',fontsize=24,loc='left')
 #plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
 #plt.ylabel("Items",font='Montserrat', fontsize=18)
 
 #format axis labels
 plt.xticks(fontsize=14,fontname = 'Montserrat')
 def y_label_formatter(value):
-	formatted_value = '{:1.1f}B'.format(value*1e-9)
-	formatted_value = formatted_value.replace('.0','')
-	return formatted_value
+	formatted_value = '{:1.0f}K'.format(value*1e-3)
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
 current_values = plt.gca().get_yticks()
 plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
@@ -153,16 +157,17 @@ annotate('unique_devices', 'Unique Devices',wmf_colors['brightblue'], 130)
 #rectangle annotation
 annotation_x = xstart + (width / 2)
 annotation_y = ystart + (height / 2)
-rectangle_text = "Data unreliable during this period"
+rectangle_text = "Data unreliable February 2021 - June 2022 (inclusive)"
 
 rectangle_textbox = ax.text(annotation_x, annotation_y, rectangle_text, 
 	ha='center', 
 	va='center', 
-	color=wmf_colors['brightblue'],
+	color=wmf_colors['black25'],
 	family='Montserrat',
 	fontsize=14,
 	wrap=True,
-	bbox=dict(pad = 100, boxstyle='square', fc='none', ec='none')) 
+	bbox=dict(pad = 100, boxstyle='square', fc='none', ec='none'),
+	zorder=7) 
 rectangle_textbox._get_wrap_line_width = lambda : 300.
 
 #data notes

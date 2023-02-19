@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import numpy as np
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Project_Growth_Chart.png"
@@ -87,10 +88,14 @@ plt.title('Growth of Wikimedia Projects: Content Items',font='Montserrat',weight
 #plt.ylabel("Items",font='Montserrat', fontsize=18)
 
 #format axis labels
-current_yvalues = plt.gca().get_yticks()
-plt.gca().set_yticklabels(['{:1.0f}M'.format(x*1e-6) for x in current_yvalues])
-plt.xticks(fontsize=14,fontname = 'Montserrat')
-plt.yticks(fontsize=14,fontname = 'Montserrat')
+def y_label_formatter(value):
+	formatted_value = '{:1.0f}M'.format(value*1e-6)
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
+current_values = plt.gca().get_yticks()
+plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
+plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 #expand bottom margin
 plt.subplots_adjust(bottom=0.11, left=0.1, right=0.75)
