@@ -6,6 +6,7 @@ import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import numpy as np
 from matplotlib.ticker import FormatStrFormatter
+import re
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Net_New_Chart.png"
@@ -122,16 +123,15 @@ plt.yticks(fontsize=14)
 #print(plt.rcParams["xtick.major.size"])
 
 #format axis labels
-current_values = plt.gca().get_yticks()
-#plt.set_major_formatter(FormatStrFormatter('%g'))
-#f = lambda x,pos: str(x).rstrip('0').rstrip('.')
 def y_label_formatter(value):
 	formatted_value = '{:1.1f}M'.format(value*1e-6)
-	formatted_value = formatted_value.replace('.0','')
-	return formatted_value
+	#remove trailing zeros after decimal point only
+	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
+	return tail_dot_rgx.sub(r'\2',formatted_value)
+current_values = plt.gca().get_yticks()
 plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
-plt.xticks(fontname = 'Montserrat')
-plt.yticks(fontname = 'Montserrat')
+plt.yticks(fontname = 'Montserrat',fontsize=14)
+plt.xticks(fontname = 'Montserrat',fontsize=14)
 
 '''
 #add legend
