@@ -104,18 +104,24 @@ plt.xticks(ticks=df['timestamp'],labels=date_labels,fontsize=14,fontname = 'Mont
 #---ADD ANNOTATIONS---
 #add combined annotation
 def annotate():
-	pageviews = df['sum_view_count'].iat[-1]
-	annotation = '{:1.2f}B Pageviews'.format(pageviews*1e-9)
-	plt.annotate(annotation,
-		xy = (df['timestamp'].iat[-1],pageviews),
+	yoy_change_percent = ((yoy_highlight['interactions_corrected'].iat[-1] - yoy_highlight['interactions_corrected'].iat[0]) /  yoy_highlight['interactions_corrected'].iat[0]) * 100
+	#make YoY annotation (add text her if relevant)
+	if yoy_change_percent > 0:
+		yoy_annotation = f"+{yoy_change_percent:.1f}% YoY" + " " + yoy_note
+	else:
+		yoy_annotation = f"{yoy_change_percent:.1f}% YoY" + " " + yoy_note
+	#annotate
+	plt.annotate(yoy_annotation,
+		xy = (yoy_highlight['month'].iat[-1],yoy_highlight['interactions_corrected'].iat[-1]),
 		xytext = (20,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
 		color='black',
-		fontsize=14,
+		family='Montserrat',
+		fontsize=12,
 		weight='bold',
-		wrap = 'True',
-		family='Montserrat')
+		wrap=True,
+		bbox=dict(pad=10, facecolor="white", edgecolor="none"))
 annotate()
 
 #data notes
