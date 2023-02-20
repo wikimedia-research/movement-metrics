@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 import re
+import calendar
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Unique_Devices.png"
@@ -26,18 +27,28 @@ df = pd.read_csv('../data/reader_metrics.tsv', sep='\t')
 #print out data types
 #print(df.month.dtype)
 
+start_date = "2018-05-01"
+end_date = "2023-01-01"
+month_interest = 1
+month_name = calendar.month_name[month_interest]
+
 #convert string to datetime
 df['month'] = pd.to_datetime(df['month'])
 
 #truncate to preferred date range
-df = df[df["month"].isin(pd.date_range("2018-05-01", "2022-12-01"))]
+df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
 #drop unneeded columns
 df.drop(columns=['automated_pageviews','desktop','interactions','mobileweb','previews_seen','total_pageview'])
 
 #drop rows w data error
-df_a = df[df["month"].isin(pd.date_range("2018-02-01", "2021-01-01"))]
-df_b = df[df["month"].isin(pd.date_range("2022-07-01", "2022-12-01"))]
+df_a = df[df["month"].isin(pd.date_range(start_date, "2021-01-01"))]
+df_b = df[df["month"].isin(pd.date_range("2022-07-01", end_date))]
+
+#monthly higlight
+monthly_df_a = df_a[df_a['month'].dt.month == month_interest]
+monthly_df_b = df_b[df_b['month'].dt.month == month_interest]
+monthly_df = pd.concat([monthly_df_a,monthly_df_b])
 
 #---PREPARE TO PLOT ---
 #adjust plot size
@@ -72,6 +83,12 @@ plt.plot(df_b.month, df_b.unique_devices,
 	linewidth = 2,
 	zorder=6)
 
+#draw circle on highlighted month by plotting scatter
+plt.scatter(monthly_df.month, monthly_df.unique_devices,
+	#label='_nolegend_',
+	label=month_name,
+	color=wmf_colors['brightblue'],
+	zorder=7)
 
 #---DRAW DATA ERROR AREA---
 #create rectangle x coordinates
@@ -91,28 +108,26 @@ height = ytick_values[-1] - ytick_values[0]
 pale_blue = '#c0e6ff'
 # Plot rectangle
 rect = Rectangle((xstart, ystart), width, height, 
-	color=wmf_colors['black25'], 
+	color='white', 
 	linewidth=0,
-	alpha=0.1,
-	fill=wmf_colors['black25'],
+	#alpha=0.1,
+	fill='white',
 	#hatch='///',
 	edgecolor=None,
 	zorder=5)
 	#fill=None,
-	#hatch='///'
-	#fill='white',
 ax.add_patch(rect)  
 
 #---FORMATTING---
 #add title and axis labels
-plt.title('Unique Devices (Wikipedia only)',font='Montserrat',weight='bold',fontsize=24,loc='left')
+plt.title(f'Unique Devices - Wikipedia Only ({month_name})',font='Montserrat',weight='bold',fontsize=24,loc='left')
 #plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
 #plt.ylabel("Items",font='Montserrat', fontsize=18)
 
 #format axis labels
 plt.xticks(fontsize=14,fontname = 'Montserrat')
 def y_label_formatter(value):
-	formatted_value = '{:1.0f}K'.format(value*1e-3)
+	formatted_value = '{:1.2f}B'.format(value*1e-9)
 	#remove trailing zeros after decimal point only
 	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
 	return tail_dot_rgx.sub(r'\2',formatted_value)
@@ -121,11 +136,26 @@ plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
 
 #expand bottom margin
-plt.subplots_adjust(bottom=0.11, left=0.1, right=0.75)
+plt.subplots_adjust(bottom=0.1, right = 0.8, left=0.1)
 
 #remove bounding box
 for pos in ['right', 'top', 'bottom', 'left']:
 	plt.gca().spines[pos].set_visible(False)
+
+#add legend
+#plt.legend(fontsize=18)
+'''
+matplotlib.rcParams['legend.fontsize'] = 14
+plt.legend(frameon=False,
+	loc ="upper center",
+	bbox_to_anchor=(0.5, -0.1),
+	fancybox=False, 
+	shadow=False,
+	ncol=1, 
+	prop={"family":"Montserrat"},
+	labelspacing=0.01,
+	handlelength=0.5) #adjust space between marker and label
+'''
 
 #---ADD ANNOTATIONS---
 #YoY Change Annotation
@@ -167,7 +197,7 @@ rectangle_textbox = ax.text(annotation_x, annotation_y, rectangle_text,
 	fontsize=14,
 	wrap=True,
 	bbox=dict(pad = 100, boxstyle='square', fc='none', ec='none'),
-	zorder=7) 
+	zorder=8) 
 rectangle_textbox._get_wrap_line_width = lambda : 300.
 
 #data notes
