@@ -12,6 +12,7 @@ import matplotlib.dates as mdates
 from datetime import datetime
 import re
 import calendar
+from datetime import date
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "Unique_Devices.png"
@@ -39,7 +40,7 @@ df['month'] = pd.to_datetime(df['month'])
 df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
 #drop unneeded columns
-df.drop(columns=['automated_pageviews','desktop','interactions','mobileweb','previews_seen','total_pageview'])
+df = df.drop(columns=['automated_pageviews','desktop','interactions','mobileweb','previews_seen','total_pageview'])
 
 #drop rows w data error
 df_a = df[df["month"].isin(pd.date_range(start_date, "2021-01-01"))]
