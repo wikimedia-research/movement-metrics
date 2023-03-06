@@ -51,6 +51,9 @@ monthly_df_a = df_a[df_a['month'].dt.month == month_interest]
 monthly_df_b = df_b[df_b['month'].dt.month == month_interest]
 monthly_df = pd.concat([monthly_df_a,monthly_df_b])
 
+#subset to highlight the last two months
+yoy_highlight = pd.concat([monthly_df.iloc[-2,:],monthly_df.iloc[-1,:]],axis=1).T
+
 #---PREPARE TO PLOT ---
 #adjust plot size
 fig, ax = plt.subplots()
@@ -90,6 +93,18 @@ plt.scatter(monthly_df.month, monthly_df.unique_devices,
 	label=month_name,
 	color=wmf_colors['brightblue'],
 	zorder=7)
+
+#draw circle on 2021 and 2022 to highlight for comparison
+#scatter s variable sets size by "typographic points"
+highlight_radius = 1000000
+plt.scatter(yoy_highlight.month, yoy_highlight.unique_devices,
+	label='_nolegend_',
+	s=(highlight_radius**0.5),
+	facecolors='none',
+	edgecolors=wmf_colors['yellow'],
+	zorder=8)
+#I explored using plt.patch.Circle but due to the unequal axes, it caused more trouble than this even though typographic points is not the ideal metric to be using
+
 
 #---DRAW DATA ERROR AREA---
 #create rectangle x coordinates
@@ -162,6 +177,7 @@ plt.legend(frameon=False,
 #YoY Change Annotation
 #calculate YoY change
 def annotate(data_label, legend_label, label_color, x_distance):
+	'''
 	plt.annotate(legend_label,
 		xy = (df_b['month'].iat[-1],df_b[data_label].iat[-1]),
 		xytext = (10,-5),
@@ -171,11 +187,12 @@ def annotate(data_label, legend_label, label_color, x_distance):
 		fontsize=14,
 		weight='bold',
 		family='Montserrat')
+	'''
 	final_count = df_b[data_label].iat[-1]
 	count_annotation = '{:1.2f}B'.format(final_count*1e-9)
 	plt.annotate(count_annotation,
 		xy = (df_b['month'].iat[-1],final_count),
-		xytext = (x_distance,-5),
+		xytext = (20,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
 		color='black',
@@ -202,7 +219,8 @@ rectangle_textbox = ax.text(annotation_x, annotation_y, rectangle_text,
 rectangle_textbox._get_wrap_line_width = lambda : 300.
 
 #data notes
-plt.figtext(0.08, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Readers-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
+today = date.today()
+plt.figtext(0.08, 0.025, "Graph Notes: Created by Hua Xi " + str(today) + " using data from https://github.com/wikimedia-research/Readers-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 #save as image

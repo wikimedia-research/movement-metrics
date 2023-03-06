@@ -71,11 +71,18 @@ plt.plot(df.timestamp, df.pageviews_corrected,
 plt.scatter(monthly_df.timestamp, monthly_df.pageviews_corrected,
 	label='_nolegend_',
 	color=wmf_colors['blue'])
-'''
+
+#draw circle on 2021 and 2022 to highlight for comparison
+#scatter s variable sets size by "typographic points"
+highlight_radius = 1000000
 plt.scatter(yoy_highlight.timestamp, yoy_highlight.pageviews_corrected,
 	label='_nolegend_',
-	color=wmf_colors['blue'])
-'''
+	s=(highlight_radius**0.5),
+	facecolors='none',
+	edgecolors=wmf_colors['yellow'],
+	zorder=8)
+#I explored using plt.patch.Circle but due to the unequal axes, it caused more trouble than this even though typographic points is not the ideal metric to be using
+
 
 #---CIRCLE YTD AREA---
 #add a circle to highlight the YTD area
@@ -94,7 +101,6 @@ xstart = mdates.date2num(year_start)
 xend = mdates.date2num(year_end)
 bracket_w = xend - xstart
 ellipse_w = xend - xstart
-
 
 '''
 # Plot rectangle
