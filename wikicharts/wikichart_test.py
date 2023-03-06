@@ -6,13 +6,16 @@ import numpy as np
 import re
 import calendar
 from datetime import date
+import wikicharts
+from wikicharts import Wikichart
+from wikicharts import wmf_colors
 
 #---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Active_Editors_Chart.png"
+outfile_name = input('Outfile_name:\n') or "test_charts/testchart.png"
 yoy_note = input('YoY annotation note (default is blank):\n') or " "
 
 #---READ IN DATA--
-df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
+df = pd.read_csv('data/editor_metrics.tsv', sep='\t')
 
 #display top rows for preview
 #df.iloc[0,:] 
@@ -30,15 +33,24 @@ month_name = calendar.month_name[month_interest]
 #convert string to datetime
 df['month'] = pd.to_datetime(df['month'])
 
-#---BREAK DATA INTO SUBSETS--
 #truncate data to period of interst
 df = df[df["month"].isin(pd.date_range(start_date, end_date))]
-#display data for month of interest only
-monthly_df = df[df['month'].dt.month == month_interest]
-#for highlighting
-yoy_highlight = pd.concat([df.iloc[-13,:],df.iloc[-1,:]],axis=1).T
-#highlighted_months = df[df['month'].isin(['2021-10-01','2022-10-01'])]
 
+#---MAKE CHART---
+testchart = Wikichart(start_date,end_date,month_interest,df)
+testchart.init_plot()
+testchart.plot_line('month','active_editors',wmf_colors['blue'])
+testchart.plot_scatter('month','active_editors',wmf_colors['blue'])
+testchart.plot_yoy_highlight('month','active_editors',wmf_colors['yellow'])
+testchart.format(title = f'Active Editors ({month_name})')
+testchart.bottom_note("Hua Xi", "https://github.com/wikimedia-research/Editing-movement-metrics")
+testchart.yoy_annotate('month','active_editors','','black', 20, yoy_note)
+save_file_name = outfile_name
+testchart.finalize_plot(save_file_name)
+
+
+
+'''
 #---ADJUST PLOT SIZE---
 plt.figure(figsize=(10, 6))
 
@@ -85,7 +97,6 @@ plt.title(f'Active Editors ({month_name})',font='Montserrat',weight='bold',fonts
 #plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
 #plt.ylabel("Active Editors",font='Montserrat', fontsize=18)
 
-'''
 #add legend
 matplotlib.rcParams['legend.fontsize'] = 14
 plt.legend(frameon=False,
@@ -96,7 +107,6 @@ plt.legend(frameon=False,
 	ncol=1,
 	prop={"family":"Montserrat"},
 	fontsize=18)
-'''
 
 #expand bottom margin
 plt.subplots_adjust(bottom=0.1, right = 0.85, left=0.1)
@@ -120,12 +130,10 @@ plt.yticks(fontname = 'Montserrat',fontsize=14)
 plt.xticks(fontname = 'Montserrat',fontsize=14)
 
 #monthly x-axis labels on highlighted month
-'''
 date_labels = []
 for dl in monthly_df['month']:
 	date_labels.append(datetime.datetime.strftime(dl, '%b %Y'))
 plt.xticks(ticks=monthly_df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
-'''
 
 #yearly x-axis labels on January
 date_labels = []
@@ -135,7 +143,6 @@ for dl in date_labels_raw:
 plt.xticks(ticks=date_labels_raw,labels=date_labels)
 
 #add monthly x-axis labels with monthly ticks
-'''
 date_labels = []
 for dl in df['month']:
 	if dl.month == 10:
@@ -143,7 +150,6 @@ for dl in df['month']:
 	else:
 		date_labels.append(" ")
 plt.xticks(ticks=df['month'],labels=date_labels,fontsize=14,fontname = 'Montserrat')
-'''
 
 #---ADD ANNOTATIONS---
 #YoY Change Annotation
@@ -174,3 +180,4 @@ plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi " + str(today) + " using
 save_file_name = "charts/" + outfile_name
 plt.savefig(save_file_name, dpi=300)
 plt.show()
+'''

@@ -6,6 +6,7 @@ import matplotlib.font_manager
 import numpy as np
 import re
 import calendar
+from datetime import date
 
 #---PROMPT FOR INPUT---
 outfile_name = input('Outfile_name:\n') or "New_Returning_Chart.png"
@@ -211,7 +212,8 @@ yoy_annotation('new_active_editors',wmf_colors['green50'])
 yoy_annotation('returning_active_editors',wmf_colors['blue'])
 '''
 #data notes
-plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi 12/12/22 using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
+today = date.today()
+plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi  " + str(today) + " using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat',color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 save_file_name = "charts/" + outfile_name

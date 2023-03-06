@@ -165,7 +165,7 @@ plt.legend(frameon=False,
 '''
 
 #expand bottom margin
-plt.subplots_adjust(bottom=0.2, left=0.1, right=0.75)
+plt.subplots_adjust(bottom=0.1, left=0.1, right=0.75)
 
 #remove bounding box
 for pos in ['right', 'top', 'bottom', 'left']:
@@ -190,7 +190,9 @@ for i in range(1,3):
 	valuedistance = lastys.iloc[i]['lasty'] - lastys.iloc[i-1]['lasty']
 	if valuedistance < 150000:
 		lastys.at[lastys.iloc[i].name,'ypad'] = 5 * padmultiplier
-	padmultiplier += 1
+		padmultiplier += 1
+	else:
+		padmultiplier = 1
 
 #add legend as data labels
 def legend_annotate(data_label, legend_label, label_color,ypad):
@@ -203,17 +205,6 @@ def legend_annotate(data_label, legend_label, label_color,ypad):
 		fontsize=14,
 		weight='bold',
 		family='Montserrat')
-#annotate in order of last-y (for padding)
-for i in range(3):
-	keyref = lastys.iloc[i].name
-	legend_annotate(key.loc[keyref,'colname'],
-		key.loc[keyref,'labelname'],
-		key.loc[keyref,'color'],
-		lastys.iloc[i].ypad)
-#legend_annotate('net_new_Commons_content_pages', 'Commons',wmf_colors['pink'])
-#legend_annotate('net_new_Wikidata_entities', 'Wikidata',wmf_colors['brightgreen'])
-#legend_annotate('net_new_Wikipedia_articles', 'Wikipedia',wmf_colors['purple'])
-
 #make YoY annotation
 def yoy_annotation(data_label,label_color,ypad):
 	yoy_change_percent = ((yoy_highlight[data_label].iat[-1] - yoy_highlight[data_label].iat[0]) /  yoy_highlight[data_label].iat[0]) * 100
@@ -232,16 +223,23 @@ def yoy_annotation(data_label,label_color,ypad):
 		weight='bold')
 for i in range(3):
 	keyref = lastys.iloc[i].name
+	legend_annotate(key.loc[keyref,'colname'],
+		key.loc[keyref,'labelname'],
+		key.loc[keyref,'color'],
+		lastys.iloc[i].ypad)
 	yoy_annotation(key.loc[keyref,'colname'],
 		key.loc[keyref,'color'],
 		lastys.iloc[i].ypad)
+#legend_annotate('net_new_Commons_content_pages', 'Commons',wmf_colors['pink'])
+#legend_annotate('net_new_Wikidata_entities', 'Wikidata',wmf_colors['brightgreen'])
+#legend_annotate('net_new_Wikipedia_articles', 'Wikipedia',wmf_colors['purple'])
 #yoy_annotation('net_new_Commons_content_pages',wmf_colors['pink'])
 #yoy_annotation('net_new_Wikidata_entities',wmf_colors['brightgreen'])
 #yoy_annotation('net_new_Wikipedia_articles',wmf_colors['purple'])
 
 #data notes
 today = date.today()
-plt.figtext(0.1, 0.1, "Graph Notes: Created by Hua Xi " + str(today) + " using data from https://github.com/wikimedia-research/Reader-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
+plt.figtext(0.1, 0.025, "Graph Notes: Created by Hua Xi " + str(today) + " using data from https://github.com/wikimedia-research/Editing-movement-metrics", fontsize=8, family='Montserrat', color= wmf_colors['black25'])
 
 #---SHOW GRAPH---
 #save as image

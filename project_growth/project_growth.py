@@ -97,6 +97,8 @@ current_values = plt.gca().get_yticks()
 plt.gca().set_yticklabels([y_label_formatter(x) for x in current_values])
 plt.yticks(fontname = 'Montserrat',fontsize=14)
 
+plt.xticks(fontname = 'Montserrat',fontsize=14)
+
 #expand bottom margin
 plt.subplots_adjust(bottom=0.11, left=0.1, right=0.75)
 
