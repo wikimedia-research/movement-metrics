@@ -12,14 +12,14 @@ from wikicharts import Wikichart
 from wikicharts import wmf_colors
 
 def main(argv):
-	print("Generating Active Editors chart...")
+	print("Generating New Returning chart...")
 
 	#parse commandline arguments
 	opts, args = getopt.getopt(argv,"pi")
 
 	#---PROMPT FOR INPUT---
 	script_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
-	outfile_name = "Active_Editors.png"
+	outfile_name = "New_Returning.png"
 	yoy_note = " "
 	display_flag = True
 	for opt in opts[0]:
@@ -34,30 +34,38 @@ def main(argv):
 	data_directory = dirname(dirname(script_directory))
 	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
 
-	#note start and end dates may be different depending on chart_type
 	start_date = "2019-01-01"
 	end_date = "2023-01-01"
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
 
-	#truncate data to period of interst
+	#truncate to preferred date range
 	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
+
+	#---PREPARE TO PLOT
+	key = pd.DataFrame([['Returning',wmf_colors['blue']],
+		['New',wmf_colors['green50']]],
+		index=['returning_active_editors','new_active_editors'],
+		columns=['labelname','color'])
 
 	#---MAKE CHART---
 	chart = Wikichart(start_date,end_date,df)
-	chart.init_plot()
-	chart.plot_line('month','active_editors',wmf_colors['blue'])
-	chart.plot_monthlyscatter('month','active_editors',wmf_colors['blue'])
-	chart.plot_yoy_highlight('month','active_editors',wmf_colors['yellow'])
-	chart.format(title = 'Active Editors',
+	chart.init_plot(width=12)
+	chart.plot_line('month','returning_active_editors',key.loc['returning_active_editors','color'])
+	chart.plot_line('month','new_active_editors',key.loc['new_active_editors','color'])
+	chart.plot_monthlyscatter('month','returning_active_editors',key.loc['returning_active_editors','color'])
+	chart.plot_monthlyscatter('month','new_active_editors',key.loc['new_active_editors','color'])
+	chart.format(title = f'New and Returning Editors',
 		y_order=1e-3,
 		y_label_format='{:1.0f}K',
+		radjust=0.75,
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
-	chart.annotate(x='month',
-		y='active_editors',
-		num_annotation=chart.calc_yoy(y='active_editors',yoy_note=yoy_note))
+
+	chart.multi_yoy_annotate(['returning_active_editors','new_active_editors'],key,chart.calc_yoy)
+
 	chart.finalize_plot(save_file_name,display=display_flag)
+
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

@@ -12,7 +12,7 @@ from wikicharts import Wikichart
 from wikicharts import wmf_colors
 
 def main(argv):
-	print("Generating Active Editors chart...")
+	print("Generating Pageviews (User Only) chart...")
 
 	#parse commandline arguments
 	opts, args = getopt.getopt(argv,"pi")
@@ -20,6 +20,7 @@ def main(argv):
 	#---PROMPT FOR INPUT---
 	script_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
 	outfile_name = "Active_Editors.png"
+	outfile_name = "Pageviews_User_Only.png"
 	yoy_note = " "
 	display_flag = True
 	for opt in opts[0]:
@@ -32,31 +33,35 @@ def main(argv):
 
 	#---CLEAN DATA--
 	data_directory = dirname(dirname(script_directory))
-	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
+	df = pd.read_csv(data_directory + '/data/monthly_pageviews.csv', sep='\t')
 
-	#note start and end dates may be different depending on chart_type
-	start_date = "2019-01-01"
+	start_date = "2020-07-01"
 	end_date = "2023-01-01"
 
 	#convert string to datetime
-	df['month'] = pd.to_datetime(df['month'])
+	df['timestamp'] = pd.to_datetime(df['timestamp'])
+	df.sort_values(by='timestamp')
 
-	#truncate data to period of interst
-	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
+	#truncate to preferred date range
+	df = df[df["timestamp"].isin(pd.date_range(start_date, end_date))]
 
-	#---MAKE CHART---
+
+	#---PLOT---
 	chart = Wikichart(start_date,end_date,df)
-	chart.init_plot()
-	chart.plot_line('month','active_editors',wmf_colors['blue'])
-	chart.plot_monthlyscatter('month','active_editors',wmf_colors['blue'])
-	chart.plot_yoy_highlight('month','active_editors',wmf_colors['yellow'])
-	chart.format(title = 'Active Editors',
-		y_order=1e-3,
-		y_label_format='{:1.0f}K',
-		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
-	chart.annotate(x='month',
-		y='active_editors',
-		num_annotation=chart.calc_yoy(y='active_editors',yoy_note=yoy_note))
+	chart.init_plot(width=12)
+	chart.plot_line('timestamp','pageviews_corrected',wmf_colors['blue'])
+	chart.plot_monthlyscatter('timestamp','pageviews_corrected',wmf_colors['blue'])
+	chart.plot_yoy_highlight('timestamp','pageviews_corrected')
+	chart.format(title = f'Monthly User Pageviews to Wikipedia',
+		y_order=1e-9,
+		y_label_format='{:1.1f}B',
+		radjust=0.825,
+		tadjust=0.85,
+		badjust=0.15,
+		data_source="https://docs.google.com/spreadsheets/d/1YfKmAe6ViAIjnPejYEq6yCkuYa8QK8-h6VxsAlbnNGA")
+	chart.annotate(x='timestamp',
+		y='sum_view_count',
+		num_annotation=chart.calc_yoy(y='pageviews_corrected'))
 	chart.finalize_plot(save_file_name,display=display_flag)
 
 if __name__ == "__main__":

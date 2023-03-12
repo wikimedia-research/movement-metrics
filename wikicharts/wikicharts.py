@@ -9,11 +9,13 @@ import re
 import calendar
 from datetime import date
 from PIL import ImageFont
+import warnings
 
 
 #---CUSTOM DICTIONARIES
 wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','base80':'#eaecf0','orange':'#EE8019','base70':'#c8ccd1','red':'#970302','pink':'#E679A6','green50':'#00af89','purple':'#5748B5','blue':'#0E65C0','brightblue':'#049DFF','brightbluelight':'#C0E6FF','yellow':'#F0BC00','green':'#308557','brightgreen':'#71D1B3'}
-parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
+parameters = {'month_interest':1,'author':'Hua Xi'}
+style_parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
 
 
 #---CUSTOM FUNCTIONS---
@@ -25,7 +27,7 @@ def y_label_formatter(value,multiplier,format_text):
 
 #---BASIC CHART---
 class Wikichart:
-	def __init__(self,start_date, end_date, month_interest,dataset,yoy_highlight=None):
+	def __init__(self,start_date, end_date,dataset,month_interest=parameters['month_interest'],yoy_highlight=None):
 		self.start_date = start_date
 		self.end_date = end_date
 		self.month_interest = month_interest
@@ -67,35 +69,36 @@ class Wikichart:
 			zorder=5)
 			#note: due to a bug in matplotlib, the grid's zorder is fixed at 2.5 so everything plotted must be above 2.5
 
-	def plot_data_loss(self, x, y1, y2, col = wmf_colors['base80'], legend_label ='_nolegend_'):
-		plt.fill_between(self.df[str(x)], self.df[str(y1)], self.df[str(y2)],
+	def plot_data_loss(self, x, y1, y2, data_loss_df, col = wmf_colors['base80'], legend_label ='_nolegend_'):
+		plt.fill_between(data_loss_df[str(x)], data_loss_df[str(y1)], data_loss_df[str(y2)],
 			label=legend_label,
 			color=col,
 			edgecolor=col,
 			zorder=3)
 
-	def format(self, title, y_order, y_label_format, author, data_source,radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
-		plt.title(title,font=parameters['font'],fontsize=parameters['title_font_size'],weight='bold',loc='left')
+	def format(self, title, y_order, y_label_format, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
+		custom_title = f'{title} ({calendar.month_name[self.month_interest]})'
+		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left')
 		#remove bounding box
 		for pos in ['right', 'top', 'bottom', 'left']:
 			plt.gca().spines[pos].set_visible(False)
 		#expand bottom margin
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust)
 		#format x-axis labels — yearly x-axis labels on January
-		plt.xticks(fontname=parameters['font'],fontsize=parameters['text_font_size'])
+		plt.xticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
 		date_labels = []
 		date_labels_raw = pd.date_range(self.start_date, self.end_date, freq='AS-JAN')
 		for dl in date_labels_raw:
 			date_labels.append(datetime.datetime.strftime(dl, '%Y'))
-		print(date_labels)
 		plt.xticks(ticks=date_labels_raw,labels=date_labels)
 		#format y-axis labels
+		warnings.filterwarnings("ignore")
 		current_values = plt.gca().get_yticks()
 		plt.gca().set_yticklabels([y_label_formatter(x,y_order,y_label_format) for x in current_values])
-		plt.yticks(fontname=parameters['font'],fontsize=parameters['text_font_size'])
+		plt.yticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
 		#add bottom annotation
 		today = date.today()
-		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=parameters['font'],fontsize=8, color= wmf_colors['black25'])
+		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
 	def calc_yoy(self,y,yoy_note=""):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
@@ -119,14 +122,14 @@ class Wikichart:
 			xycoords = 'data',
 			textcoords = 'offset points',
 			color=label_color,
-			fontsize=parameters['text_font_size'],
+			fontsize=style_parameters['text_font_size'],
 			weight='bold',
-			family=parameters['font'])
+			family=style_parameters['font'])
 		#yoy annotation
 		#try to get custom spacing
 		if(len(legend_label) > 0):
 			try:
-				font = ImageFont.truetype('Montserrat-Bold.ttf', parameters['text_font_size'])
+				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
 				labelsize = font.getsize(legend_label)
 				xpad= labelsize[0] + 3
 			except:
@@ -137,14 +140,16 @@ class Wikichart:
 			xycoords = 'data',
 			textcoords = 'offset points',
 			color='black',
-			fontsize=parameters['text_font_size'],
+			fontsize=style_parameters['text_font_size'],
 			weight='bold',
 			wrap=True,
-			family=parameters['font'])
+			family=style_parameters['font'])
 		
-	def finalize_plot(self, save_file_name):
+	def finalize_plot(self, save_file_name, display=True):
 		plt.savefig(save_file_name, dpi=300)
-		plt.show()
+		if display:
+			print(display)
+			plt.show()
 
 	def calc_yspacing(self, ys):
 		lastys = self.df[ys].iloc[-1]
@@ -166,14 +171,14 @@ class Wikichart:
 				padmultiplier = 1
 		return lastys
 
-	def multi_yoy_annotate(self,ys,key,num_annotation_fxn):
+	def multi_yoy_annotate(self,ys,key,annotation_fxn):
 		#takes a key referenced by y column name and with columns labelname, color
 		lastys = self.calc_yspacing(ys)
 		for i in range(len(ys)):
 			y = lastys.iloc[i].name
 			self.annotate(x='month',
 				y=y,
-				num_annotation=num_annotation_fxn(y=y),
+				num_annotation=annotation_fxn(y=y),
 				legend_label=key.loc[y,'labelname'],
 				label_color=key.loc[y,'color'],
 				xpad=75, 
