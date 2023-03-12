@@ -6,20 +6,36 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 ## Content Interactions
 
-![Content Interactions](content_interactions/charts/ContentInteractions_3_light.png)
+![Content Interactions](wikicharts/charts/ContentInteractions.png)
 
 ## Active Editors
 
-
-![Active Editors](active_editors/charts/Dec_1.png)
-
+![Active Editors](wikicharts/charts/Active_Editors.png)
 
 ## New and Returning Editors
 
-
-![New and Returning Editors](new_returning/charts/Dec_3_sidelabelsblack.png)
+![New and Returning Editors](wikicharts/charts/New_Returning.png)
 
 ## Net New Content
 
+![Net New Content](wikicharts/charts/New_New.png)
 
-![Net New Content](net_new_content/charts/NetNew_2_yoy.png)
+## Unique Devices
+
+![Unique Devices](wikicharts/charts/Unique_Devices.png)
+
+## Pageviews by Access Source
+
+![Pageviews Source](wikicharts/charts/Pageviews_Source.png)
+
+## Pageviews by Referral Source
+
+![Referral Source](wikicharts/charts/Referral_Source.png)
+
+## Country Breakdown
+
+![Country Breakdown](wikicharts/charts/Country_Breakdown.png)
+
+## Project Growth
+
+![Project Growth](wikicharts/charts/Project_Growth.png)
