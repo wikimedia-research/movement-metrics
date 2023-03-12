@@ -2,81 +2,76 @@ import pandas as pd
 import datetime
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
-import numpy as np
-import re
-import calendar
-from datetime import date
+import path
+import getopt
+import sys
+import os
+from os.path import dirname
+sys.path.append('../')
 from wikicharts import Wikichart
 from wikicharts import wmf_colors
 
+def main(argv):
+	print("Generating Content Interactions chart...")
 
-#---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Content_Interactions.png"
-save_file_name = "charts/" + outfile_name
-yoy_note = input('YoY annotation note (default is blank):\n') or " "
+	#parse commandline arguments
+	opts, args = getopt.getopt(argv,"pi")
 
-#---READ IN DATA--
-df = pd.read_csv('../data/reader_metrics.tsv', sep='\t')
-corrected_df = pd.read_csv('../data/corrected_metrics.csv')
+	#---PROMPT FOR INPUT---
+	script_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+	outfile_name = "Content_Interactions.png"
+	yoy_note = " "
+	display_flag = True
+	for opt in opts[0]:
+		if opt == '-p':
+			outfile_name = input('Outfile_name:\n')
+			yoy_note = input('YoY annotation note (default is blank):\n')
+		elif opt == '-i':
+			display_flag = False
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name
 
-#display top rows for preview
-#df.iloc[0,:] 
+	#---CLEAN DATA--
+	data_directory = dirname(dirname(script_directory))
+	df = pd.read_csv(data_directory + '/data/reader_metrics.tsv', sep='\t')
+	corrected_df = pd.read_csv(data_directory + '/data/corrected_metrics_only.csv')
 
-#---CLEAN DATA--
-#print out data types
-#print(df.month.dtype)
-#print(df.interactions.dtype)
-#print(df.interactions_corrected.dtype)
+	start_date = "2018-05-01"
+	end_date = "2023-01-01"
 
-start_date = "2018-05-01"
-end_date = "2023-01-01"
-month_interest = 1
-month_name = calendar.month_name[month_interest]
+	#convert string to datetime
+	df['month'] = pd.to_datetime(df['month'])
+	corrected_df['month'] = pd.to_datetime(corrected_df['month'])
 
-#remove commas
-corrected_df["interactions"] = corrected_df["interactions"].str.replace(",","")
-corrected_df["interactions_corrected"] = corrected_df["interactions_corrected"].str.replace(",","")
+	#set new index
+	corrected_df.set_index('month')
 
-#convert string to datetime
-df['month'] = pd.to_datetime(df['month'])
-corrected_df['month'] = pd.to_datetime(corrected_df['month'])
+	#truncate to preferred date range
+	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
-#truncate to preferred date range
-df = df[df["month"].isin(pd.date_range(start_date, end_date))]
-corrected_df = corrected_df[corrected_df["month"].isin(pd.date_range(start_date, end_date))]
+	#combine datasets — add corrected values to the reader metrics dataset
+	df['interactions_corrected'] = df['interactions']
+	correction_range = pd.date_range(start='2021-05-01', end='2022-01-01', freq='MS')
+	for m in correction_range:
+		row_index = df[df['month'] == m].index 
+		correct_row = corrected_df.loc[corrected_df['month'] ==  m]
+		df.loc[row_index, 'interactions_corrected'] = correct_row['interactions_corrected'].values
 
-#convert to int
-corrected_df['interactions'] = corrected_df['interactions'].astype(str).astype(float)
-corrected_df['interactions_corrected'] = corrected_df['interactions_corrected'].astype(str).astype(float)
+	#---MAKE CHART---
+	chart = Wikichart(start_date,end_date,df)
+	chart.init_plot()
+	chart.plot_data_loss('month','interactions','interactions_corrected',corrected_df)
+	chart.plot_line('month','interactions_corrected',wmf_colors['blue'])
+	chart.plot_monthlyscatter('month','interactions_corrected',wmf_colors['blue'])
+	chart.plot_yoy_highlight('month','interactions_corrected')
+	chart.format(title = f'Content Interactions',
+		radjust=0.87,
+		y_order=1e-9,
+		y_label_format='{:1.0f}B',
+		data_source="https://github.com/wikimedia-research/Reader-movement-metrics")
+	chart.annotate(x='month',
+		y='interactions_corrected',
+		num_annotation=chart.calc_yoy(y='interactions_corrected'))
+	chart.finalize_plot(save_file_name,display=display_flag)
 
-#combine datasets — add corrected values to the reader metrics dataset
-df['interactions_corrected'] = df['interactions']
-correction_range = pd.date_range(start='2021-05-01', end='2022-02-01', freq='MS')
-for m in correction_range:
-	row_index = df[df['month'] == m].index 
-	correct_row = corrected_df.loc[corrected_df['month'] ==  m]
-	df.loc[row_index, 'interactions_corrected'] = correct_row['interactions_corrected']
-
-#create subsets of data for easier plotting
-data_loss_df = df[df["month"].isin(pd.date_range("2021-05-01", "2022-02-01"))]
-
-#---MAKE CHART---
-chart = Wikichart(start_date,end_date,month_interest,df)
-chart.init_plot()
-chart.plot_data_loss('month','interactions','interactions_corrected')
-chart.plot_line('month','interactions_corrected',wmf_colors['blue'])
-chart.plot_monthlyscatter('month','interactions_corrected',wmf_colors['blue'])
-chart.plot_yoy_highlight('month','interactions_corrected')
-chart.format(title = f'Content Interactions ({month_name})',
-	radjust=0.87,
-	y_order=1e-9,
-	y_label_format='{:1.0f}B',
-	author="Hua Xi",
-	data_source="https://github.com/wikimedia-research/Reader-movement-metrics")
-chart.annotate(x='month',
-	y='interactions_corrected',
-	num_annotation=chart.calc_yoy(y='interactions_corrected'),
-	legend_label='',
-	xpad=0,
-	ypad=0)
-chart.finalize_plot(save_file_name)
+if __name__ == "__main__":
+	main(sys.argv[1:])

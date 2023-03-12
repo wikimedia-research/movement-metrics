@@ -1,77 +1,78 @@
 import pandas as pd
 import datetime
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import matplotlib.font_manager
-import numpy as np
-from matplotlib.ticker import FormatStrFormatter
-import re
-import calendar
-from datetime import date
+import path
+import getopt
+import sys
+import os
+from os.path import dirname
+sys.path.append('../')
 from wikicharts import Wikichart
 from wikicharts import wmf_colors
 
-#to do
-#programmatize yorder and ylabelformatter
-#remove repetitive yoy_highlight dataframe making
+def main(argv):
+	print("Generating Net New Content chart...")
 
-#---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Net_New.png"
-save_file_name = "charts/" + outfile_name
-yoy_note = input('YoY annotation note (default is blank):\n') or " "
+	#parse commandline arguments
+	opts, args = getopt.getopt(argv,"pi")
 
-#---READ IN DATA--
-df = pd.read_csv('../data/editor_metrics.tsv', sep='\t')
+	#---PROMPT FOR INPUT---
+	script_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+	outfile_name = "Net_New.png"
+	yoy_note = " "
+	display_flag = True
+	for opt in opts[0]:
+		if opt == '-p':
+			outfile_name = input('Outfile_name:\n')
+			yoy_note = input('YoY annotation note (default is blank):\n')
+		elif opt == '-i':
+			display_flag = False
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name
 
-#display top rows for preview
-#df.head()
-#df.iloc[0,:]
+	#---CLEAN DATA--
+	data_directory = dirname(dirname(script_directory))
+	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
 
-#---CLEAN DATA--
-#print out data types
-#print(df.month.dtype)
-#print(df.net_new_Commons_content_pages.dtype)
-#print(df.net_new_Wikidata_entities.dtype)
-#print(df.net_new_Wikipedia_articles.dtype)
-#print(df.net_new_content_pages.dtype)
+	start_date = "2018-05-01"
+	end_date = "2023-01-01"
 
-start_date = "2018-05-01"
-end_date = "2023-01-01"
-month_interest = 1
-month_name = calendar.month_name[month_interest]
+	#convert string to datetime
+	df['month'] = pd.to_datetime(df['month'])
 
-#convert string to datetime
-df['month'] = pd.to_datetime(df['month'])
+	#truncate to preferred date range
+	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
-#truncate to preferred date range
-df = df[df["month"].isin(pd.date_range(start_date, end_date))]
+	#---PREPARE TO PLOT
+	key = pd.DataFrame([['Commons',wmf_colors['pink']],
+		['Wikidata',wmf_colors['brightgreen']],
+		['Wikipedia',wmf_colors['purple']]],
+		index=['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],
+		columns=['labelname','color'])
 
-#---PREPARE TO PLOT
-key = pd.DataFrame([['Commons',wmf_colors['pink']],
-	['Wikidata',wmf_colors['brightgreen']],
-	['Wikipedia',wmf_colors['purple']]],
-	index=['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],
-	columns=['labelname','color'])
+	#---MAKE CHART---
+	chart = Wikichart(start_date,end_date,df)
+	chart.init_plot(width=12)
+	chart.plot_line('month','net_new_Commons_content_pages',key.loc['net_new_Commons_content_pages','color'])
+	chart.plot_line('month','net_new_Wikidata_entities',key.loc['net_new_Wikidata_entities','color'])
+	chart.plot_line('month','net_new_Wikipedia_articles',key.loc['net_new_Wikipedia_articles','color'])
 
-#---MAKE CHART---
-chart = Wikichart(start_date,end_date,month_interest,df)
-chart.init_plot(width=12)
-chart.plot_line('month','net_new_Commons_content_pages',key.loc['net_new_Commons_content_pages','color'])
-chart.plot_line('month','net_new_Wikidata_entities',key.loc['net_new_Wikidata_entities','color'])
-chart.plot_line('month','net_new_Wikipedia_articles',key.loc['net_new_Wikipedia_articles','color'])
+	chart.plot_monthlyscatter('month','net_new_Commons_content_pages',key.loc['net_new_Commons_content_pages','color'])
+	chart.plot_monthlyscatter('month','net_new_Wikidata_entities',key.loc['net_new_Wikidata_entities','color'])
+	chart.plot_monthlyscatter('month','net_new_Wikipedia_articles',key.loc['net_new_Wikipedia_articles','color'])
 
-chart.plot_monthlyscatter('month','net_new_Commons_content_pages',key.loc['net_new_Commons_content_pages','color'])
-chart.plot_monthlyscatter('month','net_new_Wikidata_entities',key.loc['net_new_Wikidata_entities','color'])
-chart.plot_monthlyscatter('month','net_new_Wikipedia_articles',key.loc['net_new_Wikipedia_articles','color'])
+	chart.format(title = f'Net New Content',
+		y_order=1e-6,
+		y_label_format='{:1.1f}M',
+		radjust=0.75,
+		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
 
-chart.format(title = f'Net New Content ({month_name})',
-	y_order=1e-6,
-	y_label_format='{:1.1f}M',
-	radjust=0.75,
-	author="Hua Xi",
-	data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
+	#labeling is done together in order to calculate correct spacing to prevent label overlap whereas the lines can be plotted separately
+	chart.multi_yoy_annotate(['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],key,chart.calc_yoy)
 
-chart.multi_yoy_annotate(['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],key)
+	chart.finalize_plot(save_file_name,display=display_flag)
 
-chart.finalize_plot(save_file_name)
+if __name__ == "__main__":
+	main(sys.argv[1:])
+
+
