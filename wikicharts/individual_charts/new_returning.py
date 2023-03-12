@@ -17,7 +17,7 @@ from wikicharts import wmf_colors
 #remove repetitive yoy_highlight dataframe making
 
 #---PROMPT FOR INPUT---
-outfile_name = input('Outfile_name:\n') or "Net_New_Content.png"
+outfile_name = input('Outfile_name:\n') or "New_Returning.png"
 save_file_name = "charts/" + outfile_name
 yoy_note = input('YoY annotation note (default is blank):\n') or " "
 
