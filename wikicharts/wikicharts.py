@@ -26,6 +26,9 @@ def y_label_formatter(value,multiplier,format_text):
 	return tail_dot_rgx.sub(r'\2',formatted_value)
 
 #---BASIC CHART---
+#the wrapper's main functionality is in the formatting and annotation
+#the plotting functions could actually probably be deleted bc they just repeat matplotlib's functions
+
 class Wikichart:
 	def __init__(self,start_date, end_date,dataset,month_interest=parameters['month_interest'],yoy_highlight=None):
 		self.start_date = start_date
@@ -77,13 +80,22 @@ class Wikichart:
 			zorder=3)
 
 	def format(self, title, y_order, y_label_format, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
+		#format title
 		custom_title = f'{title} ({calendar.month_name[self.month_interest]})'
 		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left')
 		#remove bounding box
 		for pos in ['right', 'top', 'bottom', 'left']:
 			plt.gca().spines[pos].set_visible(False)
-		#expand bottom margin
+		#expand bottom margin (to make room for author and data source annotation)
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust)
+		#format y-axis range (gca = get current axis)
+		#we want the plotted portion to be 2/3rds the total y axis range
+		ax = plt.gca()
+		current_ylim = ax.get_ylim()
+		current_yrange = current_ylim[1] - current_ylim[0]
+		new_ymin = current_ylim[0] - current_yrange / 2
+		new_ymax = current_ylim[1] + current_yrange / 2
+		ax.set_ylim([new_ymin, new_ymax])
 		#format x-axis labels — yearly x-axis labels on January
 		plt.xticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
 		date_labels = []
@@ -148,7 +160,6 @@ class Wikichart:
 	def finalize_plot(self, save_file_name, display=True):
 		plt.savefig(save_file_name, dpi=300)
 		if display:
-			print(display)
 			plt.show()
 
 	def calc_yspacing(self, ys):
