@@ -22,12 +22,13 @@ def main(argv):
 	outfile_name = "Content_Interactions.png"
 	yoy_note = " "
 	display_flag = True
-	for opt in opts[0]:
-		if opt == '-p':
-			outfile_name = input('Outfile_name:\n')
-			yoy_note = input('YoY annotation note (default is blank):\n')
-		elif opt == '-i':
-			display_flag = False
+	if len(opts) > 0:
+		for opt in opts[0]:
+			if opt == '-p':
+				outfile_name = input('Outfile_name:\n')
+				yoy_note = input('YoY annotation note (default is blank):\n')
+			elif opt == '-i':
+				display_flag = False
 	save_file_name = dirname(script_directory) + "/charts/" + outfile_name
 
 	#---CLEAN DATA--
@@ -36,7 +37,7 @@ def main(argv):
 	corrected_df = pd.read_csv(data_directory + '/data/corrected_metrics_only.csv')
 
 	start_date = "2018-05-01"
-	end_date = "2023-01-01"
+	end_date = "2023-03-01"
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
@@ -65,8 +66,6 @@ def main(argv):
 	chart.plot_yoy_highlight('month','interactions_corrected')
 	chart.format(title = f'Content Interactions',
 		radjust=0.87,
-		y_order=1e-9,
-		y_label_format='{:1.0f}B',
 		data_source="https://github.com/wikimedia-research/Reader-movement-metrics")
 	chart.annotate(x='month',
 		y='interactions_corrected',

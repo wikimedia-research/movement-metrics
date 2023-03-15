@@ -28,12 +28,13 @@ def main(argv):
 	outfile_name = "Unique_Devices.png"
 	yoy_note = " "
 	display_flag = True
-	for opt in opts[0]:
-		if opt == '-p':
-			outfile_name = input('Outfile_name:\n')
-			yoy_note = input('YoY annotation note (default is blank):\n')
-		elif opt == '-i':
-			display_flag = False
+	if len(opts) > 0:
+		for opt in opts[0]:
+			if opt == '-p':
+				outfile_name = input('Outfile_name:\n')
+				yoy_note = input('YoY annotation note (default is blank):\n')
+			elif opt == '-i':
+				display_flag = False
 	save_file_name = dirname(script_directory) + "/charts/" + outfile_name
 
 	#---CLEAN DATA--
@@ -41,7 +42,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/reader_metrics.tsv', sep='\t')
 
 	start_date = "2018-05-01"
-	end_date = "2023-01-01"
+	end_date = "2023-03-01"
 	month_interest = parameters['month_interest']
 
 	#convert string to datetime
@@ -145,13 +146,11 @@ def main(argv):
 
 	#---FORMATTING---
 	chart.format(title = f'Unique Devices - Wikipedia Only',
-		y_order=1e-9,
-		y_label_format='{:1.2f}B',
 		radjust=0.8,
 		data_source="https://github.com/wikimedia-research/Readers-movement-metrics")
 	chart.annotate(x='month',
 		y='unique_devices',
-		num_annotation=chart.calc_yoy(y='unique_devices',yoy_note=yoy_note))
+		num_annotation=chart.calc_finalcount(y='unique_devices',yoy_note=yoy_note))
 
 	chart.finalize_plot(save_file_name,display=display_flag)
 

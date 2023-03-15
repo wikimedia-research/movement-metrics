@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import numpy as np
+import math
 import re
 import calendar
 from datetime import date
@@ -14,16 +15,40 @@ import warnings
 
 #---CUSTOM DICTIONARIES
 wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','base80':'#eaecf0','orange':'#EE8019','base70':'#c8ccd1','red':'#970302','pink':'#E679A6','green50':'#00af89','purple':'#5748B5','blue':'#0E65C0','brightblue':'#049DFF','brightbluelight':'#C0E6FF','yellow':'#F0BC00','green':'#308557','brightgreen':'#71D1B3'}
-parameters = {'month_interest':1,'author':'Hua Xi'}
+parameters = {'month_interest':2,'author':'Hua Xi'}
 style_parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
 
 
 #---CUSTOM FUNCTIONS---
+#takes a y value, an order to divide it by, and a format and produces a label-ready text
 def y_label_formatter(value,multiplier,format_text):
 	formatted_value = format_text.format(value*multiplier)
 	#remove trailing zeros after decimal point only
 	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
 	return tail_dot_rgx.sub(r'\2',formatted_value)
+
+#takes a value and calculates the order and a reasonable default text formatting
+def calc_order_format(value):
+	if value == 0:
+		order = 1
+	else:
+		order = math.floor(math.log10(abs(value)))
+	if order >= 12:
+		multiplier = float('1e-12')
+		formatting = '{:1.2f}T'
+	elif order >= 9:
+		multiplier = float('1e-9')
+		formatting = '{:1.2f}B'
+	elif order >= 6:
+		multiplier = float('1e-6')
+		formatting = '{:1.2f}M'
+	elif order > 3:
+		multiplier = float('1e-3')
+		formatting = '{:1.2f}K'
+	else:
+		multiplier = 1
+		formatting = '{:1.0f}'
+	return multiplier, formatting
 
 #---BASIC CHART---
 #the wrapper's main functionality is in the formatting and annotation
@@ -79,7 +104,7 @@ class Wikichart:
 			edgecolor=col,
 			zorder=3)
 
-	def format(self, title, y_order, y_label_format, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
+	def format(self, title, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
 		#format title
 		custom_title = f'{title} ({calendar.month_name[self.month_interest]})'
 		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left')
@@ -93,8 +118,8 @@ class Wikichart:
 		ax = plt.gca()
 		current_ylim = ax.get_ylim()
 		current_yrange = current_ylim[1] - current_ylim[0]
-		new_ymin = current_ylim[0] - current_yrange / 2
-		new_ymax = current_ylim[1] + current_yrange / 2
+		new_ymin = current_ylim[0] - current_yrange / 4
+		new_ymax = current_ylim[1] + current_yrange / 4
 		ax.set_ylim([new_ymin, new_ymax])
 		#format x-axis labels — yearly x-axis labels on January
 		plt.xticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
@@ -106,7 +131,12 @@ class Wikichart:
 		#format y-axis labels
 		warnings.filterwarnings("ignore")
 		current_values = plt.gca().get_yticks()
-		plt.gca().set_yticklabels([y_label_formatter(x,y_order,y_label_format) for x in current_values])
+		new_labels = []
+		for y_value in current_values:
+			y_order, y_label_format = calc_order_format(y_value)
+			new_label = y_label_formatter(y_value, y_order, y_label_format)
+			new_labels.append(new_label)
+		plt.gca().set_yticklabels(new_labels)
 		plt.yticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
 		#add bottom annotation
 		today = date.today()
@@ -123,11 +153,13 @@ class Wikichart:
 
 	def calc_finalcount(self,y,yoy_note=""):
 		final_count = self.df[str(y)].iat[-1]
-		count_annotation = '{:1.0f}M'.format(final_count*1e-6) 
+		multiplier, formatting = calc_order_format(final_count)
+		count_annotation = y_label_formatter(value = final_count,multiplier = multiplier,format_text=formatting)
 		return(count_annotation)
 
 	def annotate(self, x, y, num_annotation, legend_label="", label_color='black', xpad=0, ypad=0):
-		#note that when legend_label="", xpad should be 0 (only a yoy label is produced)
+		#legend annotation
+		#note that when legend_label="", xpad should be 0 (only a numerical annotation is produced)
 		plt.annotate(legend_label,
 			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
 			xytext = (20,-5+ypad),
@@ -137,8 +169,7 @@ class Wikichart:
 			fontsize=style_parameters['text_font_size'],
 			weight='bold',
 			family=style_parameters['font'])
-		#yoy annotation
-		#try to get custom spacing
+		#increase xpad for numerical annotation if legend annotation is present (prevent overlap)
 		if(len(legend_label) > 0):
 			try:
 				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
@@ -146,6 +177,7 @@ class Wikichart:
 				xpad= labelsize[0] + 3
 			except:
 				xpad = len(legend_label) * 4
+		#numerical annotation
 		plt.annotate(num_annotation,
 			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
 			xytext = (20+xpad,-5+ypad),
@@ -172,7 +204,7 @@ class Wikichart:
 		#set remaining two paddings
 		for i in range(1,len(ys)):
 			valuedistance = lastys.iloc[i]['lasty'] - lastys.iloc[i-1]['lasty']
-			if valuedistance < 150000:
+			if valuedistance < 250000:
 				#add padding if too close
 				lastys.at[lastys.iloc[i].name,'ypad'] = 5 * padmultiplier
 				#increase multiplier in event that multiple values are too close together
