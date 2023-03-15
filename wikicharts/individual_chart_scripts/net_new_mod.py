@@ -22,12 +22,13 @@ def main(argv):
 	outfile_name = "Net_New.png"
 	yoy_note = " "
 	display_flag = True
-	for opt in opts[0]:
-		if opt == '-p':
-			outfile_name = input('Outfile_name:\n')
-			yoy_note = input('YoY annotation note (default is blank):\n')
-		elif opt == '-i':
-			display_flag = False
+	if len(opts) > 0:
+		for opt in opts[0]:
+			if opt == '-p':
+				outfile_name = input('Outfile_name:\n')
+				yoy_note = input('YoY annotation note (default is blank):\n')
+			elif opt == '-i':
+				display_flag = False
 	save_file_name = dirname(script_directory) + "/charts/" + outfile_name
 
 	#---CLEAN DATA--
@@ -35,7 +36,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
 
 	start_date = "2018-05-01"
-	end_date = "2023-01-01"
+	end_date = "2023-03-01"
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
@@ -62,8 +63,6 @@ def main(argv):
 	chart.plot_monthlyscatter('month','net_new_Wikipedia_articles',key.loc['net_new_Wikipedia_articles','color'])
 
 	chart.format(title = f'Net New Content',
-		y_order=1e-6,
-		y_label_format='{:1.1f}M',
 		radjust=0.75,
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
 
