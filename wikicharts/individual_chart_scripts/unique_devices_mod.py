@@ -42,7 +42,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/reader_metrics.tsv', sep='\t')
 
 	start_date = "2018-05-01"
-	end_date = "2023-03-01"
+	end_date = datetime.datetime.today()
 	month_interest = parameters['month_interest']
 
 	#convert string to datetime

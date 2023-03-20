@@ -37,7 +37,7 @@ def main(argv):
 	corrected_df = pd.read_csv(data_directory + '/data/corrected_metrics_only.csv')
 
 	start_date = "2018-05-01"
-	end_date = "2023-03-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])

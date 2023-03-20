@@ -12,15 +12,15 @@ from wikicharts import Wikichart
 from wikicharts import wmf_colors
 
 def main(argv):
+	#print update
 	print("Generating New Returning chart...")
 
-	#parse commandline arguments
-	opts, args = getopt.getopt(argv,"pi")
-
-	#---PROMPT FOR INPUT---
+	#---INTERPRET COMMANDLINE ARGUEMNTS---
 	script_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
 	outfile_name = "New_Returning.png"
 	yoy_note = " "
+	#parse commandline arguments
+	opts, args = getopt.getopt(argv,"pi")
 	display_flag = True
 	if len(opts) > 0:
 		for opt in opts[0]:
@@ -36,7 +36,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
 
 	start_date = "2019-01-01"
-	end_date = "2023-03-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
@@ -57,6 +57,8 @@ def main(argv):
 	chart.plot_line('month','new_active_editors',key.loc['new_active_editors','color'])
 	chart.plot_monthlyscatter('month','returning_active_editors',key.loc['returning_active_editors','color'])
 	chart.plot_monthlyscatter('month','new_active_editors',key.loc['new_active_editors','color'])
+	chart.plot_yoy_highlight('month','returning_active_editors')
+	chart.plot_yoy_highlight('month','new_active_editors')
 	chart.format(title = f'New and Returning Editors',
 		radjust=0.75,
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")

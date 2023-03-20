@@ -36,7 +36,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/monthly_pageviews.csv', sep='\t')
 
 	start_date = "2020-07-01"
-	end_date = "2023-01-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
