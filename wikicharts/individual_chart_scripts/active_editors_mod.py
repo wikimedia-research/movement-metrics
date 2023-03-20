@@ -37,7 +37,7 @@ def main(argv):
 
 	#note start and end dates may be different depending on chart_type
 	start_date = "2019-01-01"
-	end_date = "2023-03-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
@@ -50,7 +50,7 @@ def main(argv):
 	chart.init_plot()
 	chart.plot_line('month','active_editors',wmf_colors['blue'])
 	chart.plot_monthlyscatter('month','active_editors',wmf_colors['blue'])
-	chart.plot_yoy_highlight('month','active_editors',wmf_colors['yellow'])
+	chart.plot_yoy_highlight('month','active_editors')
 	chart.format(title = 'Active Editors',
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
 	chart.annotate(x='month',

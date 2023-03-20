@@ -42,7 +42,7 @@ def calc_order_format(value):
 	elif order >= 6:
 		multiplier = float('1e-6')
 		formatting = '{:1.2f}M'
-	elif order > 3:
+	elif order >= 3:
 		multiplier = float('1e-3')
 		formatting = '{:1.2f}K'
 	else:
@@ -61,13 +61,22 @@ class Wikichart:
 		self.month_interest = month_interest
 		self.month_name = calendar.month_name[month_interest]
 		self.df = dataset
+		self.fig = None
+		self.ax = None
 
-	def init_plot(self,width=10,height=6):
+	'''
+	def get_inputs(self, script_dir, outfile_name = "Chart", annotation_note = "", display_flag = True):
+		outfile_name = "Regional_Active_Editors"
+		outfile_name = input('Outfile_name:\n')
+		yoy_note = input('YoY annotation note (default is blank):\n')
+		input1 = input()
+	'''
+
+	def init_plot(self,width=10,height=6,subplotsx=1,subplotsy=1):
 		#plt.figure(figsize=(width, height))
-		fig, ax = plt.subplots()
-		fig.set_figwidth(width)
-		fig.set_figheight(height)
-		plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
+		self.fig, self.ax = plt.subplots(subplotsx,subplotsy)
+		self.fig.set_figwidth(width)
+		self.fig.set_figheight(height)
 
 	def plot_line(self, x, y, col, legend_label ='_nolegend_',linewidth = 2):
 		plt.plot(self.df[str(x)], self.df[str(y)],
@@ -104,7 +113,25 @@ class Wikichart:
 			edgecolor=col,
 			zorder=3)
 
+	def plot_subplots_lines(self, x, key, linewidth=2):
+		#remove bounding box
+		i = 0
+		for row in self.ax:
+			for axis in row:
+				region_label = key.iloc[i]['labelname']
+				region_color = key.iloc[i]['color']
+				axis.plot(self.df['month'], 
+					self.df[region_label],
+					label='_no_legend_,',
+					color=region_color,
+					zorder=3,
+					linewidth=linewidth)
+				axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=12)
+				i += 1
+
 	def format(self, title, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
+		#add gridlines
+		plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
 		#format title
 		custom_title = f'{title} ({calendar.month_name[self.month_interest]})'
 		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left')
@@ -141,6 +168,38 @@ class Wikichart:
 		#add bottom annotation
 		today = date.today()
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
+
+	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1):
+		#expand bottom margin
+		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust, wspace=0.2, hspace=0.4)
+		#remove bounding box
+		for row in self.ax:
+			for axis in row:
+				axis.set_frame_on(False)
+				#gridlines
+				axis.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
+				#format x axis labels
+				axis.set_xticklabels(axis.get_xticklabels(),fontfamily=style_parameters['font'])
+				#format y axis labels
+				current_values = axis.get_yticklabels()
+				new_labels = []
+				for y_label in current_values:
+					y_value = float(y_label.get_position()[1])
+					y_order, y_label_format = calc_order_format(y_value)
+					new_label = y_label_formatter(y_value, y_order, y_label_format)
+					new_labels.append(new_label)
+				axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'])
+		#add title and axis labels
+		#note there seems to be a bug with ha and va args to suptitle, so just set x and y manually
+		self.fig.suptitle(f'{title} ({calendar.month_name[self.month_interest]})',ha='left',x=0.05,y=0.97,fontsize=style_parameters['title_font_size'],fontproperties={'family':style_parameters['font'],'weight':'bold'})
+		#add bottom annotation
+		today = date.today()
+		plt.figtext(0.05,0.01, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), fontsize=8, va="bottom", ha="left", color=wmf_colors['black25'], fontproperties={'family':style_parameters['font']})
+	
+	def normalize_subplotyaxis(self, ymin, ymax):
+		for row in self.ax:
+			for axis in row:
+				axis.set_ylim([ymin, ymax])
 
 	def calc_yoy(self,y,yoy_note=""):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T

@@ -36,7 +36,7 @@ def main(argv):
 	df = pd.read_csv(data_directory + '/data/editor_metrics.tsv', sep='\t')
 
 	start_date = "2018-05-01"
-	end_date = "2023-03-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])

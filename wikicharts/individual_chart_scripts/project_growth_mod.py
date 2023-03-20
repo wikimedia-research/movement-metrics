@@ -39,7 +39,7 @@ def main(argv):
 
 	#note start and end dates may be different depending on chart_type
 	start_date = "2014-01-01"
-	end_date = "2023-01-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df_wikidata['month'] = df_wikidata['month'].apply(lambda x: x.rsplit("T")[0])

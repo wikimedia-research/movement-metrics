@@ -43,7 +43,7 @@ def main(argv):
 	#print(df.month.dtype)
 
 	start_date = "2020-06-01"
-	end_date = "2023-01-01"
+	end_date = datetime.datetime.today()
 
 	#convert string to datetime
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
