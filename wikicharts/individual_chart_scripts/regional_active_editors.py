@@ -72,19 +72,31 @@ def main(argv):
 	#---MAKE CHART---
 	#first set of four
 	chart1 = Wikichart(start_date,end_date,df1)
-	chart1.init_plot(width=12,subplotsx=2,subplotsy=2)
+	#plt.figure(1)
+	chart1.init_plot(width=12,subplotsx=2,subplotsy=2,fignum=0)
 	chart1.plot_subplots_lines('month', key1)
-	chart1.format_subplots(title = 'Regional Active Editors',
-		key = key1,
-		data_source="https://docs.google.com/spreadsheets/d/17aK5TeBAod9a2v5A4lDImsQQ6zwSOuO9-G8jWCGIvgs")
-	chart1.finalize_plot(save_file_name1,display=display_flag)
+	maxrange1 = chart1.get_maxrange()
 	#second set of four
 	chart2 = Wikichart(start_date,end_date,df2)
-	chart2.init_plot(width=12,subplotsx=2,subplotsy=2)
+	chart2.init_plot(width=12,subplotsx=2,subplotsy=2,fignum=1)
 	chart2.plot_subplots_lines('month', key2)
+	maxrange2 = chart2.get_maxrange()
+	#calculate the largest range between the two figures and 8 subplots
+	maxrange = max(maxrange1,maxrange2)
+	#format and display figure 1
+	plt.figure(0)
+	chart1.standardize_subplotyrange(maxrange)
+	chart1.format_subplots(title = 'Regional Active Editors',
+		key = key1,
+		data_source="https://docs.google.com/spreadsheets/d/13XrrnCaz9qsKs5Gu_lUs2jtsK9VrSiGlilCleDgR6KM")
+	#save chart1 but set display to False because plt.show() will show all figures at once
+	chart1.finalize_plot(save_file_name1,display=False)
+	#format and display figure 2
+	plt.figure(1)
+	chart2.standardize_subplotyrange(maxrange)
 	chart2.format_subplots(title = 'Regional Active Editors',
 		key = key2,
-		data_source="https://docs.google.com/spreadsheets/d/17aK5TeBAod9a2v5A4lDImsQQ6zwSOuO9-G8jWCGIvgs")
+		data_source="https://docs.google.com/spreadsheets/d/13XrrnCaz9qsKs5Gu_lUs2jtsK9VrSiGlilCleDgR6KM")
 	chart2.finalize_plot(save_file_name2,display=display_flag)
 
 if __name__ == "__main__":

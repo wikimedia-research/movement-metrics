@@ -115,7 +115,6 @@ def main(argv):
 	ystart = ytick_values[0]
 	height = ytick_values[-1] - ytick_values[0]
 
-	pale_blue = '#c0e6ff'
 	# Plot rectangle
 	rect = Rectangle((xstart, ystart), width, height, 
 		color='white', 
