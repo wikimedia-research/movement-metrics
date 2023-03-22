@@ -1,9 +1,12 @@
 import pandas as pd
-import datetime
+from datetime import date
+from datetime import datetime, timedelta
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.font_manager
+import matplotlib.dates as mdates
+from matplotlib.patches import Rectangle
 import numpy as np
 import math
 import re
@@ -72,9 +75,9 @@ class Wikichart:
 		input1 = input()
 	'''
 
-	def init_plot(self,width=10,height=6,subplotsx=1,subplotsy=1):
+	def init_plot(self,width=10,height=6,subplotsx=1,subplotsy=1,fignum=0):
 		#plt.figure(figsize=(width, height))
-		self.fig, self.ax = plt.subplots(subplotsx,subplotsy)
+		self.fig, self.ax = plt.subplots(subplotsx,subplotsy, num=fignum)
 		self.fig.set_figwidth(width)
 		self.fig.set_figheight(height)
 
@@ -196,10 +199,32 @@ class Wikichart:
 		today = date.today()
 		plt.figtext(0.05,0.01, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), fontsize=8, va="bottom", ha="left", color=wmf_colors['black25'], fontproperties={'family':style_parameters['font']})
 	
-	def normalize_subplotyaxis(self, ymin, ymax):
+	#set every subplot to the same ymin and ymax
+	def standardize_subplotyaxis(self, ymin, ymax):
 		for row in self.ax:
 			for axis in row:
 				axis.set_ylim([ymin, ymax])
+
+	#set every subplot to the same yrange and intervals
+	def standardize_subplotyrange(self, yrange, yspacing = 50000000):
+		#minorLocator = ticker.MultipleLocator(yspacing)
+		for row in self.ax:
+			for axis in row:
+				current_ymin, current_ymax = axis.get_ylim()
+				newymin = current_ymin + ((current_ymax - current_ymin) / 2) - (yrange / 2)
+				newymax = newymin + yrange
+				axis.set_ylim(newymin, newymax)
+				#axis.yaxis.set_major_locator(ticker.MultipleLocator(yspacing))
+				#axis.Axis.set_minor_locator(minorLocator)
+
+	#returns the subplot with the max range, and its corresponding locators
+	def get_maxrange(self):
+		ranges = []
+		for row in self.ax:
+			for axis in row:
+				ymin, ymax = axis.get_ylim()
+				ranges.append(ymax - ymin)
+		return max(ranges)
 
 	def calc_yoy(self,y,yoy_note=""):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
@@ -285,6 +310,39 @@ class Wikichart:
 				label_color=key.loc[y,'color'],
 				xpad=75, 
 				ypad=lastys.iloc[i].ypad)
+
+	def top_annotation(self, x = 0.05, y =0.87, annotation_text = ""):
+		plt.figtext(x, y, annotation_text, family=style_parameters['font'],fontsize=10, color= wmf_colors['black75'])
+
+	#draws a rectangle to block off a set of dates
+	def block_off(self,axis, blockstart, blockend, xbuffer = 7):
+		#convert dates to x axis coordinates
+		xstart = mdates.date2num(blockstart)
+		xend = mdates.date2num(blockend)
+		block_width = xend - xstart
+
+		#get height
+		ymin, ymax = axis.get_ylim()
+		block_height = ymax - ymin
+
+		#plot rectangle
+		rect = Rectangle((xstart - xbuffer, ymin), block_width + 2 * xbuffer, block_height, 
+			color='white', 
+			linewidth=0,
+			fill='white',
+			edgecolor=None,
+			zorder=10)
+		axis.add_patch(rect) 
+
+	def block_off_multi(self,blockstart, blockend, xbuffer = 7):
+		for row in self.ax:
+			for axis in row:
+				self.block_off(axis,blockstart, blockend, xbuffer)
+
+
+
+
+
 
 
 
