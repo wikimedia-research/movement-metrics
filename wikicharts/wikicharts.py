@@ -9,6 +9,8 @@ import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
 import numpy as np
 import math
+from math import ceil
+from math import floor
 import re
 import calendar
 from datetime import date
@@ -53,6 +55,63 @@ def calc_order_format(value):
 		formatting = '{:1.0f}'
 	return multiplier, formatting
 
+#takes a dataframe and splits it into sets of four columns (for plotting multiple charts per figure)
+#keeps the index column as the first column in each split dataframe
+def split_df_by_col(df, index_column_name = "month", cols_per_df = 4):
+	num_charts = len(df.columns) - 1
+	num_figures = ceil(num_charts / cols_per_df)
+	index_column = df.columns.get_loc(index_column_name)
+	dfs = []
+	for f in range(num_figures):
+		#get a list consisting of the 0th column and the 4 columns going on the figure i
+		col_start = f * cols_per_df
+		col_end = min(col_start + cols_per_df,num_charts + 1)
+		#list of four columns going on figure i
+		cols = [index_column] + list(range(col_start,col_end))
+		#remove duplicates
+		cols = list(set(list(cols)))
+		#create the new df and set the index
+		new_df = df.iloc[:, cols]
+		#new_df = new_df.reset_index(index_column_name)
+		dfs.append(new_df)
+	return dfs
+
+#generate a set of key tables for a set of dfs
+def gen_keys(dfs, key_colors, index_column_name = "month"):
+	keys = []
+	num_colors = len(key_colors)
+	c = 0
+	for subdf in dfs:
+		variables = list(subdf.columns)
+		variables.remove("month")
+		new_key_values = []
+		for col in variables:
+			if c == 0:
+				new_key_values.append([col, key_colors[c]])
+			else:
+				new_key_values.append([col, key_colors[(c % num_colors)]])
+			c += 1
+		new_key = pd.DataFrame(new_key_values, index=variables, columns=['labelname','color'])
+		keys.append(new_key)
+	return keys
+
+#find number closest to n divisible by m
+def closestdivisible(n, m) :
+    # Find the quotient
+    q = int(n / m)
+    # 1st possible closest number
+    n1 = m * q
+    # 2nd possible closest number
+    if((n * m) > 0) :
+        n2 = (m * (q + 1))
+    else :
+        n2 = (m * (q - 1))
+    # if true, then n1 is the required closest number
+    if (abs(n - n1) < abs(n - n2)) :
+        return n1
+    # else n2 is the required closest number
+    return n2
+
 #---BASIC CHART---
 #the wrapper's main functionality is in the formatting and annotation
 #the plotting functions could actually probably be deleted bc they just repeat matplotlib's functions
@@ -66,6 +125,8 @@ class Wikichart:
 		self.df = dataset
 		self.fig = None
 		self.ax = None
+		self.yranges = []
+		self.ynumticks = []
 
 	'''
 	def get_inputs(self, script_dir, outfile_name = "Chart", annotation_note = "", display_flag = True):
@@ -116,20 +177,21 @@ class Wikichart:
 			edgecolor=col,
 			zorder=3)
 
-	def plot_subplots_lines(self, x, key, linewidth=2):
+	def plot_subplots_lines(self, x, key, linewidth=2, num_charts=4):
 		#remove bounding box
 		i = 0
 		for row in self.ax:
 			for axis in row:
-				region_label = key.iloc[i]['labelname']
-				region_color = key.iloc[i]['color']
-				axis.plot(self.df['month'], 
-					self.df[region_label],
-					label='_no_legend_,',
-					color=region_color,
-					zorder=3,
-					linewidth=linewidth)
-				axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=12)
+				if i < num_charts:
+					region_label = key.iloc[i]['labelname']
+					region_color = key.iloc[i]['color']
+					axis.plot(self.df['month'], 
+						self.df[region_label],
+						label='_no_legend_,',
+						color=region_color,
+						zorder=3,
+						linewidth=linewidth)
+					axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=12)
 				i += 1
 
 	def format(self, title, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
@@ -172,26 +234,48 @@ class Wikichart:
 		today = date.today()
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
-	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1):
+	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1, num_charts=4):
 		#expand bottom margin
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust, wspace=0.2, hspace=0.4)
-		#remove bounding box
+		#count number of charts and stop when num_charts is hit
+		i = 0
 		for row in self.ax:
 			for axis in row:
-				axis.set_frame_on(False)
-				#gridlines
-				axis.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
-				#format x axis labels
-				axis.set_xticklabels(axis.get_xticklabels(),fontfamily=style_parameters['font'])
-				#format y axis labels
-				current_values = axis.get_yticklabels()
-				new_labels = []
-				for y_label in current_values:
-					y_value = float(y_label.get_position()[1])
-					y_order, y_label_format = calc_order_format(y_value)
-					new_label = y_label_formatter(y_value, y_order, y_label_format)
-					new_labels.append(new_label)
-				axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'])
+				if i < num_charts:
+					#remove bounding box
+					axis.set_frame_on(False)
+					#gridlines
+					axis.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
+					#format x axis labels
+					axis.set_xticklabels(axis.get_xticklabels(),fontfamily=style_parameters['font'])
+					'''
+					date_labels = []
+					date_labels_raw = pd.date_range(self.start_date, self.end_date, freq='AS-JAN')
+					for dl in date_labels_raw:
+						date_labels.append(datetime.strftime(dl, '%Y'))
+					axis.set_xticklabels(date_labels_raw)
+					axis.set_xticklabels(date_labels)
+					'''
+					#format y axis labels
+					current_values = axis.get_yticklabels()
+					new_labels = []
+					#format in abbreviated notation
+					for y_label in current_values:
+						y_value = float(y_label.get_position()[1])
+						y_order, y_label_format = calc_order_format(y_value)
+						new_label = y_label_formatter(y_value, y_order, y_label_format)
+						new_labels.append(new_label)
+					'''
+					#if 0 is the bottom label, remove aka don't label at all
+					print(type(new_labels[0]))
+					if new_labels[0] == str(0):
+						new_labels[0] = ""
+					'''
+					axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'])
+				else:
+					#make invisible if outside of num_charts
+					axis.set_visible(False)
+				i += 1
 		#add title and axis labels
 		#note there seems to be a bug with ha and va args to suptitle, so just set x and y manually
 		self.fig.suptitle(f'{title} ({calendar.month_name[self.month_interest]})',ha='left',x=0.05,y=0.97,fontsize=style_parameters['title_font_size'],fontproperties={'family':style_parameters['font'],'weight':'bold'})
@@ -200,31 +284,86 @@ class Wikichart:
 		plt.figtext(0.05,0.01, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), fontsize=8, va="bottom", ha="left", color=wmf_colors['black25'], fontproperties={'family':style_parameters['font']})
 	
 	#set every subplot to the same ymin and ymax
-	def standardize_subplotyaxis(self, ymin, ymax):
+	def standardize_subplotyaxis(self, ymin, ymax, num_charts=4):
+		i = 0
 		for row in self.ax:
 			for axis in row:
-				axis.set_ylim([ymin, ymax])
+				if i < num_charts:
+					axis.set_ylim([ymin, ymax])
+				i += 1
 
 	#set every subplot to the same yrange and intervals
-	def standardize_subplotyrange(self, yrange, yspacing = 50000000):
+	def standardize_subplotyrange(self, yrange, num_ticks, yspacing = 50000000, num_charts=4):
+		#get the standard y interval
+		std_yinterval = yrange / (num_ticks - 1)
+		#keep track of chart num
+		i = 0
 		#minorLocator = ticker.MultipleLocator(yspacing)
 		for row in self.ax:
 			for axis in row:
-				current_ymin, current_ymax = axis.get_ylim()
-				newymin = current_ymin + ((current_ymax - current_ymin) / 2) - (yrange / 2)
-				newymax = newymin + yrange
-				axis.set_ylim(newymin, newymax)
-				#axis.yaxis.set_major_locator(ticker.MultipleLocator(yspacing))
-				#axis.Axis.set_minor_locator(minorLocator)
+				if i < num_charts:
+					#get current y range
+					current_ymin, current_ymax = axis.get_ylim()
+					current_ymedian = current_ymin + ((current_ymax - current_ymin) / 2)
+					if (num_ticks % 2) == 0:
+						#for final even num ticks
+						new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+						print(num_ticks)
+						if new_ymedian < current_ymedian:
+							new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2 - 1))
+						else:
+							new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2))
+					else:
+						#for final odd number of ticks 
+						new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+						new_ymin = new_ymedian - (yrange / 2)
+					#set min to 0 if negative
+					new_ymin = max(0, new_ymin)
+					#set ymax
+					new_ymax = new_ymin + yrange
+					axis.set_ylim(new_ymin, new_ymax)
+					#axis.yaxis.set_major_locator(ticker.MultipleLocator(yspacing))
+					#axis.Axis.set_minor_locator(minorLocator)
+				i += 1
 
-	#returns the subplot with the max range, and its corresponding locators
-	def get_maxrange(self):
-		ranges = []
+	#returns the subplot with the max range, and its corresponding number of ticks
+	#need to change to getting max tick range
+	def get_maxyrange(self):
 		for row in self.ax:
 			for axis in row:
-				ymin, ymax = axis.get_ylim()
-				ranges.append(ymax - ymin)
-		return max(ranges)
+				#note that the axis limits are not necessarily the range displayed by the min and max ticks
+				#the axis limits might slightly wider than the min-max tick range — we use the min max tick range to ensure congruity btw charts
+				#gets the tick range
+				ticks = axis.get_yticklabels()
+				tick_range = ticks[-1].get_position()[1] - ticks[0].get_position()[1]
+				print("expanded tick range " + str(tick_range))
+				self.yranges.append(tick_range)
+				#get tick intervals
+				self.ynumticks.append(len(ticks))
+		maxrange = max(self.yranges)
+		maxrange_index = self.yranges.index(maxrange)
+		maxrange_numticks = self.ynumticks[maxrange_index]
+		return maxrange, maxrange_numticks
+
+	def expand_yrange(self):
+		'''
+		print("initial yrange " + str(axis.get_ylim()))
+		print("initial tick num " + str(len(axis.get_yticklabels())))
+		current_ticks = axis.get_yticklabels()
+		current_tick_range = current_ticks[-1].get_position()[1] - current_ticks[0].get_position()[1]
+		print("initial tick range " + str(current_tick_range))
+		#expands the axis limits via the 2/3rds rule
+		#expanding the ylim via set_ylim will recalibrate ticks automatically
+		current_ylim = axis.get_ylim()
+		current_ylim_range = current_ylim[1] - current_ylim[0]
+		print(current_ylim_range)
+		current_ticknum = len(axis.get_yticklabels())
+		new_ymin = current_ylim[0] - current_ylim_range / 4
+		new_ymax = current_ylim[1] + current_ylim_range / 4
+		axis.set_ylim([new_ymin, new_ymax])
+		print("expanded yrange " + str(axis.get_ylim()))
+		print("expanded tick num " + str(len(axis.get_yticklabels())))
+		'''
 
 	def calc_yoy(self,y,yoy_note=""):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T

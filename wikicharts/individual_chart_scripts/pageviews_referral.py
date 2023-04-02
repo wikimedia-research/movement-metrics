@@ -113,13 +113,13 @@ plt.fill_between(none_dataloss.x_order, none_dataloss.sum_view_count, none_datal
 '''
 #2022 data
 #df_22.plot(x="timestamp", y=["external", "internal","none"],#
-plt.plot(df_22.x_order, df_22.external, label='_nolegend_', color=wmf_colors['purple'],linewidth=2,zorder=7)
-plt.plot(df_22.x_order, df_22.internal, label='_nolegend_', color=wmf_colors['green'],linewidth=2,zorder=7)
-plt.plot(df_22.x_order, df_22.none, label='_nolegend_', color=wmf_colors['orange'],linewidth=2,zorder=6)
+plt.plot(df_22.x_order, df_22.external, label='_nolegend_', color=wmf_colors['purple'],linewidth=2,zorder=8)
+plt.plot(df_22.x_order, df_22.internal, label='_nolegend_', color=wmf_colors['green'],linewidth=2,zorder=8)
+plt.plot(df_22.x_order, df_22.none, label='_nolegend_', color=wmf_colors['orange'],linewidth=2,zorder=8)
 #2021 data
-plt.plot(df_21.x_order, df_21.external, label='_nolegend_', color=wmf_colors['purple'],linestyle='dashed',alpha=0.5,zorder=5)
-plt.plot(df_21.x_order, df_21.internal, label='_nolegend_', color=wmf_colors['green'],linestyle='dashed',alpha=0.5,zorder=5)
-plt.plot(df_21.x_order, df_21.none, label='_nolegend_', color=wmf_colors['orange'],linestyle='dashed',alpha=0.5,zorder=4)
+plt.plot(df_21.x_order, df_21.external, label='_nolegend_', color=wmf_colors['purple'],linestyle='dashed',alpha=0.5,zorder=7)
+plt.plot(df_21.x_order, df_21.internal, label='_nolegend_', color=wmf_colors['green'],linestyle='dashed',alpha=0.5,zorder=7)
+plt.plot(df_21.x_order, df_21.none, label='_nolegend_', color=wmf_colors['orange'],linestyle='dashed',alpha=0.5,zorder=7)
 #for legend only (hidden)
 '''
 plt.fill_between(df_22.x_order, df_22.external, df_22.external,
@@ -128,21 +128,20 @@ plt.fill_between(df_22.x_order, df_22.external, df_22.external,
 	label='Data Loss',
 	zorder=3)
 '''
-#these are plots for the legend, hidden behind
 plt.plot(df_22.x_order, df_22.external,
 	color='black',
-	label='2021-22 (Dashed Line)',
+	label='2021 (Dashed Line)',
 	linestyle='dashed',
 	alpha=0.5,
 	zorder=3)
 plt.plot(df_22.x_order, df_22.external,
 	color='black',
-	label='2022-23 (Solid Line)',
-	zorder=3)
+	label='2022 (Solid Line)',
+	zorder=4)
 
 #---FORMATTING---
 #add title and labels
-plt.title('Pageviews by Referral Source (February)',font='Montserrat',weight='bold',fontsize=24,loc='left')
+plt.title('Pageviews by Referral Source',font='Montserrat',weight='bold',fontsize=24,loc='left')
 plt.xlabel("Month",font='Montserrat', fontsize=18, labelpad=10) #source serif pro
 plt.ylabel("Pageviews",font='Montserrat', fontsize=18,labelpad=10)
 
@@ -180,22 +179,20 @@ plt.legend(frameon=False,
 
 #---ADD ANNOTATIONS---
 #add combined annotation
-def annotate(data_label, legend_label, label_color, ybuffer = 0):
+def annotate(data_label, legend_label, label_color):
 	plt.annotate(legend_label,
 		xy = (df_22['x_order'].iat[-1],df_22[data_label].iat[-1]),
-		xytext = (20,-5 + ybuffer),
+		xytext = (20,-5),
 		xycoords = 'data',
 		textcoords = 'offset points',
 		color=label_color,
 		fontsize=14,
 		weight='bold',
 		wrap = 'True',
-		family='Montserrat',
-		zorder=8,
-		bbox=dict(pad=5, facecolor="white", edgecolor="none"))
+		family='Montserrat')
 annotate('external','External (Search Engine)',wmf_colors['purple'])
-annotate('internal','Internal',wmf_colors['green'], ybuffer = 0)
-annotate('none','None',wmf_colors['orange'], ybuffer = 0)
+annotate('internal','Internal',wmf_colors['green'])
+annotate('none','None',wmf_colors['orange'])
 #data losee note
 plt.figtext(0.5, 0.09, "Data between July 2021 and January 2022 corrected for data loss.", fontsize=14, family='Montserrat',color= wmf_colors['black25'],horizontalalignment='center')
 #data notes
