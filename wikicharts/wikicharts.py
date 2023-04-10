@@ -112,6 +112,11 @@ def closestdivisible(n, m) :
     # else n2 is the required closest number
     return n2
 
+#take a df and create a parallel df of rolling averages
+def roll(df, rolling_months = 3, index_column_name = "month"):
+	rolled = df.set_index('month').rolling(rolling_months).mean().reset_index().dropna()
+	return rolled
+
 #---BASIC CHART---
 #the wrapper's main functionality is in the formatting and annotation
 #the plotting functions could actually probably be deleted bc they just repeat matplotlib's functions
@@ -158,13 +163,12 @@ class Wikichart:
 			zorder=4)
 			#note: due to a bug in matplotlib, the grid's zorder is fixed at 2.5 so everything plotted must be above 2.5
 	
-	def plot_yoy_highlight(self, x, y, col = wmf_colors['yellow'], legend_label ='_nolegend_'):
+	def plot_yoy_highlight(self, x, y, highlight_radius = 1000, col = wmf_colors['yellow'], legend_label ='_nolegend_'):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
 		#dots on month of interest
-		highlight_radius = 1000000
 		plt.scatter(yoy_highlight[str(x)], yoy_highlight[str(y)],
 			label=legend_label,
-			s=(highlight_radius**0.5),
+			s=highlight_radius,
 			facecolors='none',
 			edgecolors=col,
 			zorder=5)
@@ -177,7 +181,7 @@ class Wikichart:
 			edgecolor=col,
 			zorder=3)
 
-	def plot_subplots_lines(self, x, key, linewidth=2, num_charts=4):
+	def plot_subplots_lines(self, x, key, linewidth=2, num_charts=4, subplot_title_size = 12):
 		#remove bounding box
 		i = 0
 		for row in self.ax:
@@ -191,34 +195,35 @@ class Wikichart:
 						color=region_color,
 						zorder=3,
 						linewidth=linewidth)
-					axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=12)
+					axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=subplot_title_size)
 				i += 1
 
-	def format(self, title, author=parameters['author'], data_source="N/A",radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1):
+	def format(self, title, author=parameters['author'], data_source="N/A",ybuffer=True,radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1,titlepad=0):
 		#add gridlines
 		plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
 		#format title
 		custom_title = f'{title} ({calendar.month_name[self.month_interest]})'
-		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left')
+		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left',wrap=True,pad=titlepad)
 		#remove bounding box
 		for pos in ['right', 'top', 'bottom', 'left']:
 			plt.gca().spines[pos].set_visible(False)
 		#expand bottom margin (to make room for author and data source annotation)
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust)
-		#format y-axis range (gca = get current axis)
-		#we want the plotted portion to be 2/3rds the total y axis range
-		ax = plt.gca()
-		current_ylim = ax.get_ylim()
-		current_yrange = current_ylim[1] - current_ylim[0]
-		new_ymin = current_ylim[0] - current_yrange / 4
-		new_ymax = current_ylim[1] + current_yrange / 4
-		ax.set_ylim([new_ymin, new_ymax])
+		#buffer y-axis range to be 2/3rds of the total y axis range
+		#note: gca = get current axis
+		if ybuffer == True:
+			ax = plt.gca()
+			current_ylim = ax.get_ylim()
+			current_yrange = current_ylim[1] - current_ylim[0]
+			new_ymin = current_ylim[0] - current_yrange / 4
+			new_ymax = current_ylim[1] + current_yrange / 4
+			ax.set_ylim([new_ymin, new_ymax])
 		#format x-axis labels — yearly x-axis labels on January
 		plt.xticks(fontname=style_parameters['font'],fontsize=style_parameters['text_font_size'])
 		date_labels = []
 		date_labels_raw = pd.date_range(self.start_date, self.end_date, freq='AS-JAN')
 		for dl in date_labels_raw:
-			date_labels.append(datetime.datetime.strftime(dl, '%Y'))
+			date_labels.append(datetime.strftime(dl, '%Y'))
 		plt.xticks(ticks=date_labels_raw,labels=date_labels)
 		#format y-axis labels
 		warnings.filterwarnings("ignore")
@@ -234,7 +239,7 @@ class Wikichart:
 		today = date.today()
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
-	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1, num_charts=4):
+	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1, num_charts=4,tickfontsize=12,mo_in_title=True):
 		#expand bottom margin
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust, wspace=0.2, hspace=0.4)
 		#count number of charts and stop when num_charts is hit
@@ -247,15 +252,10 @@ class Wikichart:
 					#gridlines
 					axis.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
 					#format x axis labels
-					axis.set_xticklabels(axis.get_xticklabels(),fontfamily=style_parameters['font'])
-					'''
-					date_labels = []
-					date_labels_raw = pd.date_range(self.start_date, self.end_date, freq='AS-JAN')
-					for dl in date_labels_raw:
-						date_labels.append(datetime.strftime(dl, '%Y'))
-					axis.set_xticklabels(date_labels_raw)
-					axis.set_xticklabels(date_labels)
-					'''
+					axis.set_xticklabels(axis.get_xticklabels(),fontfamily=style_parameters['font'],fontsize=tickfontsize)
+					#format x axis labels to show year only
+					xaxisFormatter = mdates.DateFormatter('%Y')
+					axis.xaxis.set_major_formatter(xaxisFormatter)
 					#format y axis labels
 					current_values = axis.get_yticklabels()
 					new_labels = []
@@ -271,18 +271,35 @@ class Wikichart:
 					if new_labels[0] == str(0):
 						new_labels[0] = ""
 					'''
-					axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'])
+					axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'],fontsize=tickfontsize)
 				else:
 					#make invisible if outside of num_charts
 					axis.set_visible(False)
 				i += 1
 		#add title and axis labels
 		#note there seems to be a bug with ha and va args to suptitle, so just set x and y manually
-		self.fig.suptitle(f'{title} ({calendar.month_name[self.month_interest]})',ha='left',x=0.05,y=0.97,fontsize=style_parameters['title_font_size'],fontproperties={'family':style_parameters['font'],'weight':'bold'})
+		if mo_in_title:
+			figure_title = f'{title} ({calendar.month_name[self.month_interest]})'
+		else:
+			figure_title = f'{title}'
+		self.fig.suptitle(figure_title,ha='left',x=0.05,y=0.97,fontsize=style_parameters['title_font_size'],fontproperties={'family':style_parameters['font'],'weight':'bold'})
 		#add bottom annotation
 		today = date.today()
 		plt.figtext(0.05,0.01, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), fontsize=8, va="bottom", ha="left", color=wmf_colors['black25'], fontproperties={'family':style_parameters['font']})
 	
+	#show only bottom and top ylabel
+	def clean_ylabels_subplots(self,tickfontsize=12):
+		#count number of charts and stop when num_charts is hit
+		i = 0
+		for row in self.ax:
+			for axis in row:
+				current_labels = axis.get_yticklabels()
+				new_labels = ['']*len(current_labels)
+				new_labels[0] = current_labels[0]
+				new_labels[-1] = current_labels[-1]
+				axis.set_yticklabels(new_labels,fontfamily=style_parameters['font'],fontsize=tickfontsize)
+				i += 1	
+
 	#set every subplot to the same ymin and ymax
 	def standardize_subplotyaxis(self, ymin, ymax, num_charts=4):
 		i = 0
@@ -292,8 +309,35 @@ class Wikichart:
 					axis.set_ylim([ymin, ymax])
 				i += 1
 
+	#set yrange for a single chart plot
+	def standardize_yrange(self, yrange, num_ticks,std_cutoff=15):
+		#get the standard y interval
+		std_yinterval = yrange / (num_ticks - 1)
+		ax = plt.gca()
+		current_ymin, current_ymax = ax.get_ylim()
+		current_yrange = current_ymax - current_ymin
+		if current_yrange > (yrange / std_cutoff):
+			current_ymedian = current_ymin + ((current_ymax - current_ymin) / 2)
+			if (num_ticks % 2) == 0:
+				#for final even num ticks
+				new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+				if new_ymedian < current_ymedian:
+					new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2 - 1))
+				else:
+					new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2))
+			else:
+				#for final odd number of ticks 
+				new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+				new_ymin = new_ymedian - (yrange / 2)
+			#set min to 0 if negative
+			new_ymin = max(0, new_ymin)
+			#set ymax
+			new_ymax = new_ymin + yrange
+			ax.set_ylim(new_ymin, new_ymax)
+
 	#set every subplot to the same yrange and intervals
-	def standardize_subplotyrange(self, yrange, num_ticks, yspacing = 50000000, num_charts=4):
+	#std_cutoff is a number where if the current yrange < (std_cutoff x std_yrange), then we don't standardize it; used to keep natural range for very small ranged plots
+	def standardize_subplotyrange(self, yrange, num_ticks, num_charts=4, std_cutoff=15):
 		#get the standard y interval
 		std_yinterval = yrange / (num_ticks - 1)
 		#keep track of chart num
@@ -304,27 +348,33 @@ class Wikichart:
 				if i < num_charts:
 					#get current y range
 					current_ymin, current_ymax = axis.get_ylim()
-					current_ymedian = current_ymin + ((current_ymax - current_ymin) / 2)
-					if (num_ticks % 2) == 0:
-						#for final even num ticks
-						new_ymedian = closestdivisible(current_ymedian, std_yinterval)
-						print(num_ticks)
-						if new_ymedian < current_ymedian:
-							new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2 - 1))
+					current_yrange = current_ymax - current_ymin
+					if current_yrange > (yrange / std_cutoff):
+						current_ymedian = current_ymin + ((current_ymax - current_ymin) / 2)
+						if (num_ticks % 2) == 0:
+							#for final even num ticks
+							new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+							if new_ymedian < current_ymedian:
+								new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2 - 1))
+							else:
+								new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2))
 						else:
-							new_ymin = new_ymedian - (std_yinterval * (num_ticks / 2))
-					else:
-						#for final odd number of ticks 
-						new_ymedian = closestdivisible(current_ymedian, std_yinterval)
-						new_ymin = new_ymedian - (yrange / 2)
-					#set min to 0 if negative
-					new_ymin = max(0, new_ymin)
-					#set ymax
-					new_ymax = new_ymin + yrange
-					axis.set_ylim(new_ymin, new_ymax)
-					#axis.yaxis.set_major_locator(ticker.MultipleLocator(yspacing))
-					#axis.Axis.set_minor_locator(minorLocator)
+							#for final odd number of ticks 
+							new_ymedian = closestdivisible(current_ymedian, std_yinterval)
+							new_ymin = new_ymedian - (yrange / 2)
+						#set min to 0 if negative
+						new_ymin = max(0, new_ymin)
+						#set ymax
+						new_ymax = new_ymin + yrange
+						axis.set_ylim(new_ymin, new_ymax)
+						#axis.yaxis.set_major_locator(ticker.MultipleLocator(yspacing))
+						#axis.Axis.set_minor_locator(minorLocator)
 				i += 1
+
+	def get_ytickrange(self):
+		ticks = self.ax.get_yticklabels()
+		tick_range = ticks[-1].get_position()[1] - ticks[0].get_position()[1]
+		return tick_range
 
 	#returns the subplot with the max range, and its corresponding number of ticks
 	#need to change to getting max tick range
@@ -336,7 +386,6 @@ class Wikichart:
 				#gets the tick range
 				ticks = axis.get_yticklabels()
 				tick_range = ticks[-1].get_position()[1] - ticks[0].get_position()[1]
-				print("expanded tick range " + str(tick_range))
 				self.yranges.append(tick_range)
 				#get tick intervals
 				self.ynumticks.append(len(ticks))
@@ -368,7 +417,9 @@ class Wikichart:
 	def calc_yoy(self,y,yoy_note=""):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
 		yoy_change_percent = ((yoy_highlight[str(y)].iat[-1] - yoy_highlight[str(y)].iat[0]) /  yoy_highlight[str(y)].iat[0]) * 100
-		if yoy_change_percent > 0:
+		if math.isnan(yoy_change_percent):
+			yoy_annotation = "YoY N/A"
+		elif yoy_change_percent > 0:
 			yoy_annotation = f" +{yoy_change_percent:.1f}% YoY" + " " + yoy_note
 		else:
 			yoy_annotation = f" {yoy_change_percent:.1f}% YoY" + " " + yoy_note
@@ -465,18 +516,31 @@ class Wikichart:
 		block_height = ymax - ymin
 
 		#plot rectangle
+		matplotlib.rcParams['hatch.linewidth'] = 0.25  # previous pdf hatch linewidth
 		rect = Rectangle((xstart - xbuffer, ymin), block_width + 2 * xbuffer, block_height, 
-			color='white', 
-			linewidth=0,
-			fill='white',
-			edgecolor=None,
+			linewidth=0, #no edge around rectangle
+			hatch='////',
+			edgecolor=wmf_colors['black75'], #hatch color
+			facecolor='white', #bg color
 			zorder=10)
 		axis.add_patch(rect) 
 
-	def block_off_multi(self,blockstart, blockend, xbuffer = 7):
+	def block_off_multi(self,blockstart, blockend, xbuffer = 6):
 		for row in self.ax:
 			for axis in row:
 				self.block_off(axis,blockstart, blockend, xbuffer)
+
+		#draws a rectangle to block off a set of dates
+	def add_block_legend(self):
+		self.fig.patches.extend([plt.Rectangle((0.05, 0.868), 0.01, 0.02,
+			linewidth=0.1, #no edge around rectangle
+			hatch='//////',
+			edgecolor='black', #hatch color
+			facecolor='white', #bg color
+			zorder=100,
+			transform=self.fig.transFigure,
+			figure = self.fig)])
+		#self.ax[0][1].add_patch(rect) 
 
 
 
