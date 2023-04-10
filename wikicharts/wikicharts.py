@@ -24,7 +24,7 @@ parameters = {'month_interest':2,'author':'Hua Xi'}
 style_parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
 
 
-#---CUSTOM FUNCTIONS---
+#---HELPER FUNCTIONS---
 #takes a y value, an order to divide it by, and a format and produces a label-ready text
 def y_label_formatter(value,multiplier,format_text):
 	formatted_value = format_text.format(value*multiplier)
@@ -122,6 +122,7 @@ def roll(df, rolling_months = 3, index_column_name = "month"):
 #the plotting functions could actually probably be deleted bc they just repeat matplotlib's functions
 
 class Wikichart:
+	#initialize chart object
 	def __init__(self,start_date, end_date,dataset,month_interest=parameters['month_interest'],yoy_highlight=None):
 		self.start_date = start_date
 		self.end_date = end_date
@@ -141,12 +142,15 @@ class Wikichart:
 		input1 = input()
 	'''
 
+	#initialize a figure of given height width and number of subplots
 	def init_plot(self,width=10,height=6,subplotsx=1,subplotsy=1,fignum=0):
 		#plt.figure(figsize=(width, height))
 		self.fig, self.ax = plt.subplots(subplotsx,subplotsy, num=fignum)
 		self.fig.set_figwidth(width)
 		self.fig.set_figheight(height)
 
+	#---PLOTTING FUNCTIONS---
+	#basic line
 	def plot_line(self, x, y, col, legend_label ='_nolegend_',linewidth = 2):
 		plt.plot(self.df[str(x)], self.df[str(y)],
 			label=legend_label,
@@ -154,6 +158,7 @@ class Wikichart:
 			zorder=3,
 			linewidth=linewidth)
 
+	#dots to indicate a given month
 	def plot_monthlyscatter(self, x, y, col, legend_label ='_nolegend_'):
 		#dots on month of interest
 		monthly_df = self.df[self.df[str(x)].dt.month == self.month_interest]
@@ -162,7 +167,8 @@ class Wikichart:
 			color=col,
 			zorder=4)
 			#note: due to a bug in matplotlib, the grid's zorder is fixed at 2.5 so everything plotted must be above 2.5
-	
+
+	#yellow circles to highlight a YoY
 	def plot_yoy_highlight(self, x, y, highlight_radius = 1000, col = wmf_colors['yellow'], legend_label ='_nolegend_'):
 		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
 		#dots on month of interest
@@ -174,6 +180,7 @@ class Wikichart:
 			zorder=5)
 			#note: due to a bug in matplotlib, the grid's zorder is fixed at 2.5 so everything plotted must be above 2.5
 
+	#grayed out area to represent data loss
 	def plot_data_loss(self, x, y1, y2, data_loss_df, col = wmf_colors['base80'], legend_label ='_nolegend_'):
 		plt.fill_between(data_loss_df[str(x)], data_loss_df[str(y1)], data_loss_df[str(y2)],
 			label=legend_label,
@@ -181,23 +188,29 @@ class Wikichart:
 			edgecolor=col,
 			zorder=3)
 
-	def plot_subplots_lines(self, x, key, linewidth=2, num_charts=4, subplot_title_size = 12):
-		#remove bounding box
-		i = 0
-		for row in self.ax:
-			for axis in row:
-				if i < num_charts:
-					region_label = key.iloc[i]['labelname']
-					region_color = key.iloc[i]['color']
-					axis.plot(self.df['month'], 
-						self.df[region_label],
-						label='_no_legend_,',
-						color=region_color,
-						zorder=3,
-						linewidth=linewidth)
-					axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=subplot_title_size)
-				i += 1
+	#draws a rectangle to block off a set of dates
+	def block_off(self,axis, blockstart, blockend, xbuffer = 7):
+		#convert dates to x axis coordinates
+		xstart = mdates.date2num(blockstart)
+		xend = mdates.date2num(blockend)
+		block_width = xend - xstart
 
+		#get height
+		ymin, ymax = axis.get_ylim()
+		block_height = ymax - ymin
+
+		#plot rectangle
+		matplotlib.rcParams['hatch.linewidth'] = 0.25  # previous pdf hatch linewidth
+		rect = Rectangle((xstart - xbuffer, ymin), block_width + 2 * xbuffer, block_height, 
+			linewidth=0, #no edge around rectangle
+			hatch='////',
+			edgecolor=wmf_colors['black75'], #hatch color
+			facecolor='white', #bg color
+			zorder=10)
+		axis.add_patch(rect) 
+
+	#---FORMATTING FUNCTIONS---
+	#basic formatting — title, bottom note, axis formatting, gridlines
 	def format(self, title, author=parameters['author'], data_source="N/A",ybuffer=True,radjust=0.85,ladjust=0.1,tadjust=0.9,badjust=0.1,titlepad=0):
 		#add gridlines
 		plt.grid(axis = 'y', zorder=-1, color = wmf_colors['black25'], linewidth = 0.25)
@@ -239,6 +252,141 @@ class Wikichart:
 		today = date.today()
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
+	#annotate the end of the plotted line
+	def annotate(self, x, y, num_annotation, legend_label="", label_color='black', xpad=0, ypad=0):
+		#legend annotation
+		#note that when legend_label="", xpad should be 0 (only a numerical annotation is produced)
+		plt.annotate(legend_label,
+			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
+			xytext = (20,-5+ypad),
+			xycoords = 'data',
+			textcoords = 'offset points',
+			color=label_color,
+			fontsize=style_parameters['text_font_size'],
+			weight='bold',
+			family=style_parameters['font'])
+		#increase xpad for numerical annotation if legend annotation is present (prevent overlap)
+		if(len(legend_label) > 0):
+			try:
+				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
+				labelsize = font.getsize(legend_label)
+				xpad= labelsize[0] + 3
+			except:
+				xpad = len(legend_label) * 4
+		#numerical annotation
+		plt.annotate(num_annotation,
+			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
+			xytext = (20+xpad,-5+ypad),
+			xycoords = 'data',
+			textcoords = 'offset points',
+			color='black',
+			fontsize=style_parameters['text_font_size'],
+			weight='bold',
+			wrap=True,
+			family=style_parameters['font'])
+
+	#annotation helper function
+	def calc_yoy(self,y,yoy_note=""):
+		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
+		yoy_change_percent = ((yoy_highlight[str(y)].iat[-1] - yoy_highlight[str(y)].iat[0]) /  yoy_highlight[str(y)].iat[0]) * 100
+		if math.isnan(yoy_change_percent):
+			yoy_annotation = "YoY N/A"
+		elif yoy_change_percent > 0:
+			yoy_annotation = f" +{yoy_change_percent:.1f}% YoY" + " " + yoy_note
+		else:
+			yoy_annotation = f" {yoy_change_percent:.1f}% YoY" + " " + yoy_note
+		return(yoy_annotation)
+
+	#annotation helper function
+	def calc_finalcount(self,y,yoy_note=""):
+		final_count = self.df[str(y)].iat[-1]
+		multiplier, formatting = calc_order_format(final_count)
+		count_annotation = y_label_formatter(value = final_count,multiplier = multiplier,format_text=formatting)
+		return(count_annotation)
+
+	#annotation helper function
+	def calc_yspacing(self, ys):
+		lastys = self.df[ys].iloc[-1]
+		lastys = lastys.to_frame('lasty')
+		lastys = lastys.sort_values(by=['lasty'],ascending=True)
+		lastys['ypad']=0
+		#add padding
+		padmultiplier = 1 
+		#set remaining two paddings
+		for i in range(1,len(ys)):
+			valuedistance = lastys.iloc[i]['lasty'] - lastys.iloc[i-1]['lasty']
+			if valuedistance < 250000:
+				#add padding if too close
+				lastys.at[lastys.iloc[i].name,'ypad'] = 5 * padmultiplier
+				#increase multiplier in event that multiple values are too close together
+				padmultiplier += 1
+			else:
+				#reset multiplier to 1 if there is a label that doesnt need a multiplier
+				padmultiplier = 1
+		return lastys
+
+	#annotate a single chart with multiple lines
+	def multi_yoy_annotate(self,ys,key,annotation_fxn):
+		#takes a key referenced by y column name and with columns labelname, color
+		lastys = self.calc_yspacing(ys)
+		for i in range(len(ys)):
+			y = lastys.iloc[i].name
+			self.annotate(x='month',
+				y=y,
+				num_annotation=annotation_fxn(y=y),
+				legend_label=key.loc[y,'labelname'],
+				label_color=key.loc[y,'color'],
+				xpad=75, 
+				ypad=lastys.iloc[i].ypad)
+
+	#add a custom note at the top of the chart under the title
+	def top_annotation(self, x = 0.05, y =0.87, annotation_text = ""):
+		plt.figtext(x, y, annotation_text, family=style_parameters['font'],fontsize=10, color= wmf_colors['black75'])
+
+	#add blocked out area to legend — alternative is to use '///' string
+	def add_block_legend(self):
+		self.fig.patches.extend([plt.Rectangle((0.05, 0.868), 0.01, 0.02,
+			linewidth=0.1, #no edge around rectangle
+			hatch='//////',
+			edgecolor='black', #hatch color
+			facecolor='white', #bg color
+			zorder=100,
+			transform=self.fig.transFigure,
+			figure = self.fig)])
+		#self.ax[0][1].add_patch(rect) 
+
+	#---SHOW AND SAVE---
+	def finalize_plot(self, save_file_name, display=True):
+		plt.savefig(save_file_name, dpi=300)
+		if display:
+			plt.show()
+	
+	#---MULTI-CHART FIGURES
+	#plot lines on subplots
+	def plot_subplots_lines(self, x, key, linewidth=2, num_charts=4, subplot_title_size = 12):
+		#remove bounding box
+		i = 0
+		for row in self.ax:
+			for axis in row:
+				if i < num_charts:
+					region_label = key.iloc[i]['labelname']
+					region_color = key.iloc[i]['color']
+					axis.plot(self.df['month'], 
+						self.df[region_label],
+						label='_no_legend_,',
+						color=region_color,
+						zorder=3,
+						linewidth=linewidth)
+					axis.set_title(region_label,fontfamily=style_parameters['font'],fontsize=subplot_title_size)
+				i += 1
+
+	#draws a rectangle to block off a set of dates
+	def block_off_multi(self,blockstart, blockend, xbuffer = 6):
+		for row in self.ax:
+			for axis in row:
+				self.block_off(axis,blockstart, blockend, xbuffer)
+
+	#formatting across multichart figures
 	def format_subplots(self, title, key, author=parameters['author'], data_source="N/A", radjust=0.85, ladjust=0.1,tadjust=0.85,badjust=0.1, num_charts=4,tickfontsize=12,mo_in_title=True):
 		#expand bottom margin
 		plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust, wspace=0.2, hspace=0.4)
@@ -413,136 +561,6 @@ class Wikichart:
 		print("expanded yrange " + str(axis.get_ylim()))
 		print("expanded tick num " + str(len(axis.get_yticklabels())))
 		'''
-
-	def calc_yoy(self,y,yoy_note=""):
-		yoy_highlight = pd.concat([self.df.iloc[-13,:],self.df.iloc[-1,:]],axis=1).T
-		yoy_change_percent = ((yoy_highlight[str(y)].iat[-1] - yoy_highlight[str(y)].iat[0]) /  yoy_highlight[str(y)].iat[0]) * 100
-		if math.isnan(yoy_change_percent):
-			yoy_annotation = "YoY N/A"
-		elif yoy_change_percent > 0:
-			yoy_annotation = f" +{yoy_change_percent:.1f}% YoY" + " " + yoy_note
-		else:
-			yoy_annotation = f" {yoy_change_percent:.1f}% YoY" + " " + yoy_note
-		return(yoy_annotation)
-
-	def calc_finalcount(self,y,yoy_note=""):
-		final_count = self.df[str(y)].iat[-1]
-		multiplier, formatting = calc_order_format(final_count)
-		count_annotation = y_label_formatter(value = final_count,multiplier = multiplier,format_text=formatting)
-		return(count_annotation)
-
-	def annotate(self, x, y, num_annotation, legend_label="", label_color='black', xpad=0, ypad=0):
-		#legend annotation
-		#note that when legend_label="", xpad should be 0 (only a numerical annotation is produced)
-		plt.annotate(legend_label,
-			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
-			xytext = (20,-5+ypad),
-			xycoords = 'data',
-			textcoords = 'offset points',
-			color=label_color,
-			fontsize=style_parameters['text_font_size'],
-			weight='bold',
-			family=style_parameters['font'])
-		#increase xpad for numerical annotation if legend annotation is present (prevent overlap)
-		if(len(legend_label) > 0):
-			try:
-				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
-				labelsize = font.getsize(legend_label)
-				xpad= labelsize[0] + 3
-			except:
-				xpad = len(legend_label) * 4
-		#numerical annotation
-		plt.annotate(num_annotation,
-			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
-			xytext = (20+xpad,-5+ypad),
-			xycoords = 'data',
-			textcoords = 'offset points',
-			color='black',
-			fontsize=style_parameters['text_font_size'],
-			weight='bold',
-			wrap=True,
-			family=style_parameters['font'])
-		
-	def finalize_plot(self, save_file_name, display=True):
-		plt.savefig(save_file_name, dpi=300)
-		if display:
-			plt.show()
-
-	def calc_yspacing(self, ys):
-		lastys = self.df[ys].iloc[-1]
-		lastys = lastys.to_frame('lasty')
-		lastys = lastys.sort_values(by=['lasty'],ascending=True)
-		lastys['ypad']=0
-		#add padding
-		padmultiplier = 1 
-		#set remaining two paddings
-		for i in range(1,len(ys)):
-			valuedistance = lastys.iloc[i]['lasty'] - lastys.iloc[i-1]['lasty']
-			if valuedistance < 250000:
-				#add padding if too close
-				lastys.at[lastys.iloc[i].name,'ypad'] = 5 * padmultiplier
-				#increase multiplier in event that multiple values are too close together
-				padmultiplier += 1
-			else:
-				#reset multiplier to 1 if there is a label that doesnt need a multiplier
-				padmultiplier = 1
-		return lastys
-
-	def multi_yoy_annotate(self,ys,key,annotation_fxn):
-		#takes a key referenced by y column name and with columns labelname, color
-		lastys = self.calc_yspacing(ys)
-		for i in range(len(ys)):
-			y = lastys.iloc[i].name
-			self.annotate(x='month',
-				y=y,
-				num_annotation=annotation_fxn(y=y),
-				legend_label=key.loc[y,'labelname'],
-				label_color=key.loc[y,'color'],
-				xpad=75, 
-				ypad=lastys.iloc[i].ypad)
-
-	def top_annotation(self, x = 0.05, y =0.87, annotation_text = ""):
-		plt.figtext(x, y, annotation_text, family=style_parameters['font'],fontsize=10, color= wmf_colors['black75'])
-
-	#draws a rectangle to block off a set of dates
-	def block_off(self,axis, blockstart, blockend, xbuffer = 7):
-		#convert dates to x axis coordinates
-		xstart = mdates.date2num(blockstart)
-		xend = mdates.date2num(blockend)
-		block_width = xend - xstart
-
-		#get height
-		ymin, ymax = axis.get_ylim()
-		block_height = ymax - ymin
-
-		#plot rectangle
-		matplotlib.rcParams['hatch.linewidth'] = 0.25  # previous pdf hatch linewidth
-		rect = Rectangle((xstart - xbuffer, ymin), block_width + 2 * xbuffer, block_height, 
-			linewidth=0, #no edge around rectangle
-			hatch='////',
-			edgecolor=wmf_colors['black75'], #hatch color
-			facecolor='white', #bg color
-			zorder=10)
-		axis.add_patch(rect) 
-
-	def block_off_multi(self,blockstart, blockend, xbuffer = 6):
-		for row in self.ax:
-			for axis in row:
-				self.block_off(axis,blockstart, blockend, xbuffer)
-
-		#draws a rectangle to block off a set of dates
-	def add_block_legend(self):
-		self.fig.patches.extend([plt.Rectangle((0.05, 0.868), 0.01, 0.02,
-			linewidth=0.1, #no edge around rectangle
-			hatch='//////',
-			edgecolor='black', #hatch color
-			facecolor='white', #bg color
-			zorder=100,
-			transform=self.fig.transFigure,
-			figure = self.fig)])
-		#self.ax[0][1].add_patch(rect) 
-
-
 
 
 
