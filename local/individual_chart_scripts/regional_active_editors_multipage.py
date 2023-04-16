@@ -154,7 +154,7 @@ def main(argv):
 			num_charts=charts_per_figure,
 			tickfontsize=8)
 	main_fig.clean_ylabels_subplots(tickfontsize=8)
-	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_fullview.jpeg"
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_fullview.png"
 	main_fig.finalize_plot(save_file_name,display=False)
 	plt.show()
 	#Rolling View
@@ -172,7 +172,7 @@ def main(argv):
 			tickfontsize=8,
 			mo_in_title=False)
 	main_fig.clean_ylabels_subplots(tickfontsize=8)
-	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_rolling.jpeg"
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_rolling.png"
 	main_fig.finalize_plot(save_file_name,display=False)
 	plt.show()
 	#Annual
@@ -190,7 +190,7 @@ def main(argv):
 			tickfontsize=8,
 			mo_in_title=False)
 	main_fig.clean_ylabels_subplots(tickfontsize=8)
-	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_annual.jpeg"
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_annual.png"
 	main_fig.finalize_plot(save_file_name,display=False)
 	plt.show()
 	#Quarterly
@@ -210,7 +210,7 @@ def main(argv):
 			tickfontsize=8,
 			mo_in_title=False)
 	main_fig.clean_ylabels_subplots(tickfontsize=8)
-	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_quarterly.jpeg"
+	save_file_name = dirname(script_directory) + "/charts/" + outfile_name + "_quarterly.png"
 	main_fig.finalize_plot(save_file_name,display=False)
 	plt.show()
 

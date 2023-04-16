@@ -90,7 +90,7 @@ def main(argv):
 	annotation_text = "     Data unreliable [February 2021 - June 2022] (period not shown)" #or use /// instead of rectangle patch
 	#make charts
 	total_num_charts = len(df.columns) - 1
-	charts_per_figure = 4
+	charts_per_figure = 8
 	num_figures = ceil(total_num_charts / charts_per_figure)
 	charts = [None]*num_figures
 	#max range across figures
@@ -100,7 +100,7 @@ def main(argv):
 	for f in range(num_figures):
 		figure_num_charts = len(dfs[f].columns) - 1
 		charts[f] = Wikichart(start_date,end_date,dfs[f])
-		charts[f].init_plot(width=12,subplotsx=2,subplotsy=2,fignum=f)
+		charts[f].init_plot(width=12,subplotsx=2,subplotsy=4,fignum=f)
 		charts[f].plot_subplots_lines('month', keys[f], num_charts=figure_num_charts)
 		maxranges[f], num_ticks[f] = charts[f].get_maxyrange()
 	#calculate the largest range between the two figures and 8 subplots
