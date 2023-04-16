@@ -42,13 +42,19 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 ## Country Breakdown
 
-![Country Breakdown](local/charts/Country_Breakdown.png)
+![Country Breakdown](local/charts/triplevertical_blue.png)
 
 ## Regional Active Editors (8-Chart View)
 
-![Country Breakdown](local/charts/Regional_Active_Editors_fullview.png)
+![Regional Active Editors (8-Chart View)](local/charts/Regional_Active_Editors_fullview.jpeg)
 
 Also available for rolling, quarterly and annual version of the data. 
+
+![Regional Active Editors (Annual)](local/charts/Regional_Active_Editors_annual.jpeg)
+
+![Regional Active Editors (Quarterly)](local/charts/Regional_Active_Editors_quarterly.jpeg)
+
+![Regional Active Editors (Rolling)](local/charts/Regional_Active_Editors_rolling.jpeg)
 
 Also available in 4-chart per figure view. 
 
