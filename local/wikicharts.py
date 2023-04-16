@@ -20,7 +20,7 @@ import warnings
 
 #---CUSTOM DICTIONARIES
 wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','base80':'#eaecf0','orange':'#EE8019','base70':'#c8ccd1','red':'#970302','pink':'#E679A6','green50':'#00af89','purple':'#5748B5','blue':'#0E65C0','brightblue':'#049DFF','brightbluelight':'#C0E6FF','yellow':'#F0BC00','green':'#308557','brightgreen':'#71D1B3'}
-parameters = {'month_interest':2,'author':'Hua Xi'}
+parameters = {'month_interest': 2,'author':'Hua Xi'}
 style_parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
 
 
