@@ -6,36 +6,50 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 ## Content Interactions
 
-![Content Interactions](wikicharts/charts/ContentInteractions.png)
+![Content Interactions](local/charts/Content_Interactions.png)
 
 ## Active Editors
 
-![Active Editors](wikicharts/charts/Active_Editors.png)
+![Active Editors](local/charts/Active_Editors.png)
 
 ## New and Returning Editors
 
-![New and Returning Editors](wikicharts/charts/New_Returning.png)
+![New and Returning Editors](local/charts/New_Returning.png)
 
 ## Net New Content
 
-![Net New Content](wikicharts/charts/New_New.png)
+![Net New Content](local/charts/Net_New.png)
 
 ## Unique Devices
 
-![Unique Devices](wikicharts/charts/Unique_Devices.png)
+![Unique Devices](local/charts/Unique_Devices.png)
 
-## Pageviews by Access Source
+## Pageviews - Monthly Automated
 
-![Pageviews Source](wikicharts/charts/Pageviews_Source.png)
+![Pageviews Source](local/charts/Pageviews_Monthly_Automated.png)
+
+## Pageviews - Pageviews_Useronly
+
+![Pageviews Source](local/charts/Pageviews_Useronly.png)
 
 ## Pageviews by Referral Source
 
-![Referral Source](wikicharts/charts/Referral_Source.png)
-
-## Country Breakdown
-
-![Country Breakdown](wikicharts/charts/Country_Breakdown.png)
+![Referral Source](local/charts/Referral_Source.png)
 
 ## Project Growth
 
-![Project Growth](wikicharts/charts/Project_Growth.png)
+![Project Growth](local/charts/Project_Growth.png)
+
+## Country Breakdown
+
+![Country Breakdown](local/charts/Country_Breakdown.png)
+
+## Regional Active Editors (8-Chart View)
+
+![Country Breakdown](local/charts/Regional_Active_Editors_fullview.png)
+
+Also available for rolling, quarterly and annual version of the data. 
+
+Also available in 4-chart per figure view. 
+
+Also available for Unique Devices.
