@@ -62,9 +62,7 @@ def main(argv):
 	chart.format(title = f'New and Returning Editors',
 		radjust=0.75,
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
-
-	chart.multi_yoy_annotate(['returning_active_editors','new_active_editors'],key,chart.calc_yoy)
-
+	chart.multi_yoy_annotate(['returning_active_editors','new_active_editors'],key,chart.calc_yoy,xpad=10)
 	chart.finalize_plot(save_file_name,display=display_flag)
 
 
