@@ -1,4 +1,5 @@
 import pandas as pd
+import calendar
 from datetime import date
 from datetime import datetime, timedelta
 import matplotlib
@@ -7,14 +8,13 @@ import matplotlib.ticker as ticker
 import matplotlib.font_manager
 import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
-import numpy as np
 import math
 from math import ceil
 from math import floor
-import re
-import calendar
-from datetime import date
+import numpy as np
+import os
 from PIL import ImageFont
+import re
 import warnings
 
 
@@ -267,7 +267,7 @@ class Wikichart:
 		#note that when legend_label="", xpad should be 0 (only a numerical annotation is produced)
 		plt.annotate(legend_label,
 			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
-			xytext = (20,-5+ypad),
+			xytext = (20+xpad,-5+ypad),
 			xycoords = 'data',
 			textcoords = 'offset points',
 			color=label_color,
@@ -277,17 +277,20 @@ class Wikichart:
 			bbox=dict(pad=5, facecolor="white", edgecolor="none"),
 			zorder=zorder)
 		#increase xpad for numerical annotation if legend annotation is present (prevent overlap)
+		num_xpad = xpad
 		if(len(legend_label) > 0):
 			try:
 				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
 				labelsize = font.getsize(legend_label)
-				xpad= labelsize[0] + 5
+				num_xpad= xpad + labelsize[0] + 5
+				print("labelsize: " + str(labelsize[0]))
 			except:
-				xpad = len(legend_label) * 4
+				num_xpad = xpad + len(legend_label) * 4
+		print("num_xpad: " + str(num_xpad))
 		#numerical annotation
 		plt.annotate(num_annotation,
 			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
-			xytext = (20+xpad,-5+ypad),
+			xytext = (20+num_xpad,-5+ypad),
 			xycoords = 'data',
 			textcoords = 'offset points',
 			color='black',
@@ -337,7 +340,7 @@ class Wikichart:
 		return lastys
 
 	#annotate a single chart with multiple lines
-	def multi_yoy_annotate(self,ys,key,annotation_fxn,x='month',xpad=75):
+	def multi_yoy_annotate(self,ys,key,annotation_fxn,x='month',xpad=0):
 		#takes a key referenced by y column name and with columns labelname, color
 		lastys = self.calc_yspacing(ys)
 		for i in range(len(ys)):

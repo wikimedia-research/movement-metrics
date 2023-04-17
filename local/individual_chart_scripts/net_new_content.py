@@ -67,7 +67,7 @@ def main(argv):
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")
 
 	#labeling is done together in order to calculate correct spacing to prevent label overlap whereas the lines can be plotted separately
-	chart.multi_yoy_annotate(['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],key,chart.calc_yoy)
+	chart.multi_yoy_annotate(['net_new_Commons_content_pages','net_new_Wikidata_entities','net_new_Wikipedia_articles'],key,chart.calc_yoy, xpad=0)
 
 	chart.finalize_plot(save_file_name,display=display_flag)
 
