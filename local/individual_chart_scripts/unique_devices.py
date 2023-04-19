@@ -42,7 +42,6 @@ def main(argv):
 
 	start_date = "2018-05-01"
 	end_date = datetime.datetime.today()
-	month_interest = parameters['month_interest']
 
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
@@ -50,6 +49,9 @@ def main(argv):
 	#truncate to preferred date range
 	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
+	#get last availablemonth, and use to set custom month_interest in the monthlyscatter line
+	month_interest = df.iloc[-1]['month'].month
+	
 	#drop unneeded columns
 	df = df.drop(columns=['automated_pageviews','desktop','interactions','mobileweb','previews_seen','total_pageview'])
 
