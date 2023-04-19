@@ -45,11 +45,14 @@ def main(argv):
 	#truncate data to period of interst
 	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
+	#get last availablemonth, and use to set custom month_interest in the monthlyscatter line
+	lastmonth = df.iloc[-1]['month'].month
+
 	#---MAKE CHART---
-	chart = Wikichart(start_date,end_date,df)
+	chart = Wikichart(start_date,end_date,df, month_interest=lastmonth)
 	chart.init_plot()
 	chart.plot_line('month','active_editors',wmf_colors['blue'])
-	chart.plot_monthlyscatter('month','active_editors',wmf_colors['blue'])
+	chart.plot_monthlyscatter('month','active_editors',wmf_colors['blue'],month=lastmonth)
 	chart.plot_yoy_highlight('month','active_editors')
 	chart.format(title = 'Active Editors',
 		data_source="https://github.com/wikimedia-research/Editing-movement-metrics")

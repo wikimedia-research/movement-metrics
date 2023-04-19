@@ -20,7 +20,7 @@ import warnings
 
 #---CUSTOM DICTIONARIES
 wmf_colors = {'black75':'#404040','black50':'#7F7F7F','black25':'#BFBFBF','base80':'#eaecf0','orange':'#EE8019','base70':'#c8ccd1','red':'#970302','pink':'#E679A6','green50':'#00af89','purple':'#5748B5','blue':'#0E65C0','brightblue':'#049DFF','brightbluelight':'#C0E6FF','yellow':'#F0BC00','green':'#308557','brightgreen':'#71D1B3'}
-parameters = {'month_interest': 2,'author':'Hua Xi'}
+parameters = {'author':'Hua Xi'}
 style_parameters = {'font':'Montserrat','title_font_size':24,'text_font_size':14}
 
 
@@ -123,12 +123,13 @@ def roll(df, rolling_months = 3, index_column_name = "month"):
 
 class Wikichart:
 	#initialize chart object
-	def __init__(self,start_date, end_date,dataset,month_interest=parameters['month_interest'],yoy_highlight=None):
+	def __init__(self,start_date, end_date,dataset,time_col='month',yoy_highlight=None):
 		self.start_date = start_date
 		self.end_date = end_date
-		self.month_interest = month_interest
-		self.month_name = calendar.month_name[month_interest]
 		self.df = dataset
+		print(self.df.iloc[-1][time_col])
+		self.month_interest = self.df.iloc[-1][time_col].month
+		self.month_name = calendar.month_name[self.month_interest]
 		self.fig = None
 		self.ax = None
 		self.yranges = []
@@ -159,9 +160,9 @@ class Wikichart:
 			linewidth=linewidth)
 
 	#dots to indicate a given month
-	def plot_monthlyscatter(self, x, y, col, month=parameters['month_interest'], legend_label ='_nolegend_'):
+	def plot_monthlyscatter(self, x, y, col, legend_label ='_nolegend_'):
 		#dots on month of interest
-		monthly_df = self.df[self.df[str(x)].dt.month == month]
+		monthly_df = self.df[self.df[str(x)].dt.month == self.month_interest]
 		plt.scatter(monthly_df[str(x)], monthly_df[str(y)],
 			label=legend_label,
 			color=col,
@@ -283,10 +284,8 @@ class Wikichart:
 				font = ImageFont.truetype('Montserrat-Bold.ttf', style_parameters['text_font_size'])
 				labelsize = font.getsize(legend_label)
 				num_xpad= xpad + labelsize[0] + 5
-				print("labelsize: " + str(labelsize[0]))
 			except:
 				num_xpad = xpad + len(legend_label) * 4
-		print("num_xpad: " + str(num_xpad))
 		#numerical annotation
 		plt.annotate(num_annotation,
 			xy = (self.df[str(x)].iat[-1],self.df[str(y)].iat[-1]),
