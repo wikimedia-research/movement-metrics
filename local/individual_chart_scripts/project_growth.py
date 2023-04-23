@@ -66,6 +66,9 @@ def main(argv):
 	#truncate date
 	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
+	#get last availablemonth, and use to set custom month_interest in the monthlyscatter line
+	lastmonth = df.iloc[-1]['month'].month
+
 	#---PREPARE TO PLOT
 	key = pd.DataFrame([['Wikidata',wmf_colors['pink']],
 		['Wikipedia',wmf_colors['yellow']],
