@@ -127,7 +127,7 @@ class Wikichart:
 		self.start_date = start_date
 		self.end_date = end_date
 		self.df = dataset
-		print(self.df.iloc[-1][time_col])
+		print(self.df.iloc[-1])
 		self.month_interest = self.df.iloc[-1][time_col].month
 		self.month_name = calendar.month_name[self.month_interest]
 		self.fig = None
