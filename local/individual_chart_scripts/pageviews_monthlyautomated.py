@@ -35,14 +35,6 @@ def main(argv):
 	data_directory = dirname(dirname(script_directory))
 	df = pd.read_csv(data_directory + '/data/monthly_pageviews.csv', sep=',')
 
-	#display top rows for preview
-	#df.head()
-
-	#---CLEAN DATA--
-	#look at data types
-	#print(df.active_editors.dtype)
-	#print(df.month.dtype)
-
 	start_date = "2020-06-01"
 	end_date = datetime.datetime.today()
 
