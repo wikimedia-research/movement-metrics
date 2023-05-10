@@ -60,7 +60,8 @@ def calc_order_format(value):
 		formatting = '{:1.0f}'
 	return multiplier, formatting
 
-def simple_format(value):
+#takes a number and formats it for y axis labels
+def simple_num_format(value, perc=False, sign=False):
 	if value == 0:
 		order = 1
 	else:
@@ -82,7 +83,13 @@ def simple_format(value):
 		formatting = '{:1.0f}'
 	formatted_value = formatting.format(value*multiplier)
 	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
-	return tail_dot_rgx.sub(r'\2',formatted_value)
+	label = tail_dot_rgx.sub(r'\2',formatted_value)
+	if perc == True:
+		label = label + "%"
+	if sign == True:
+		if value > 0:
+			label = "+" + label
+	return label
 
 
 #takes a dataframe and splits it into sets of four columns (for plotting multiple charts per figure)
@@ -144,7 +151,7 @@ def closestdivisible(n, m) :
 
 #take a df and create a parallel df of rolling averages
 def roll(df, rolling_months = 3, index_column_name = "month"):
-	rolled = df.set_index('month').rolling(rolling_months).mean().reset_index().dropna()
+	rolled = df.set_index(index_column_name).rolling(rolling_months).mean().reset_index().dropna()
 	return rolled
 
 #---BASIC CHART---
@@ -622,20 +629,35 @@ class Wikichart:
 		'''
 class Wikimap():
 	#initialize chart object
-	def __init__(self,dataset, width=10, height=6):
+	def __init__(self,dataset, width=10, height=6, fignum=0, title="", author=parameters['author'],data_source="N/A",titlepad=0, month=0, display_month=True):
 		self.df = dataset
-		self.fig, self.ax = plt.subplots(1,1, num=0)
+		self.fig, self.ax = plt.subplots(1,1, num=fignum)
 		self.fig.set_figwidth(width)
 		self.fig.set_figheight(height)
 		self.cax = None
 		self.cbar = None
 		self.vmin = None
 		self.vmax = None
+		#format title
+		if display_month == True:
+			month_name = f"({calendar.month_name[month]})"
+		else:
+			month_name = ""
+		custom_title = f'{title} {month_name}'
+		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left',wrap=True,pad=titlepad)
+		#add bottom annotation
+		today = date.today()
+		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
-	def plot_wcolorbar(self, col = "pop_est", custom_cmap="plasma", plot_alpha=0.6):
+
+	def plot_wcolorbar(self, col = "pop_est", custom_cmap="gnuplot2_r", plot_alpha=0.6, setperc = False):
 		#set min and max for colorbar
-		self.vmin = self.df[col].min()
-		self.vmax = self.df[col].max()
+		if setperc == True:
+			self.vmin=-25
+			self.vmax=50
+		else: 
+			self.vmin = self.df[col].min()
+			self.vmax = self.df[col].max()
 		sm = plt.cm.ScalarMappable(cmap=custom_cmap, norm=plt.Normalize(vmin=self.vmin, vmax=self.vmax))
 		sm.set_array([])
 		# create an axes on the right side of ax with presset width and padding
@@ -646,26 +668,20 @@ class Wikimap():
 		self.cbar = plt.colorbar(sm, cax=self.cax, alpha=plot_alpha)
 		#self.fig.colorbar(sm,fraction=0.046, pad=0.04)
 		#plot map
-		self.df.plot(column=col, cmap='plasma', linewidth=0.1, ax=self.ax, edgecolor='black', alpha=plot_alpha)
-	
-	def plot_regions(self, region_table):
+		self.df.plot(column=col, cmap=custom_cmap, vmin=self.vmin, vmax=self.vmax, linewidth=0.1, ax=self.ax, edgecolor='black', alpha=plot_alpha)
+
+	def plot_regions(self, region_table, label_col, fontsize=12):
 		for region in wmf_regions:
-			region_geo = region_table.at[region,'geometry']
+			region_geo = region_table.loc[region,'geometry']
 			#get just the boundary linestring (otherwise geoseries.plot has facecolor bug)
 			region_boundary = region_geo.boundary
 			region_boundary.plot(ax=self.ax, lw=1.5, color='black', alpha=1)
-
+		for region in wmf_regions:
+			centroid = region_table.loc[region,'centroid']
+			self.ax.annotate(text=region_table.loc[region,label_col], xy=(centroid.x, centroid.y), xycoords='data',ha='center', va='center', fontsize=fontsize, font=style_parameters['font'], fontweight='bold',zorder=15, bbox=dict(facecolor=(1,1,1,0.85), edgecolor='black', pad=3))	
+	
 	#a simplified formatting function for map or other nonlinear charts
-	def add_titles(self, title, author=parameters['author'], data_source="N/A",titlepad=0):
-		#format title
-		custom_title = f'{title}'
-		plt.title(custom_title,font=style_parameters['font'],fontsize=style_parameters['title_font_size'],weight='bold',loc='left',wrap=True,pad=titlepad)
-		#add bottom annotation
-		today = date.today()
-		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
-
-	#a simplified formatting function for map or other nonlinear charts
-	def format_simple(self, radjust=0.9,ladjust=0.1,tadjust=0.9,badjust=0.1):
+	def format_map(self, radjust=0.9,ladjust=0.1,tadjust=0.9,badjust=0.1,format_colobar=True,cbar_perc=False):
 		#remove bounding box
 		for pos in ['right', 'top', 'bottom', 'left']:
 			plt.gca().spines[pos].set_visible(False)
@@ -675,50 +691,18 @@ class Wikimap():
 		#plt.subplots_adjust(bottom=badjust, right = radjust, left=ladjust, top=tadjust)
 		#tighten up and expand plot size
 		plt.tight_layout(pad=3)
-
-	def format_colobar(self):
-		#remove border of colorbar
-		self.cbar.outline.set_visible(False)
-		#clean colobar labels
-		current_ylabels = self.cax.get_yticklabels()
-		#print("current ylabels")
-		#print(current_ylabels)
-		#print(len(current_ylabels))
-		y_ticks = list(self.cax.get_yticks())
-		#print("current yticks")
-		#print(y_ticks)
-		#print(len(y_ticks))
-		new_ylabels = []
-		for y_label in current_ylabels:
-			y_value = float(y_label.get_position()[1])
-			y_order, y_label_format = calc_order_format(y_value)
-			new_label = y_label_formatter(y_value, y_order, y_label_format)
-			new_ylabels.append(new_label)
-		self.cax.set_yticklabels(new_ylabels, fontsize=10, font=style_parameters['font'])
-		#abbreviated ylabels
-		'''
-		abbrev_ylabels = [""] * len(new_ylabels)
-		abbrev_ylabels[1] = new_ylabels[1]
-		abbrev_ylabels[-2] = new_ylabels[-2]
-		self.cax.set_yticklabels(abbrev_ylabels, fontsize=10, font=style_parameters['font'])
-		#display min and max value labels
-		min_val = self.vmin
-		max_val = self.vmax
-		new_yticks = [min_val] + y_ticks + [max_val]
-		self.cax.set_yticks(new_yticks)
-		y_order, y_label_format = calc_order_format(min_val)
-		new_minlabel = y_label_formatter(min_val, y_order, y_label_format)
-		y_order, y_label_format = calc_order_format(max_val)
-		new_maxlabel = y_label_formatter(max_val, y_order, y_label_format)
-		new_ylabels = [new_minlabel] + new_ylabels + [new_maxlabel]
-		self.cax.set_yticklabels(new_ylabels, fontsize=10, font=style_parameters['font'])
-		'''
-	def label_regions(self, region_table):
-		#plt.annotate(text="HELLO", xy = (0,0), xycoords='data',horizontalalignment='center', color='red', fontsize=25, font=style_parameters['font'], zorder=15)
-		for region in wmf_regions:
-			centroid = region_table.at[region,'centroid']
-			print(centroid)
-			self.ax.annotate(text=region_table.at[region,'label'], xy=(centroid.x, centroid.y), xycoords='data',ha='center', va='center', fontsize=12, font=style_parameters['font'], fontweight='bold',zorder=15, bbox=dict(facecolor=(1,1,1,0.75), edgecolor='black', pad=3))
+		if format_colobar == True:
+			#remove border of colorbar
+			self.cbar.outline.set_visible(False)
+			#clean colobar labels
+			current_ylabels = self.cax.get_yticklabels()
+			y_ticks = list(self.cax.get_yticks())
+			new_ylabels = []
+			for y_label in current_ylabels:
+				y_value = float(y_label.get_position()[1])
+				new_label = simple_num_format(y_value, perc=cbar_perc)
+				new_ylabels.append(new_label)
+			self.cax.set_yticklabels(new_ylabels, fontsize=10, font=style_parameters['font'])
 
 	def finalize_plot(self, save_file_name, display=True):
 		plt.savefig(save_file_name, dpi=300)

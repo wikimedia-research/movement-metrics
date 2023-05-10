@@ -1,513 +1,584 @@
-month,region,monthly_editors
-2018-01,Central & Eastern Europe & Central Asia,14507
-2018-01,"East, Southeast Asia, & Pacific",14943
-2018-01,Latin America & Caribbean,5798
-2018-01,Middle East & North Africa,4304
-2018-01,North America,16894
-2018-01,Northern & Western Europe,33448
-2018-01,South Asia,3877
-2018-01,Sub-Saharan Africa,626
-2018-02,Central & Eastern Europe & Central Asia,13646
-2018-02,"East, Southeast Asia, & Pacific",14344
-2018-02,Latin America & Caribbean,5141
-2018-02,Middle East & North Africa,3977
-2018-02,North America,16161
-2018-02,Northern & Western Europe,30622
-2018-02,South Asia,3850
-2018-02,Sub-Saharan Africa,604
-2018-03,Central & Eastern Europe & Central Asia,14242
-2018-03,"East, Southeast Asia, & Pacific",15204
-2018-03,Latin America & Caribbean,5593
-2018-03,Middle East & North Africa,4172
-2018-03,North America,18688
-2018-03,Northern & Western Europe,32667
-2018-03,South Asia,4200
-2018-03,Sub-Saharan Africa,706
-2018-04,Central & Eastern Europe & Central Asia,12832
-2018-04,"East, Southeast Asia, & Pacific",15191
-2018-04,Latin America & Caribbean,5581
-2018-04,Middle East & North Africa,4383
-2018-04,North America,18144
-2018-04,Northern & Western Europe,31473
-2018-04,South Asia,3890
-2018-04,Sub-Saharan Africa,739
-2018-05,Central & Eastern Europe & Central Asia,13482
-2018-05,"East, Southeast Asia, & Pacific",15519
-2018-05,Latin America & Caribbean,5625
-2018-05,Middle East & North Africa,4150
-2018-05,North America,16979
-2018-05,Northern & Western Europe,31904
-2018-05,South Asia,3721
-2018-05,Sub-Saharan Africa,760
-2018-06,Central & Eastern Europe & Central Asia,13016
-2018-06,"East, Southeast Asia, & Pacific",14515
-2018-06,Latin America & Caribbean,5381
-2018-06,Middle East & North Africa,4155
-2018-06,North America,15238
-2018-06,Northern & Western Europe,30018
-2018-06,South Asia,3492
-2018-06,Sub-Saharan Africa,728
-2018-07,Central & Eastern Europe & Central Asia,12876
-2018-07,"East, Southeast Asia, & Pacific",15345
-2018-07,Latin America & Caribbean,5666
-2018-07,Middle East & North Africa,4271
-2018-07,North America,15303
-2018-07,Northern & Western Europe,29498
-2018-07,South Asia,3740
-2018-07,Sub-Saharan Africa,973
-2018-08,Central & Eastern Europe & Central Asia,13004
-2018-08,"East, Southeast Asia, & Pacific",15594
-2018-08,Latin America & Caribbean,5769
-2018-08,Middle East & North Africa,4197
-2018-08,North America,15639
-2018-08,Northern & Western Europe,30350
-2018-08,South Asia,3960
-2018-08,Sub-Saharan Africa,777
-2018-08,UNCLASSED,0
-2018-09,Central & Eastern Europe & Central Asia,12180
-2018-09,"East, Southeast Asia, & Pacific",14805
-2018-09,Latin America & Caribbean,5764
-2018-09,Middle East & North Africa,4142
-2018-09,North America,14921
-2018-09,Northern & Western Europe,29640
-2018-09,South Asia,4118
-2018-09,Sub-Saharan Africa,684
-2018-10,Central & Eastern Europe & Central Asia,13101
-2018-10,"East, Southeast Asia, & Pacific",15227
-2018-10,Latin America & Caribbean,5478
-2018-10,Middle East & North Africa,3954
-2018-10,North America,16402
-2018-10,Northern & Western Europe,31888
-2018-10,South Asia,3950
-2018-10,Sub-Saharan Africa,844
-2018-11,Central & Eastern Europe & Central Asia,13718
-2018-11,"East, Southeast Asia, & Pacific",14736
-2018-11,Latin America & Caribbean,5568
-2018-11,Middle East & North Africa,3995
-2018-11,North America,17184
-2018-11,Northern & Western Europe,32067
-2018-11,South Asia,4041
-2018-11,Sub-Saharan Africa,716
-2018-12,Central & Eastern Europe & Central Asia,13768
-2018-12,"East, Southeast Asia, & Pacific",14787
-2018-12,Latin America & Caribbean,5446
-2018-12,Middle East & North Africa,4316
-2018-12,North America,16642
-2018-12,Northern & Western Europe,31055
-2018-12,South Asia,4262
-2018-12,Sub-Saharan Africa,670
-2018-12,UNCLASSED,1
-2019-01,Central & Eastern Europe & Central Asia,14771
-2019-01,"East, Southeast Asia, & Pacific",15441
-2019-01,Latin America & Caribbean,5837
-2019-01,Middle East & North Africa,4656
-2019-01,North America,16685
-2019-01,Northern & Western Europe,33767
-2019-01,South Asia,4147
-2019-01,Sub-Saharan Africa,727
-2019-01,UNCLASSED,1
-2019-02,Central & Eastern Europe & Central Asia,13694
-2019-02,"East, Southeast Asia, & Pacific",14569
-2019-02,Latin America & Caribbean,5355
-2019-02,Middle East & North Africa,4056
-2019-02,North America,16575
-2019-02,Northern & Western Europe,31335
-2019-02,South Asia,3859
-2019-02,Sub-Saharan Africa,722
-2019-03,Central & Eastern Europe & Central Asia,14704
-2019-03,"East, Southeast Asia, & Pacific",15867
-2019-03,Latin America & Caribbean,5667
-2019-03,Middle East & North Africa,4381
-2019-03,North America,17882
-2019-03,Northern & Western Europe,33336
-2019-03,South Asia,4448
-2019-03,Sub-Saharan Africa,850
-2019-03,UNCLASSED,0
-2019-04,Central & Eastern Europe & Central Asia,13756
-2019-04,"East, Southeast Asia, & Pacific",15373
-2019-04,Latin America & Caribbean,5268
-2019-04,Middle East & North Africa,4251
-2019-04,North America,17831
-2019-04,Northern & Western Europe,32089
-2019-04,South Asia,3789
-2019-04,Sub-Saharan Africa,787
-2019-05,Central & Eastern Europe & Central Asia,14511
-2019-05,"East, Southeast Asia, & Pacific",15573
-2019-05,Latin America & Caribbean,5503
-2019-05,Middle East & North Africa,4511
-2019-05,North America,17211
-2019-05,Northern & Western Europe,33018
-2019-05,South Asia,4217
-2019-05,Sub-Saharan Africa,864
-2019-05,UNCLASSED,1
-2019-06,Central & Eastern Europe & Central Asia,13267
-2019-06,"East, Southeast Asia, & Pacific",15044
-2019-06,Latin America & Caribbean,5554
-2019-06,Middle East & North Africa,4384
-2019-06,North America,15508
-2019-06,Northern & Western Europe,31087
-2019-06,South Asia,3929
-2019-06,Sub-Saharan Africa,802
-2019-07,Central & Eastern Europe & Central Asia,13765
-2019-07,"East, Southeast Asia, & Pacific",15665
-2019-07,Latin America & Caribbean,5806
-2019-07,Middle East & North Africa,4570
-2019-07,North America,15695
-2019-07,Northern & Western Europe,31393
-2019-07,South Asia,4380
-2019-07,Sub-Saharan Africa,815
-2019-07,UNCLASSED,2
-2019-08,Central & Eastern Europe & Central Asia,13451
-2019-08,"East, Southeast Asia, & Pacific",15851
-2019-08,Latin America & Caribbean,5596
-2019-08,Middle East & North Africa,4564
-2019-08,North America,16008
-2019-08,Northern & Western Europe,31577
-2019-08,South Asia,4533
-2019-08,Sub-Saharan Africa,863
-2019-08,UNCLASSED,0
-2019-09,Central & Eastern Europe & Central Asia,12900
-2019-09,"East, Southeast Asia, & Pacific",15566
-2019-09,Latin America & Caribbean,5401
-2019-09,Middle East & North Africa,4107
-2019-09,North America,15497
-2019-09,Northern & Western Europe,30468
-2019-09,South Asia,4419
-2019-09,Sub-Saharan Africa,792
-2019-09,UNCLASSED,1
-2019-10,Central & Eastern Europe & Central Asia,13644
-2019-10,"East, Southeast Asia, & Pacific",16358
-2019-10,Latin America & Caribbean,5668
-2019-10,Middle East & North Africa,4304
-2019-10,North America,16708
-2019-10,Northern & Western Europe,32250
-2019-10,South Asia,4374
-2019-10,Sub-Saharan Africa,813
-2019-10,UNCLASSED,1
-2019-11,Central & Eastern Europe & Central Asia,13947
-2019-11,"East, Southeast Asia, & Pacific",15489
-2019-11,Latin America & Caribbean,5586
-2019-11,Middle East & North Africa,3919
-2019-11,North America,17215
-2019-11,Northern & Western Europe,32419
-2019-11,South Asia,4298
-2019-11,Sub-Saharan Africa,824
-2019-11,UNCLASSED,2
-2019-12,Central & Eastern Europe & Central Asia,14154
-2019-12,"East, Southeast Asia, & Pacific",15673
-2019-12,Latin America & Caribbean,5501
-2019-12,Middle East & North Africa,4505
-2019-12,North America,16710
-2019-12,Northern & Western Europe,31685
-2019-12,South Asia,4636
-2019-12,Sub-Saharan Africa,833
-2019-12,UNCLASSED,4
-2020-01,Central & Eastern Europe & Central Asia,16338
-2020-01,"East, Southeast Asia, & Pacific",16188
-2020-01,Latin America & Caribbean,5752
-2020-01,Middle East & North Africa,4737
-2020-01,North America,16778
-2020-01,Northern & Western Europe,33944
-2020-01,South Asia,4790
-2020-01,Sub-Saharan Africa,924
-2020-01,UNCLASSED,9
-2020-02,Central & Eastern Europe & Central Asia,15329
-2020-02,"East, Southeast Asia, & Pacific",16096
-2020-02,Latin America & Caribbean,5454
-2020-02,Middle East & North Africa,4319
-2020-02,North America,16533
-2020-02,Northern & Western Europe,32327
-2020-02,South Asia,4409
-2020-02,Sub-Saharan Africa,943
-2020-02,UNCLASSED,2
-2020-03,Central & Eastern Europe & Central Asia,16122
-2020-03,"East, Southeast Asia, & Pacific",16992
-2020-03,Latin America & Caribbean,5613
-2020-03,Middle East & North Africa,4719
-2020-03,North America,17031
-2020-03,Northern & Western Europe,32918
-2020-03,South Asia,4873
-2020-03,Sub-Saharan Africa,869
-2020-04,Central & Eastern Europe & Central Asia,16883
-2020-04,"East, Southeast Asia, & Pacific",17227
-2020-04,Latin America & Caribbean,5852
-2020-04,Middle East & North Africa,5515
-2020-04,North America,17813
-2020-04,Northern & Western Europe,35544
-2020-04,South Asia,5432
-2020-04,Sub-Saharan Africa,874
-2020-05,Central & Eastern Europe & Central Asia,17525
-2020-05,"East, Southeast Asia, & Pacific",18555
-2020-05,Latin America & Caribbean,6684
-2020-05,Middle East & North Africa,5851
-2020-05,North America,18299
-2020-05,Northern & Western Europe,36455
-2020-05,South Asia,5737
-2020-05,Sub-Saharan Africa,1200
-2020-06,Central & Eastern Europe & Central Asia,15682
-2020-06,"East, Southeast Asia, & Pacific",17185
-2020-06,Latin America & Caribbean,6500
-2020-06,Middle East & North Africa,5222
-2020-06,North America,17049
-2020-06,Northern & Western Europe,33857
-2020-06,South Asia,5337
-2020-06,Sub-Saharan Africa,1018
-2020-07,Central & Eastern Europe & Central Asia,14892
-2020-07,"East, Southeast Asia, & Pacific",16808
-2020-07,Latin America & Caribbean,6432
-2020-07,Middle East & North Africa,5270
-2020-07,North America,17070
-2020-07,Northern & Western Europe,31644
-2020-07,South Asia,5387
-2020-07,Sub-Saharan Africa,1128
-2020-08,Central & Eastern Europe & Central Asia,15110
-2020-08,"East, Southeast Asia, & Pacific",17379
-2020-08,Latin America & Caribbean,6434
-2020-08,Middle East & North Africa,5180
-2020-08,North America,16775
-2020-08,Northern & Western Europe,31409
-2020-08,South Asia,5429
-2020-08,Sub-Saharan Africa,1094
-2020-08,UNCLASSED,0
-2020-09,Central & Eastern Europe & Central Asia,14619
-2020-09,"East, Southeast Asia, & Pacific",16930
-2020-09,Latin America & Caribbean,6375
-2020-09,Middle East & North Africa,4932
-2020-09,North America,16346
-2020-09,Northern & Western Europe,31033
-2020-09,South Asia,5119
-2020-09,Sub-Saharan Africa,1077
-2020-10,Central & Eastern Europe & Central Asia,15140
-2020-10,"East, Southeast Asia, & Pacific",16605
-2020-10,Latin America & Caribbean,6829
-2020-10,Middle East & North Africa,5292
-2020-10,North America,16686
-2020-10,Northern & Western Europe,32268
-2020-10,South Asia,4730
-2020-10,Sub-Saharan Africa,1092
-2020-11,Central & Eastern Europe & Central Asia,15860
-2020-11,"East, Southeast Asia, & Pacific",16130
-2020-11,Latin America & Caribbean,6674
-2020-11,Middle East & North Africa,5218
-2020-11,North America,17027
-2020-11,Northern & Western Europe,33828
-2020-11,South Asia,4290
-2020-11,Sub-Saharan Africa,967
-2020-11,UNCLASSED,0
-2020-12,Central & Eastern Europe & Central Asia,16966
-2020-12,"East, Southeast Asia, & Pacific",16459
-2020-12,Latin America & Caribbean,6577
-2020-12,Middle East & North Africa,5649
-2020-12,North America,17973
-2020-12,Northern & Western Europe,34370
-2020-12,South Asia,4867
-2020-12,Sub-Saharan Africa,946
-2021-01,Central & Eastern Europe & Central Asia,17813
-2021-01,"East, Southeast Asia, & Pacific",17550
-2021-01,Latin America & Caribbean,7033
-2021-01,Middle East & North Africa,6120
-2021-01,North America,17791
-2021-01,Northern & Western Europe,37414
-2021-01,South Asia,5016
-2021-01,Sub-Saharan Africa,1134
-2021-02,Central & Eastern Europe & Central Asia,16327
-2021-02,"East, Southeast Asia, & Pacific",16508
-2021-02,Latin America & Caribbean,6455
-2021-02,Middle East & North Africa,5468
-2021-02,North America,17445
-2021-02,Northern & Western Europe,34775
-2021-02,South Asia,4572
-2021-02,Sub-Saharan Africa,1055
-2021-03,Central & Eastern Europe & Central Asia,17233
-2021-03,"East, Southeast Asia, & Pacific",17379
-2021-03,Latin America & Caribbean,7165
-2021-03,Middle East & North Africa,5714
-2021-03,North America,18879
-2021-03,Northern & Western Europe,36223
-2021-03,South Asia,4986
-2021-03,Sub-Saharan Africa,1249
-2021-04,Central & Eastern Europe & Central Asia,16360
-2021-04,"East, Southeast Asia, & Pacific",17206
-2021-04,Latin America & Caribbean,6999
-2021-04,Middle East & North Africa,5648
-2021-04,North America,18079
-2021-04,Northern & Western Europe,34874
-2021-04,South Asia,4690
-2021-04,Sub-Saharan Africa,1259
-2021-05,Central & Eastern Europe & Central Asia,16563
-2021-05,"East, Southeast Asia, & Pacific",18096
-2021-05,Latin America & Caribbean,7399
-2021-05,Middle East & North Africa,5638
-2021-05,North America,17472
-2021-05,Northern & Western Europe,35001
-2021-05,South Asia,5353
-2021-05,Sub-Saharan Africa,1344
-2021-05,UNCLASSED,1
-2021-06,Central & Eastern Europe & Central Asia,14775
-2021-06,"East, Southeast Asia, & Pacific",17654
-2021-06,Latin America & Caribbean,7165
-2021-06,Middle East & North Africa,5183
-2021-06,North America,16140
-2021-06,Northern & Western Europe,30848
-2021-06,South Asia,5462
-2021-06,Sub-Saharan Africa,1373
-2021-07,Central & Eastern Europe & Central Asia,15120
-2021-07,"East, Southeast Asia, & Pacific",17970
-2021-07,Latin America & Caribbean,7096
-2021-07,Middle East & North Africa,5339
-2021-07,North America,15948
-2021-07,Northern & Western Europe,30222
-2021-07,South Asia,5816
-2021-07,Sub-Saharan Africa,1448
-2021-08,Central & Eastern Europe & Central Asia,15414
-2021-08,"East, Southeast Asia, & Pacific",18868
-2021-08,Latin America & Caribbean,6945
-2021-08,Middle East & North Africa,5530
-2021-08,North America,15584
-2021-08,Northern & Western Europe,30903
-2021-08,South Asia,5315
-2021-08,Sub-Saharan Africa,1433
-2021-09,Central & Eastern Europe & Central Asia,14465
-2021-09,"East, Southeast Asia, & Pacific",17811
-2021-09,Latin America & Caribbean,6555
-2021-09,Middle East & North Africa,5132
-2021-09,North America,15548
-2021-09,Northern & Western Europe,29900
-2021-09,South Asia,5147
-2021-09,Sub-Saharan Africa,1345
-2021-10,Central & Eastern Europe & Central Asia,15229
-2021-10,"East, Southeast Asia, & Pacific",18322
-2021-10,Latin America & Caribbean,6508
-2021-10,Middle East & North Africa,5113
-2021-10,North America,16187
-2021-10,Northern & Western Europe,30839
-2021-10,South Asia,4705
-2021-10,Sub-Saharan Africa,1438
-2021-11,Central & Eastern Europe & Central Asia,15610
-2021-11,"East, Southeast Asia, & Pacific",17423
-2021-11,Latin America & Caribbean,6471
-2021-11,Middle East & North Africa,5012
-2021-11,North America,16653
-2021-11,Northern & Western Europe,31469
-2021-11,South Asia,4337
-2021-11,Sub-Saharan Africa,1296
-2021-12,Central & Eastern Europe & Central Asia,15568
-2021-12,"East, Southeast Asia, & Pacific",17577
-2021-12,Latin America & Caribbean,6330
-2021-12,Middle East & North Africa,5270
-2021-12,North America,16811
-2021-12,Northern & Western Europe,31302
-2021-12,South Asia,4456
-2021-12,Sub-Saharan Africa,1264
-2022-01,Central & Eastern Europe & Central Asia,16937
-2022-01,"East, Southeast Asia, & Pacific",18237
-2022-01,Latin America & Caribbean,6613
-2022-01,Middle East & North Africa,5714
-2022-01,North America,17028
-2022-01,Northern & Western Europe,34338
-2022-01,South Asia,4924
-2022-01,Sub-Saharan Africa,1121
-2022-02,Central & Eastern Europe & Central Asia,15714
-2022-02,"East, Southeast Asia, & Pacific",17331
-2022-02,Latin America & Caribbean,6246
-2022-02,Middle East & North Africa,5069
-2022-02,North America,16536
-2022-02,Northern & Western Europe,31447
-2022-02,South Asia,4602
-2022-02,Sub-Saharan Africa,1348
-2022-03,Central & Eastern Europe & Central Asia,15065
-2022-03,"East, Southeast Asia, & Pacific",18557
-2022-03,Latin America & Caribbean,6412
-2022-03,Middle East & North Africa,5239
-2022-03,North America,17459
-2022-03,Northern & Western Europe,31824
-2022-03,South Asia,4957
-2022-03,Sub-Saharan Africa,1506
-2022-04,Central & Eastern Europe & Central Asia,15620
-2022-04,"East, Southeast Asia, & Pacific",17470
-2022-04,Latin America & Caribbean,6280
-2022-04,Middle East & North Africa,5126
-2022-04,North America,17066
-2022-04,Northern & Western Europe,31173
-2022-04,South Asia,4582
-2022-04,Sub-Saharan Africa,1422
-2022-05,Central & Eastern Europe & Central Asia,16232
-2022-05,"East, Southeast Asia, & Pacific",18377
-2022-05,Latin America & Caribbean,6199
-2022-05,Middle East & North Africa,5611
-2022-05,North America,16728
-2022-05,Northern & Western Europe,32649
-2022-05,South Asia,4555
-2022-05,Sub-Saharan Africa,1611
-2022-06,Central & Eastern Europe & Central Asia,15109
-2022-06,"East, Southeast Asia, & Pacific",17294
-2022-06,Latin America & Caribbean,6174
-2022-06,Middle East & North Africa,5265
-2022-06,North America,15564
-2022-06,Northern & Western Europe,30935
-2022-06,South Asia,4539
-2022-06,Sub-Saharan Africa,1590
-2022-07,Central & Eastern Europe & Central Asia,15418
-2022-07,"East, Southeast Asia, & Pacific",17659
-2022-07,Latin America & Caribbean,6559
-2022-07,Middle East & North Africa,5274
-2022-07,North America,15880
-2022-07,Northern & Western Europe,30656
-2022-07,South Asia,4638
-2022-07,Sub-Saharan Africa,1656
-2022-08,Central & Eastern Europe & Central Asia,15585
-2022-08,"East, Southeast Asia, & Pacific",17991
-2022-08,Latin America & Caribbean,6296
-2022-08,Middle East & North Africa,5085
-2022-08,North America,15771
-2022-08,Northern & Western Europe,30681
-2022-08,South Asia,4737
-2022-08,Sub-Saharan Africa,1767
-2022-09,Central & Eastern Europe & Central Asia,14758
-2022-09,"East, Southeast Asia, & Pacific",17072
-2022-09,Latin America & Caribbean,6056
-2022-09,Middle East & North Africa,4842
-2022-09,North America,15938
-2022-09,Northern & Western Europe,29989
-2022-09,South Asia,4547
-2022-09,Sub-Saharan Africa,1705
-2022-10,Central & Eastern Europe & Central Asia,15122
-2022-10,"East, Southeast Asia, & Pacific",17350
-2022-10,Latin America & Caribbean,6296
-2022-10,Middle East & North Africa,5030
-2022-10,North America,16589
-2022-10,Northern & Western Europe,31962
-2022-10,South Asia,4780
-2022-10,Sub-Saharan Africa,1780
-2022-11,Central & Eastern Europe & Central Asia,15294
-2022-11,"East, Southeast Asia, & Pacific",16981
-2022-11,Latin America & Caribbean,6060
-2022-11,Middle East & North Africa,4897
-2022-11,North America,16746
-2022-11,Northern & Western Europe,31897
-2022-11,South Asia,4354
-2022-11,Sub-Saharan Africa,1581
-2022-12,Central & Eastern Europe & Central Asia,16172
-2022-12,"East, Southeast Asia, & Pacific",17140
-2022-12,Latin America & Caribbean,6227
-2022-12,Middle East & North Africa,5140
-2022-12,North America,16553
-2022-12,Northern & Western Europe,31427
-2022-12,South Asia,4551
-2022-12,Sub-Saharan Africa,1590
-2023-01,Central & Eastern Europe & Central Asia,16587
-2023-01,"East, Southeast Asia, & Pacific",17609
-2023-01,Latin America & Caribbean,6788
-2023-01,Middle East & North Africa,5679
-2023-01,North America,16983
-2023-01,Northern & Western Europe,33958
-2023-01,South Asia,4713
-2023-01,Sub-Saharan Africa,1488
-2023-02,Central & Eastern Europe & Central Asia,15511
-2023-02,"East, Southeast Asia, & Pacific",16426
-2023-02,Latin America & Caribbean,6327
-2023-02,Middle East & North Africa,4912
-2023-02,North America,15860
-2023-02,Northern & Western Europe,31152
-2023-02,South Asia,4507
-2023-02,Sub-Saharan Africa,1724
+month,sum(editors),wmf_region
+2018-01,14507,Central & Eastern Europe & Central Asia
+2018-01,14943,"East, Southeast Asia, & Pacific"
+2018-01,5798,Latin America & Caribbean
+2018-01,4304,Middle East & North Africa
+2018-01,16894,North America
+2018-01,33448,Northern & Western Europe
+2018-01,3877,South Asia
+2018-01,626,Sub-Saharan Africa
+2018-01,2832,
+2018-02,13646,Central & Eastern Europe & Central Asia
+2018-02,14344,"East, Southeast Asia, & Pacific"
+2018-02,5141,Latin America & Caribbean
+2018-02,3977,Middle East & North Africa
+2018-02,16161,North America
+2018-02,30622,Northern & Western Europe
+2018-02,3850,South Asia
+2018-02,604,Sub-Saharan Africa
+2018-02,2673,
+2018-03,14242,Central & Eastern Europe & Central Asia
+2018-03,15204,"East, Southeast Asia, & Pacific"
+2018-03,5593,Latin America & Caribbean
+2018-03,4172,Middle East & North Africa
+2018-03,18688,North America
+2018-03,32667,Northern & Western Europe
+2018-03,4200,South Asia
+2018-03,706,Sub-Saharan Africa
+2018-03,2747,
+2018-04,12832,Central & Eastern Europe & Central Asia
+2018-04,15191,"East, Southeast Asia, & Pacific"
+2018-04,5581,Latin America & Caribbean
+2018-04,4383,Middle East & North Africa
+2018-04,18144,North America
+2018-04,31473,Northern & Western Europe
+2018-04,3890,South Asia
+2018-04,739,Sub-Saharan Africa
+2018-04,2603,
+2018-05,13482,Central & Eastern Europe & Central Asia
+2018-05,15519,"East, Southeast Asia, & Pacific"
+2018-05,5625,Latin America & Caribbean
+2018-05,4150,Middle East & North Africa
+2018-05,16979,North America
+2018-05,31904,Northern & Western Europe
+2018-05,3721,South Asia
+2018-05,760,Sub-Saharan Africa
+2018-05,2527,
+2018-06,13016,Central & Eastern Europe & Central Asia
+2018-06,14515,"East, Southeast Asia, & Pacific"
+2018-06,5381,Latin America & Caribbean
+2018-06,4155,Middle East & North Africa
+2018-06,15238,North America
+2018-06,30018,Northern & Western Europe
+2018-06,3492,South Asia
+2018-06,728,Sub-Saharan Africa
+2018-06,2616,
+2018-07,12876,Central & Eastern Europe & Central Asia
+2018-07,15345,"East, Southeast Asia, & Pacific"
+2018-07,5666,Latin America & Caribbean
+2018-07,4271,Middle East & North Africa
+2018-07,15303,North America
+2018-07,29498,Northern & Western Europe
+2018-07,3740,South Asia
+2018-07,973,Sub-Saharan Africa
+2018-07,2681,
+2018-08,13004,Central & Eastern Europe & Central Asia
+2018-08,15594,"East, Southeast Asia, & Pacific"
+2018-08,5769,Latin America & Caribbean
+2018-08,4197,Middle East & North Africa
+2018-08,15639,North America
+2018-08,30350,Northern & Western Europe
+2018-08,3960,South Asia
+2018-08,777,Sub-Saharan Africa
+2018-08,0,UNCLASSED
+2018-08,2775,
+2018-09,12180,Central & Eastern Europe & Central Asia
+2018-09,14805,"East, Southeast Asia, & Pacific"
+2018-09,5764,Latin America & Caribbean
+2018-09,4142,Middle East & North Africa
+2018-09,14921,North America
+2018-09,29640,Northern & Western Europe
+2018-09,4118,South Asia
+2018-09,684,Sub-Saharan Africa
+2018-09,2579,
+2018-10,13101,Central & Eastern Europe & Central Asia
+2018-10,15227,"East, Southeast Asia, & Pacific"
+2018-10,5478,Latin America & Caribbean
+2018-10,3954,Middle East & North Africa
+2018-10,16402,North America
+2018-10,31888,Northern & Western Europe
+2018-10,3950,South Asia
+2018-10,844,Sub-Saharan Africa
+2018-10,2699,
+2018-11,13718,Central & Eastern Europe & Central Asia
+2018-11,14736,"East, Southeast Asia, & Pacific"
+2018-11,5568,Latin America & Caribbean
+2018-11,3995,Middle East & North Africa
+2018-11,17184,North America
+2018-11,32067,Northern & Western Europe
+2018-11,4041,South Asia
+2018-11,716,Sub-Saharan Africa
+2018-11,2649,
+2018-12,13768,Central & Eastern Europe & Central Asia
+2018-12,14787,"East, Southeast Asia, & Pacific"
+2018-12,5446,Latin America & Caribbean
+2018-12,4316,Middle East & North Africa
+2018-12,16642,North America
+2018-12,31055,Northern & Western Europe
+2018-12,4262,South Asia
+2018-12,670,Sub-Saharan Africa
+2018-12,1,UNCLASSED
+2018-12,2690,
+2019-01,14771,Central & Eastern Europe & Central Asia
+2019-01,15441,"East, Southeast Asia, & Pacific"
+2019-01,5837,Latin America & Caribbean
+2019-01,4656,Middle East & North Africa
+2019-01,16685,North America
+2019-01,33767,Northern & Western Europe
+2019-01,4147,South Asia
+2019-01,727,Sub-Saharan Africa
+2019-01,1,UNCLASSED
+2019-01,2905,
+2019-02,13694,Central & Eastern Europe & Central Asia
+2019-02,14569,"East, Southeast Asia, & Pacific"
+2019-02,5355,Latin America & Caribbean
+2019-02,4056,Middle East & North Africa
+2019-02,16575,North America
+2019-02,31335,Northern & Western Europe
+2019-02,3859,South Asia
+2019-02,722,Sub-Saharan Africa
+2019-02,2790,
+2019-03,14704,Central & Eastern Europe & Central Asia
+2019-03,15867,"East, Southeast Asia, & Pacific"
+2019-03,5667,Latin America & Caribbean
+2019-03,4381,Middle East & North Africa
+2019-03,17882,North America
+2019-03,33336,Northern & Western Europe
+2019-03,4448,South Asia
+2019-03,850,Sub-Saharan Africa
+2019-03,0,UNCLASSED
+2019-03,2853,
+2019-04,13756,Central & Eastern Europe & Central Asia
+2019-04,15373,"East, Southeast Asia, & Pacific"
+2019-04,5268,Latin America & Caribbean
+2019-04,4251,Middle East & North Africa
+2019-04,17831,North America
+2019-04,32089,Northern & Western Europe
+2019-04,3789,South Asia
+2019-04,787,Sub-Saharan Africa
+2019-04,2604,
+2019-05,14511,Central & Eastern Europe & Central Asia
+2019-05,15573,"East, Southeast Asia, & Pacific"
+2019-05,5503,Latin America & Caribbean
+2019-05,4511,Middle East & North Africa
+2019-05,17211,North America
+2019-05,33018,Northern & Western Europe
+2019-05,4217,South Asia
+2019-05,864,Sub-Saharan Africa
+2019-05,1,UNCLASSED
+2019-05,2780,
+2019-06,13267,Central & Eastern Europe & Central Asia
+2019-06,15044,"East, Southeast Asia, & Pacific"
+2019-06,5554,Latin America & Caribbean
+2019-06,4384,Middle East & North Africa
+2019-06,15508,North America
+2019-06,31087,Northern & Western Europe
+2019-06,3929,South Asia
+2019-06,802,Sub-Saharan Africa
+2019-06,2648,
+2019-07,13765,Central & Eastern Europe & Central Asia
+2019-07,15665,"East, Southeast Asia, & Pacific"
+2019-07,5806,Latin America & Caribbean
+2019-07,4570,Middle East & North Africa
+2019-07,15695,North America
+2019-07,31393,Northern & Western Europe
+2019-07,4380,South Asia
+2019-07,815,Sub-Saharan Africa
+2019-07,2,UNCLASSED
+2019-07,2839,
+2019-08,13451,Central & Eastern Europe & Central Asia
+2019-08,15851,"East, Southeast Asia, & Pacific"
+2019-08,5596,Latin America & Caribbean
+2019-08,4564,Middle East & North Africa
+2019-08,16008,North America
+2019-08,31577,Northern & Western Europe
+2019-08,4533,South Asia
+2019-08,863,Sub-Saharan Africa
+2019-08,0,UNCLASSED
+2019-08,2975,
+2019-09,12900,Central & Eastern Europe & Central Asia
+2019-09,15566,"East, Southeast Asia, & Pacific"
+2019-09,5401,Latin America & Caribbean
+2019-09,4107,Middle East & North Africa
+2019-09,15497,North America
+2019-09,30468,Northern & Western Europe
+2019-09,4419,South Asia
+2019-09,792,Sub-Saharan Africa
+2019-09,1,UNCLASSED
+2019-09,2694,
+2019-10,13644,Central & Eastern Europe & Central Asia
+2019-10,16358,"East, Southeast Asia, & Pacific"
+2019-10,5668,Latin America & Caribbean
+2019-10,4304,Middle East & North Africa
+2019-10,16708,North America
+2019-10,32250,Northern & Western Europe
+2019-10,4374,South Asia
+2019-10,813,Sub-Saharan Africa
+2019-10,1,UNCLASSED
+2019-10,2870,
+2019-11,13947,Central & Eastern Europe & Central Asia
+2019-11,15489,"East, Southeast Asia, & Pacific"
+2019-11,5586,Latin America & Caribbean
+2019-11,3919,Middle East & North Africa
+2019-11,17215,North America
+2019-11,32419,Northern & Western Europe
+2019-11,4298,South Asia
+2019-11,824,Sub-Saharan Africa
+2019-11,2,UNCLASSED
+2019-11,2993,
+2019-12,14154,Central & Eastern Europe & Central Asia
+2019-12,15673,"East, Southeast Asia, & Pacific"
+2019-12,5501,Latin America & Caribbean
+2019-12,4505,Middle East & North Africa
+2019-12,16710,North America
+2019-12,31685,Northern & Western Europe
+2019-12,4636,South Asia
+2019-12,833,Sub-Saharan Africa
+2019-12,4,UNCLASSED
+2019-12,2803,
+2020-01,16338,Central & Eastern Europe & Central Asia
+2020-01,16188,"East, Southeast Asia, & Pacific"
+2020-01,5752,Latin America & Caribbean
+2020-01,4737,Middle East & North Africa
+2020-01,16778,North America
+2020-01,33944,Northern & Western Europe
+2020-01,4790,South Asia
+2020-01,924,Sub-Saharan Africa
+2020-01,9,UNCLASSED
+2020-01,3078,
+2020-02,15329,Central & Eastern Europe & Central Asia
+2020-02,16096,"East, Southeast Asia, & Pacific"
+2020-02,5454,Latin America & Caribbean
+2020-02,4319,Middle East & North Africa
+2020-02,16533,North America
+2020-02,32327,Northern & Western Europe
+2020-02,4409,South Asia
+2020-02,943,Sub-Saharan Africa
+2020-02,2,UNCLASSED
+2020-02,2903,
+2020-03,16122,Central & Eastern Europe & Central Asia
+2020-03,16992,"East, Southeast Asia, & Pacific"
+2020-03,5613,Latin America & Caribbean
+2020-03,4719,Middle East & North Africa
+2020-03,17031,North America
+2020-03,32918,Northern & Western Europe
+2020-03,4873,South Asia
+2020-03,869,Sub-Saharan Africa
+2020-03,3143,
+2020-04,16883,Central & Eastern Europe & Central Asia
+2020-04,17227,"East, Southeast Asia, & Pacific"
+2020-04,5852,Latin America & Caribbean
+2020-04,5515,Middle East & North Africa
+2020-04,17813,North America
+2020-04,35544,Northern & Western Europe
+2020-04,5432,South Asia
+2020-04,874,Sub-Saharan Africa
+2020-04,3386,
+2020-05,17525,Central & Eastern Europe & Central Asia
+2020-05,18555,"East, Southeast Asia, & Pacific"
+2020-05,6684,Latin America & Caribbean
+2020-05,5851,Middle East & North Africa
+2020-05,18299,North America
+2020-05,36455,Northern & Western Europe
+2020-05,5737,South Asia
+2020-05,1200,Sub-Saharan Africa
+2020-05,3418,
+2020-06,15682,Central & Eastern Europe & Central Asia
+2020-06,17185,"East, Southeast Asia, & Pacific"
+2020-06,6500,Latin America & Caribbean
+2020-06,5222,Middle East & North Africa
+2020-06,17049,North America
+2020-06,33857,Northern & Western Europe
+2020-06,5337,South Asia
+2020-06,1018,Sub-Saharan Africa
+2020-06,3255,
+2020-07,14892,Central & Eastern Europe & Central Asia
+2020-07,16808,"East, Southeast Asia, & Pacific"
+2020-07,6432,Latin America & Caribbean
+2020-07,5270,Middle East & North Africa
+2020-07,17070,North America
+2020-07,31644,Northern & Western Europe
+2020-07,5387,South Asia
+2020-07,1128,Sub-Saharan Africa
+2020-07,3194,
+2020-08,15110,Central & Eastern Europe & Central Asia
+2020-08,17379,"East, Southeast Asia, & Pacific"
+2020-08,6434,Latin America & Caribbean
+2020-08,5180,Middle East & North Africa
+2020-08,16775,North America
+2020-08,31409,Northern & Western Europe
+2020-08,5429,South Asia
+2020-08,1094,Sub-Saharan Africa
+2020-08,0,UNCLASSED
+2020-08,3098,
+2020-09,14619,Central & Eastern Europe & Central Asia
+2020-09,16930,"East, Southeast Asia, & Pacific"
+2020-09,6375,Latin America & Caribbean
+2020-09,4932,Middle East & North Africa
+2020-09,16346,North America
+2020-09,31033,Northern & Western Europe
+2020-09,5119,South Asia
+2020-09,1077,Sub-Saharan Africa
+2020-09,3039,
+2020-10,15140,Central & Eastern Europe & Central Asia
+2020-10,16605,"East, Southeast Asia, & Pacific"
+2020-10,6829,Latin America & Caribbean
+2020-10,5292,Middle East & North Africa
+2020-10,16686,North America
+2020-10,32268,Northern & Western Europe
+2020-10,4730,South Asia
+2020-10,1092,Sub-Saharan Africa
+2020-10,3329,
+2020-11,15860,Central & Eastern Europe & Central Asia
+2020-11,16130,"East, Southeast Asia, & Pacific"
+2020-11,6674,Latin America & Caribbean
+2020-11,5218,Middle East & North Africa
+2020-11,17027,North America
+2020-11,33828,Northern & Western Europe
+2020-11,4290,South Asia
+2020-11,967,Sub-Saharan Africa
+2020-11,0,UNCLASSED
+2020-11,3384,
+2020-12,16966,Central & Eastern Europe & Central Asia
+2020-12,16459,"East, Southeast Asia, & Pacific"
+2020-12,6577,Latin America & Caribbean
+2020-12,5649,Middle East & North Africa
+2020-12,17973,North America
+2020-12,34370,Northern & Western Europe
+2020-12,4867,South Asia
+2020-12,946,Sub-Saharan Africa
+2020-12,3532,
+2021-01,17813,Central & Eastern Europe & Central Asia
+2021-01,17550,"East, Southeast Asia, & Pacific"
+2021-01,7033,Latin America & Caribbean
+2021-01,6120,Middle East & North Africa
+2021-01,17791,North America
+2021-01,37414,Northern & Western Europe
+2021-01,5016,South Asia
+2021-01,1134,Sub-Saharan Africa
+2021-01,3604,
+2021-02,16327,Central & Eastern Europe & Central Asia
+2021-02,16508,"East, Southeast Asia, & Pacific"
+2021-02,6455,Latin America & Caribbean
+2021-02,5468,Middle East & North Africa
+2021-02,17445,North America
+2021-02,34775,Northern & Western Europe
+2021-02,4572,South Asia
+2021-02,1055,Sub-Saharan Africa
+2021-02,3372,
+2021-03,17233,Central & Eastern Europe & Central Asia
+2021-03,17379,"East, Southeast Asia, & Pacific"
+2021-03,7165,Latin America & Caribbean
+2021-03,5714,Middle East & North Africa
+2021-03,18879,North America
+2021-03,36223,Northern & Western Europe
+2021-03,4986,South Asia
+2021-03,1249,Sub-Saharan Africa
+2021-03,3780,
+2021-04,16360,Central & Eastern Europe & Central Asia
+2021-04,17206,"East, Southeast Asia, & Pacific"
+2021-04,6999,Latin America & Caribbean
+2021-04,5648,Middle East & North Africa
+2021-04,18079,North America
+2021-04,34874,Northern & Western Europe
+2021-04,4690,South Asia
+2021-04,1259,Sub-Saharan Africa
+2021-04,3450,
+2021-05,16563,Central & Eastern Europe & Central Asia
+2021-05,18096,"East, Southeast Asia, & Pacific"
+2021-05,7399,Latin America & Caribbean
+2021-05,5638,Middle East & North Africa
+2021-05,17472,North America
+2021-05,35001,Northern & Western Europe
+2021-05,5353,South Asia
+2021-05,1344,Sub-Saharan Africa
+2021-05,1,UNCLASSED
+2021-05,3506,
+2021-06,14775,Central & Eastern Europe & Central Asia
+2021-06,17654,"East, Southeast Asia, & Pacific"
+2021-06,7165,Latin America & Caribbean
+2021-06,5183,Middle East & North Africa
+2021-06,16140,North America
+2021-06,30848,Northern & Western Europe
+2021-06,5462,South Asia
+2021-06,1373,Sub-Saharan Africa
+2021-06,3341,
+2021-07,15120,Central & Eastern Europe & Central Asia
+2021-07,17970,"East, Southeast Asia, & Pacific"
+2021-07,7096,Latin America & Caribbean
+2021-07,5339,Middle East & North Africa
+2021-07,15948,North America
+2021-07,30222,Northern & Western Europe
+2021-07,5816,South Asia
+2021-07,1448,Sub-Saharan Africa
+2021-07,3346,
+2021-08,15414,Central & Eastern Europe & Central Asia
+2021-08,18868,"East, Southeast Asia, & Pacific"
+2021-08,6945,Latin America & Caribbean
+2021-08,5530,Middle East & North Africa
+2021-08,15584,North America
+2021-08,30903,Northern & Western Europe
+2021-08,5315,South Asia
+2021-08,1433,Sub-Saharan Africa
+2021-08,3392,
+2021-09,14465,Central & Eastern Europe & Central Asia
+2021-09,17811,"East, Southeast Asia, & Pacific"
+2021-09,6555,Latin America & Caribbean
+2021-09,5132,Middle East & North Africa
+2021-09,15548,North America
+2021-09,29900,Northern & Western Europe
+2021-09,5147,South Asia
+2021-09,1345,Sub-Saharan Africa
+2021-09,3251,
+2021-10,15229,Central & Eastern Europe & Central Asia
+2021-10,18322,"East, Southeast Asia, & Pacific"
+2021-10,6508,Latin America & Caribbean
+2021-10,5113,Middle East & North Africa
+2021-10,16187,North America
+2021-10,30839,Northern & Western Europe
+2021-10,4705,South Asia
+2021-10,1438,Sub-Saharan Africa
+2021-10,3388,
+2021-11,15610,Central & Eastern Europe & Central Asia
+2021-11,17423,"East, Southeast Asia, & Pacific"
+2021-11,6471,Latin America & Caribbean
+2021-11,5012,Middle East & North Africa
+2021-11,16653,North America
+2021-11,31469,Northern & Western Europe
+2021-11,4337,South Asia
+2021-11,1296,Sub-Saharan Africa
+2021-11,3297,
+2021-12,15568,Central & Eastern Europe & Central Asia
+2021-12,17577,"East, Southeast Asia, & Pacific"
+2021-12,6330,Latin America & Caribbean
+2021-12,5270,Middle East & North Africa
+2021-12,16811,North America
+2021-12,31302,Northern & Western Europe
+2021-12,4456,South Asia
+2021-12,1264,Sub-Saharan Africa
+2021-12,3387,
+2022-01,16937,Central & Eastern Europe & Central Asia
+2022-01,18237,"East, Southeast Asia, & Pacific"
+2022-01,6613,Latin America & Caribbean
+2022-01,5714,Middle East & North Africa
+2022-01,17028,North America
+2022-01,34338,Northern & Western Europe
+2022-01,4924,South Asia
+2022-01,1121,Sub-Saharan Africa
+2022-01,3789,
+2022-02,15714,Central & Eastern Europe & Central Asia
+2022-02,17331,"East, Southeast Asia, & Pacific"
+2022-02,6246,Latin America & Caribbean
+2022-02,5069,Middle East & North Africa
+2022-02,16536,North America
+2022-02,31447,Northern & Western Europe
+2022-02,4602,South Asia
+2022-02,1348,Sub-Saharan Africa
+2022-02,3489,
+2022-03,15065,Central & Eastern Europe & Central Asia
+2022-03,18557,"East, Southeast Asia, & Pacific"
+2022-03,6412,Latin America & Caribbean
+2022-03,5239,Middle East & North Africa
+2022-03,17459,North America
+2022-03,31824,Northern & Western Europe
+2022-03,4957,South Asia
+2022-03,1506,Sub-Saharan Africa
+2022-03,3553,
+2022-04,15620,Central & Eastern Europe & Central Asia
+2022-04,17470,"East, Southeast Asia, & Pacific"
+2022-04,6280,Latin America & Caribbean
+2022-04,5126,Middle East & North Africa
+2022-04,17066,North America
+2022-04,31173,Northern & Western Europe
+2022-04,4582,South Asia
+2022-04,1422,Sub-Saharan Africa
+2022-04,3259,
+2022-05,16232,Central & Eastern Europe & Central Asia
+2022-05,18377,"East, Southeast Asia, & Pacific"
+2022-05,6199,Latin America & Caribbean
+2022-05,5611,Middle East & North Africa
+2022-05,16728,North America
+2022-05,32649,Northern & Western Europe
+2022-05,4555,South Asia
+2022-05,1611,Sub-Saharan Africa
+2022-05,3346,
+2022-06,15109,Central & Eastern Europe & Central Asia
+2022-06,17294,"East, Southeast Asia, & Pacific"
+2022-06,6174,Latin America & Caribbean
+2022-06,5265,Middle East & North Africa
+2022-06,15564,North America
+2022-06,30935,Northern & Western Europe
+2022-06,4539,South Asia
+2022-06,1590,Sub-Saharan Africa
+2022-06,3283,
+2022-07,15418,Central & Eastern Europe & Central Asia
+2022-07,17659,"East, Southeast Asia, & Pacific"
+2022-07,6559,Latin America & Caribbean
+2022-07,5274,Middle East & North Africa
+2022-07,15880,North America
+2022-07,30656,Northern & Western Europe
+2022-07,4638,South Asia
+2022-07,1656,Sub-Saharan Africa
+2022-07,3418,
+2022-08,15585,Central & Eastern Europe & Central Asia
+2022-08,17991,"East, Southeast Asia, & Pacific"
+2022-08,6296,Latin America & Caribbean
+2022-08,5085,Middle East & North Africa
+2022-08,15771,North America
+2022-08,30681,Northern & Western Europe
+2022-08,4737,South Asia
+2022-08,1767,Sub-Saharan Africa
+2022-08,3285,
+2022-09,14758,Central & Eastern Europe & Central Asia
+2022-09,17072,"East, Southeast Asia, & Pacific"
+2022-09,6056,Latin America & Caribbean
+2022-09,4842,Middle East & North Africa
+2022-09,15938,North America
+2022-09,29989,Northern & Western Europe
+2022-09,4547,South Asia
+2022-09,1705,Sub-Saharan Africa
+2022-09,3179,
+2022-10,15122,Central & Eastern Europe & Central Asia
+2022-10,17350,"East, Southeast Asia, & Pacific"
+2022-10,6296,Latin America & Caribbean
+2022-10,5030,Middle East & North Africa
+2022-10,16589,North America
+2022-10,31962,Northern & Western Europe
+2022-10,4780,South Asia
+2022-10,1780,Sub-Saharan Africa
+2022-10,3359,
+2022-11,15294,Central & Eastern Europe & Central Asia
+2022-11,16981,"East, Southeast Asia, & Pacific"
+2022-11,6060,Latin America & Caribbean
+2022-11,4897,Middle East & North Africa
+2022-11,16746,North America
+2022-11,31897,Northern & Western Europe
+2022-11,4354,South Asia
+2022-11,1581,Sub-Saharan Africa
+2022-11,3234,
+2022-12,16172,Central & Eastern Europe & Central Asia
+2022-12,17140,"East, Southeast Asia, & Pacific"
+2022-12,6227,Latin America & Caribbean
+2022-12,5140,Middle East & North Africa
+2022-12,16553,North America
+2022-12,31427,Northern & Western Europe
+2022-12,4551,South Asia
+2022-12,1590,Sub-Saharan Africa
+2022-12,3130,
+2023-01,16587,Central & Eastern Europe & Central Asia
+2023-01,17609,"East, Southeast Asia, & Pacific"
+2023-01,6788,Latin America & Caribbean
+2023-01,5679,Middle East & North Africa
+2023-01,16983,North America
+2023-01,33958,Northern & Western Europe
+2023-01,4713,South Asia
+2023-01,1488,Sub-Saharan Africa
+2023-01,3674,
+2023-02,15511,Central & Eastern Europe & Central Asia
+2023-02,16426,"East, Southeast Asia, & Pacific"
+2023-02,6327,Latin America & Caribbean
+2023-02,4912,Middle East & North Africa
+2023-02,15860,North America
+2023-02,31152,Northern & Western Europe
+2023-02,4507,South Asia
+2023-02,1724,Sub-Saharan Africa
+2023-02,3525,
+2023-03,15889,Central & Eastern Europe & Central Asia
+2023-03,17417,"East, Southeast Asia, & Pacific"
+2023-03,6393,Latin America & Caribbean
+2023-03,5012,Middle East & North Africa
+2023-03,17185,North America
+2023-03,32624,Northern & Western Europe
+2023-03,5074,South Asia
+2023-03,1894,Sub-Saharan Africa
+2023-03,3529,
