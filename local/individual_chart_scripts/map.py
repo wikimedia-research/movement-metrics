@@ -80,6 +80,7 @@ def main(argv):
 	#region_table.to_csv("region_geometries.csv")
 	
 	#---READER DATA---
+	#clean and merge reader data
 	reader_df = pd.read_csv(data_directory + '/data/regional_reader_metrics.csv')
 	#clean
 	reader_df['month'] = pd.to_datetime(reader_df['month'])
@@ -94,6 +95,7 @@ def main(argv):
 	region_table = region_table.drop(columns=['month'])
 	
 	#---EDITOR DATA---
+	#clean and merge editor data
 	editor_df = pd.read_csv(data_directory + '/data/regional_editor_metrics.csv')
 	#clean
 	editor_df = editor_df.rename(columns={"sum(editors)": "monthly_editors","wmf_region":"region"})
@@ -108,6 +110,7 @@ def main(argv):
 	region_table = region_table.drop(columns=['month','region'])
 	
 	#---CONTENT DATA---
+	#clean and merge content data
 	content_df = pd.read_csv(data_directory + '/data/content_quality.csv')
 	#clean
 	content_df = content_df.rename(columns={"time_bucket":"month"})
@@ -123,10 +126,10 @@ def main(argv):
 	region_table = region_table.drop(columns=['month','region'])
 	
 	#---VALUES---
-	region_table['pop_label'] = region_table['sum_pop_est'].apply(lambda v: simple_num_format(v))
-	region_table['ud_label'] = region_table['unique_devices'].apply(lambda v: simple_num_format(v))
-	region_table['ed_label'] = region_table['monthly_editors'].apply(lambda v: simple_num_format(v))
-	region_table['sqc_label'] = region_table['standard_quality_count'].apply(lambda v: simple_num_format(v))
+	region_table['pop_label'] = region_table['sum_pop_est'].apply(simple_num_format, round_sigfigs=True)
+	region_table['ud_label'] = region_table['unique_devices'].apply(simple_num_format, round_sigfigs=True)
+	region_table['ed_label'] = region_table['monthly_editors'].apply(simple_num_format, round_sigfigs=True)
+	region_table['sqc_label'] = region_table['standard_quality_count'].apply(simple_num_format, round_sigfigs=True)
 
 	#---PERCENT OF TOTAL---
 	def format_perc(x, sig=2, sign=True):
@@ -152,7 +155,16 @@ def main(argv):
 	region_table['ed_perc_label'] = region_table['ed_perc'].apply(format_perc, sign = False)
 	region_table['sqc_perc'] = ((region_table['standard_quality_count'] / region_table['standard_quality_count'].sum()) * 100)
 	region_table['sqc_perc_label'] = region_table['sqc_perc'].apply(format_perc, sign = False)
-	
+	#quality articles 2022 percent of total
+	prev_time = content_df.iloc[-1]['month'].replace(day=1) - relativedelta(years=1)
+	content_df_22 = content_df.loc[content_df['month'] == prev_time]
+	content_df_22['sqc_perc_22'] = ((content_df_22['standard_quality_count'] / content_df_22['standard_quality_count'].sum()) * 100)
+	content_df_22['sqc_perc_22_label'] = content_df_22['sqc_perc_22'].apply(format_perc, sign = False)
+	content_df_22 = content_df_22.rename(columns={'standard_quality_count':'standard_quality_count_22'})
+	region_table = region_table.merge(content_df_22, how='left', left_on="wmf_region", right_on="region").set_axis(region_table.index)
+	region_table = region_table.drop(columns=['month','region'])
+	region_table['sqc_label_22'] = region_table['standard_quality_count_22'].apply(simple_num_format, round_sigfigs=True)
+
 	#---CHANGE OVER TIME---
 	def change_over_time(var, change_var_name, data_df, region_table_local, days_delta = 0, months_delta=0, years_delta = 0):
 		#get data for last month
@@ -227,7 +239,7 @@ def main(argv):
 	
 	#---WORLD POPULATION - PERCENT---
 	chart = Wikimap(map_df, fignum=2, title = 'World Population - Percent of Total', data_source="geopandas", month=current_month)
-	chart.plot_wcolorbar(col = 'pop_perc', setperc=True)
+	chart.plot_wcolorbar(col = 'pop_perc')
 	chart.plot_regions(region_table,'pop_perc_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_WorldPopPerc.png"
@@ -243,7 +255,7 @@ def main(argv):
 	
 	#---READER METRICS - UNIQUE DEVICES PERCENT---
 	chart = Wikimap(map_df, fignum=4, title = 'Unique Devices - Percent of Total', data_source="geopandas", month=reader_lastmonth)
-	chart.plot_wcolorbar(col = 'ud_perc', setperc=True)
+	chart.plot_wcolorbar(col = 'ud_perc')
 	chart.plot_regions(region_table,'ud_perc_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_UniqueDevicesPerc.png"
@@ -261,7 +273,7 @@ def main(argv):
 
 	#---READER METRICS - UNIQUE DEVICES YOY of 3MO ROLLING Average---
 	chart = Wikimap(map_df, fignum=6, title = 'Unique Devices - Three Year Change of 3 Month Rolling Average', data_source="geopandas", month=reader_lastmonth)
-	chart.plot_wcolorbar(col = 'ud_3morolling_yoy', setperc=True)
+	chart.plot_wcolorbar(col = 'ud_3morolling_yoy', setlimits=True)
 	chart.plot_regions(region_table,'ud_3morolling_yoy_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_UniqueDevices3moRollingYoy.png"
@@ -277,7 +289,7 @@ def main(argv):
 
 	#---EDITOR METRICS - ACTIVE MONTHLY EDITORS PERC---
 	chart = Wikimap(map_df, fignum=8, title = 'Active Monthly Editors - Percent of Total', data_source="geopandas", month=editor_lastmonth)
-	chart.plot_wcolorbar(col = 'ed_perc', setperc=True)
+	chart.plot_wcolorbar(col = 'ed_perc')
 	chart.plot_regions(region_table, 'ed_perc_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_EditorsPerc.png"
@@ -285,7 +297,7 @@ def main(argv):
 
 	#---EDITOR METRICS - EDITORS YOY of 3MO ROLLING Average---
 	chart = Wikimap(map_df, fignum=6, title = 'Active Monthly Editors - YoY Change of 3 Month Rolling Average', data_source="geopandas", month=editor_lastmonth)
-	chart.plot_wcolorbar(col = 'ed_3morolling_yoy', setperc=True)
+	chart.plot_wcolorbar(col = 'ed_3morolling_yoy', setlimits=True)
 	chart.plot_regions(region_table,'ed_3morolling_yoy_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_Editors3moRollingYoy.png"
@@ -301,24 +313,41 @@ def main(argv):
 	chart.finalize_plot(save_file_name,display=True)
 	'''
 	#---CONTENT METRICS - COUNT---
-	chart = Wikimap(map_df, fignum=10, title = 'Quality Articles', data_source="geopandas", month=content_lastmonth)
-	chart.plot_wcolorbar(col = 'standard_quality_count')
+	chart = Wikimap(map_df, fignum=10, title = 'Quality Articles 2022', data_source="geopandas", month=content_lastmonth)
+	chart.plot_wcolorbar(col = 'standard_quality_count_22', setlimits=True, custom_vmin=0, custom_vmax=600000)
+	chart.plot_regions(region_table,'sqc_label_22')
+	chart.format_map()
+	save_file_name = dirname(script_directory) + "/charts/Map_Content22.png"
+	chart.finalize_plot(save_file_name,display=True)
+
+	#---CONTENT METRICS - COUNT---
+	chart = Wikimap(map_df, fignum=10, title = 'Quality Articles 2023', data_source="geopandas", month=content_lastmonth)
+	chart.plot_wcolorbar(col = 'standard_quality_count', setlimits=True, custom_vmin=0, custom_vmax=600000)
 	chart.plot_regions(region_table,'sqc_label')
 	chart.format_map()
-	save_file_name = dirname(script_directory) + "/charts/Map_Content.png"
+	save_file_name = dirname(script_directory) + "/charts/Map_Content23.png"
 	chart.finalize_plot(save_file_name,display=True)
 
-	#---CONTENT METRICS - PERCENT TOTAL---
-	chart = Wikimap(map_df, fignum=11, title = 'Quality Articles - Percent of Total', data_source="geopandas", month=content_lastmonth)
-	chart.plot_wcolorbar(col = 'sqc_perc', setperc=True)
+	#---CONTENT METRICS - PERCENT TOTAL 2022---
+	chart = Wikimap(map_df, fignum=11, title = 'Quality Articles - Percent of Total 2022', data_source="geopandas", month=content_lastmonth)
+	chart.plot_wcolorbar(col = 'sqc_perc_22', setlimits=True, custom_vmin=0, custom_vmax=50)
+	chart.plot_regions(region_table,'sqc_perc_22_label')
+	chart.format_map(cbar_perc=True)
+	save_file_name = dirname(script_directory) + "/charts/Map_ContentPerc22.png"
+	chart.finalize_plot(save_file_name,display=True)
+
+	#---CONTENT METRICS - PERCENT TOTAL 2023---
+	chart = Wikimap(map_df, fignum=12, title = 'Quality Articles - Percent of Total 2023', data_source="geopandas", month=content_lastmonth)
+	chart.plot_wcolorbar(col = 'sqc_perc', setlimits=True, custom_vmin=0, custom_vmax=50)
 	chart.plot_regions(region_table,'sqc_perc_label')
 	chart.format_map(cbar_perc=True)
-	save_file_name = dirname(script_directory) + "/charts/Map_ContentPerc.png"
+	save_file_name = dirname(script_directory) + "/charts/Map_ContentPerc23.png"
 	chart.finalize_plot(save_file_name,display=True)
 
+
 	#---CONTENT METRICS - YOY of 3MO ROLLING Average---
-	chart = Wikimap(map_df, fignum=12, title = 'Quality Articles - YoY', data_source="geopandas", month=content_lastmonth)
-	chart.plot_wcolorbar(col = 'sqc_yoy', setperc=True)
+	chart = Wikimap(map_df, fignum=13, title = 'Quality Articles - YoY', data_source="geopandas", month=content_lastmonth)
+	chart.plot_wcolorbar(col = 'sqc_yoy', setlimits=True)
 	chart.plot_regions(region_table, 'sqc_yoy_label')
 	chart.format_map(cbar_perc=True)
 	save_file_name = dirname(script_directory) + "/charts/Map_ContentYoY.png"

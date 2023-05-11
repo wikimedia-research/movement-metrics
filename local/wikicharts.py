@@ -10,8 +10,7 @@ import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
 from matplotlib.patches import Polygon
 import math
-from math import ceil
-from math import floor
+from math import ceil, floor, log10
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import os
@@ -60,27 +59,36 @@ def calc_order_format(value):
 		formatting = '{:1.0f}'
 	return multiplier, formatting
 
-#takes a number and formats it for y axis labels
-def simple_num_format(value, perc=False, sign=False):
+#takes a number and formats it for y axis labels to two decimal places
+def simple_num_format(value, round_sigfigs = False, sig=2, perc=False, sign=False):
+	#round the value to two significant figureswhere relevant
+	if round_sigfigs:
+		value = round(value, sig-int(floor(log10(abs(value))))-1)
+	#get the order of the value
 	if value == 0:
 		order = 1
 	else:
 		order = math.floor(math.log10(abs(value)))
+	#round where relevant
+	if order >= 3:
+		formatting = '{:1.2f}'
+	else:
+		formatting = '{:1.0f}'
+	#get the order label
 	if order >= 12:
 		multiplier = float('1e-12')
-		formatting = '{:1.2f}T'
+		formatting = formatting + 'T'
 	elif order >= 9:
 		multiplier = float('1e-9')
-		formatting = '{:1.2f}B'
+		formatting = formatting + 'B'
 	elif order >= 6:
 		multiplier = float('1e-6')
-		formatting = '{:1.2f}M'
+		formatting = formatting + 'M'
 	elif order >= 3:
 		multiplier = float('1e-3')
-		formatting = '{:1.2f}K'
+		formatting = formatting + 'K'
 	else:
 		multiplier = 1
-		formatting = '{:1.0f}'
 	formatted_value = formatting.format(value*multiplier)
 	tail_dot_rgx = re.compile(r'(?:(\.)|(\.\d*?[1-9]\d*?))0+(?=\b|[^0-9])')
 	label = tail_dot_rgx.sub(r'\2',formatted_value)
@@ -90,7 +98,6 @@ def simple_num_format(value, perc=False, sign=False):
 		if value > 0:
 			label = "+" + label
 	return label
-
 
 #takes a dataframe and splits it into sets of four columns (for plotting multiple charts per figure)
 #keeps the index column as the first column in each split dataframe
@@ -631,11 +638,11 @@ class Wikimap():
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
 	#create a map chart with a colorscale legend
-	def plot_wcolorbar(self, col = "pop_est", custom_cmap="gnuplot2_r", plot_alpha=0.6, setperc = False):
+	def plot_wcolorbar(self, col = "pop_est", custom_cmap="plasma_r", plot_alpha=0.6, setlimits = False, custom_vmin = -25, custom_vmax=50):
 		#set min and max for colorbar
-		if setperc == True:
-			self.vmin=-25
-			self.vmax=50
+		if setlimits == True:
+			self.vmin=custom_vmin
+			self.vmax=custom_vmax
 		else: 
 			self.vmin = self.df[col].min()
 			self.vmax = self.df[col].max()
