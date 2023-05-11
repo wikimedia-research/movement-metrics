@@ -608,25 +608,6 @@ class Wikichart:
 		maxrange_numticks = self.ynumticks[maxrange_index]
 		return maxrange, maxrange_numticks
 
-	def expand_yrange(self):
-		'''
-		print("initial yrange " + str(axis.get_ylim()))
-		print("initial tick num " + str(len(axis.get_yticklabels())))
-		current_ticks = axis.get_yticklabels()
-		current_tick_range = current_ticks[-1].get_position()[1] - current_ticks[0].get_position()[1]
-		print("initial tick range " + str(current_tick_range))
-		#expands the axis limits via the 2/3rds rule
-		#expanding the ylim via set_ylim will recalibrate ticks automatically
-		current_ylim = axis.get_ylim()
-		current_ylim_range = current_ylim[1] - current_ylim[0]
-		print(current_ylim_range)
-		current_ticknum = len(axis.get_yticklabels())
-		new_ymin = current_ylim[0] - current_ylim_range / 4
-		new_ymax = current_ylim[1] + current_ylim_range / 4
-		axis.set_ylim([new_ymin, new_ymax])
-		print("expanded yrange " + str(axis.get_ylim()))
-		print("expanded tick num " + str(len(axis.get_yticklabels())))
-		'''
 class Wikimap():
 	#initialize chart object
 	def __init__(self,dataset, width=10, height=6, fignum=0, title="", author=parameters['author'],data_source="N/A",titlepad=0, month=0, display_month=True):
@@ -649,7 +630,7 @@ class Wikimap():
 		today = date.today()
 		plt.figtext(0.1, 0.025, "Graph Notes: Created by " + str(author) + " " + str(today) + " using data from " + str(data_source), family=style_parameters['font'],fontsize=8, color= wmf_colors['black25'])
 
-
+	#create a map chart with a colorscale legend
 	def plot_wcolorbar(self, col = "pop_est", custom_cmap="gnuplot2_r", plot_alpha=0.6, setperc = False):
 		#set min and max for colorbar
 		if setperc == True:
@@ -670,6 +651,7 @@ class Wikimap():
 		#plot map
 		self.df.plot(column=col, cmap=custom_cmap, vmin=self.vmin, vmax=self.vmax, linewidth=0.1, ax=self.ax, edgecolor='black', alpha=plot_alpha)
 
+	#plot the region outlines and apply labels in label_col
 	def plot_regions(self, region_table, label_col, fontsize=12):
 		for region in wmf_regions:
 			region_geo = region_table.loc[region,'geometry']
