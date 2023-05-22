@@ -29,7 +29,10 @@ def main():
 	display_flag = True
 
 	#---CLEAN DATA--
-	df = pd.read_csv(home_dir + '/resources/data/reader_metrics.tsv', sep='\t')
+	try:
+        df = pd.read_csv(data_path, sep='\t')
+    except:
+		df = pd.read_csv(home_dir + '/resources/data/reader_metrics.tsv', sep='\t')
 	start_date = "2018-05-01"
 	end_date = datetime.today()
 	#convert string to datetime

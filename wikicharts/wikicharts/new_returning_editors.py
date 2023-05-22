@@ -3,10 +3,9 @@ from datetime import date, datetime, timedelta
 import matplotlib.pyplot as plt
 import os
 #local
-from wikicharts import Wikichart
-from wikicharts import wmf_colors
+#from wikicharts import Wikichart, wmf_colors
 #jupyter notebook
-#%run wikicharts.ipynb
+%run wikicharts.ipynb
 
 def main():
 	#print update
@@ -24,14 +23,15 @@ def main():
 	display_flag = True
 
 	#---CLEAN DATA--
-	df = pd.read_csv(home_dir + '/resources/data/editor_metrics.tsv', sep='\t')
-
+	#read in data
+    try:
+        df = pd.read_csv(data_path, sep='\t')
+    except:
+		df = pd.read_csv(home_dir + '/resources/data/editor_metrics.tsv', sep='\t')
 	start_date = "2019-01-01"
 	end_date = datetime.today()
-
 	#convert string to datetime
 	df['month'] = pd.to_datetime(df['month'])
-
 	#truncate to preferred date range
 	df = df[df["month"].isin(pd.date_range(start_date, end_date))]
 
