@@ -6,66 +6,66 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 ## Content Interactions
 
-![Content Interactions](charts/Content_Interactions.png)
+![Content Interactions](wikicharts/charts/Content_Interactions.png)
 
 ## Active Editors
 
-![Active Editors](charts/Active_Editors.png)
+![Active Editors](wikicharts/charts/Active_Editors.png)
 
 ## New and Returning Editors
 
-![New and Returning Editors](charts/New_Returning.png)
+![New and Returning Editors](wikicharts/charts/New_Returning.png)
 
 ## Net New Content
 
-![Net New Content](charts/Net_New.png)
+![Net New Content](wikicharts/charts/Net_New.png)
 
 ## Unique Devices
 
-![Unique Devices](charts/Unique_Devices.png)
+![Unique Devices](wikicharts/charts/Unique_Devices.png)
 
 ## Pageviews - Access Method
 
-![Pageviews Access Method](charts/Pageviews_Access_Method.png)
+![Pageviews Access Method](wikicharts/charts/Pageviews_Access_Method.png)
 
 ## Pageviews - Monthly Automated
 
-![Pageviews Monthly Automated](charts/Pageviews_Monthly_Automated.png)
+![Pageviews Monthly Automated](wikicharts/charts/Pageviews_Monthly_Automated.png)
 
 ## Pageviews - Pageviews_Useronly
 
-![Pageviews User Only](charts/Pageviews_Useronly.png)
+![Pageviews User Only](wikicharts/charts/Pageviews_Useronly.png)
 
 ## Pageviews by Referral Source
 
-![Pageviews Referral](charts/Pageviews_Referral.png)
+![Pageviews Referral](wikicharts/charts/Pageviews_Referral.png)
 
 ## Project Growth
 
-![Project Growth](charts/Project_Growth.png)
+![Project Growth](wikicharts/charts/Project_Growth.png)
 
 ## Country Breakdown
 
-![Country Breakdown](charts/triplevertical_blue.png)
+![Country Breakdown](wikicharts/charts/triplevertical_blue.png)
 
 ## Regional Active Editors (8-Chart View)
 
-![Regional Active Editors (8-Chart View)](charts/Regional_Active_Editors_0.jpeg)
+![Regional Active Editors (8-Chart View)](wikicharts/charts/Regional_Active_Editors_0.jpeg)
 
 Also available for rolling, quarterly and annual version of the data. 
 
-![Regional Active Editors (Annual)](charts/Regional_Active_Editors_annual.jpeg)
+![Regional Active Editors (Annual)](wikicharts/charts/Regional_Active_Editors_annual.jpeg)
 
-![Regional Active Editors (Quarterly)](charts/Regional_Active_Editors_quarterly.jpeg)
+![Regional Active Editors (Quarterly)](wikicharts/charts/Regional_Active_Editors_quarterly.jpeg)
 
-![Regional Active Editors (Rolling)](charts/Regional_Active_Editors_rolling.jpeg)
+![Regional Active Editors (Rolling)](wikicharts/charts/Regional_Active_Editors_rolling.jpeg)
 
 Also available for individual views.
 
 ## Regional Unique Devices (8-Chart View)
 
-![Regional Unique Devices (8-Chart View)](charts/Regional_Unique_Devices_0.jpeg)
+![Regional Unique Devices (8-Chart View)](wikicharts/charts/Regional_Unique_Devices_0.jpeg)
 
 ## Map Charts
 
-![Maps](charts/Map_RegionNames.jpeg)
+![Maps](wikicharts/charts/Map_RegionNames.jpeg)
