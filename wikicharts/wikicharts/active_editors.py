@@ -4,13 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import os
 from os.path import dirname
+import sys
 #local
 from wikicharts import Wikichart, wmf_colors
 #jupyter notebook
-'''
-%cd ..
-%run wikicharts.ipynb
-'''
+#%run wikicharts.ipynb
 
 def main():
     print("Generating Active Editors chart...")
@@ -27,7 +25,12 @@ def main():
     display_flag = True
 
     #---CLEAN DATA--
-    df = pd.read_csv(home_dir + '/resources/data/editor_metrics.tsv', sep='\t')
+    #read in data
+    try:
+        df = pd.read_csv(data_path, sep='\t')
+    except:
+        df = pd.read_csv(home_dir + '/resources/data/editor_metrics.tsv', sep='\t')
+    #df = pd.read_csv("../metrics/metrics.tsv', sep='\t')
     #note start and end dates may be different depending on chart_type
     start_date = "2019-01-01"
     end_date = datetime.today()
