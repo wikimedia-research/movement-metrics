@@ -64,8 +64,8 @@ Also available for individual views.
 
 ## Regional Unique Devices (8-Chart View)
 
-![Regional Unique Devices (8-Chart View)](wikicharts/charts/Regional_Unique_Devices_0.jpeg)
+![Regional Unique Devices (8-Chart View)](wikicharts/charts/Regional_Unique_Devices_00.jpeg)
 
 ## Map Charts
 
-![Maps](wikicharts/charts/Map_RegionNames.jpeg)
+![Maps](wikicharts/charts/Map_RegionNames.png)
