@@ -54,11 +54,11 @@ Examples of past Key Product Metrics Charts can be found here: https://docs.goog
 
 Also available for rolling, quarterly and annual version of the data. 
 
-![Regional Active Editors (Annual)](wikicharts/charts/Regional_Active_Editors_annual.jpeg)
+![Regional Active Editors (Annual)](wikicharts/charts/Regional_Active_Editors_annual.png)
 
-![Regional Active Editors (Quarterly)](wikicharts/charts/Regional_Active_Editors_quarterly.jpeg)
+![Regional Active Editors (Quarterly)](wikicharts/charts/Regional_Active_Editors_quarterly.png)
 
-![Regional Active Editors (Rolling)](wikicharts/charts/Regional_Active_Editors_rolling.jpeg)
+![Regional Active Editors (Rolling)](wikicharts/charts/Regional_Active_Editors_rolling.png)
 
 Also available for individual views.
 
