@@ -49,7 +49,7 @@ def main():
     #plot mom highlights
     plt.scatter(mom_highlight.timestamp, mom_highlight.desktop,label='_nolegend_',color=wmf_colors['brightgreen'])
     plt.scatter(mom_highlight.timestamp, mom_highlight.mobile_web,label='_nolegend_',color=wmf_colors['pink'])
-    #plot monthly highlights
+    #format
     chart.format(title = f'Pageviews by Access Method',
         format_x_yearly=False,
         format_x_monthly=True,
