@@ -17,7 +17,7 @@ def main():
 	'''
 	%run active_editors.ipynb
 	%run new_returning_editors.ipynb
-	%run net_new_content.
+	%run net_new_content.ipynb
 	'''
 
 	#reset directory to original
