@@ -19,7 +19,7 @@ For a full list of metric definitions, see [mw:Wikimedia Product/Data glossary](
     * [ARCHIVE_01a-editor-month-table.ipynb](ARCHIVE_01a-editor-month-table.ipynb): creates or updates an intermediate editor-month table in the wmf_product Hive database.
     * [ARCHIVE_01b-new-editor-table.ipynb](ARCHIVE_01b-new-editor-table.ipynb): creates or updates an intermediate table of new editors in the wmf_product Hive database
     
-3. once you've run 01-run.ipynb, commit and push the notebook changes to the Github repo to keep 'origin' updated
+3. once you've run 01-run.ipynb, commit and push the notebook changes to the Github repo to keep 'origin' updated; use the following commit message: Update MONTH YEAR metrics
 4. open your local version of this repo (which includes the json key) and git pull changes
 5. fronm your local, run notebook 03b
 6. commit and push the notebook changes to the Github repo to keep 'origin' updated   
