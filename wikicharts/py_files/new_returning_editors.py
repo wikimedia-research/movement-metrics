@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import date, datetime, timedelta
 import matplotlib.pyplot as plt
 import os
-#local
+#py file
 #from wikicharts import Wikichart, wmf_colors
 #jupyter notebook
 %run wikicharts.ipynb
@@ -14,6 +14,8 @@ def main():
 	#---PARAMETERS---
 	#current path
 	home_dir = os.getcwd()
+	#py file only (comment out next line in jupyter notebook)
+    home_dir = dirname(home_dir)
 	#where file is saved
 	outfile_name = "New_Returning.png"
 	save_file_name = home_dir + "/charts/" + outfile_name

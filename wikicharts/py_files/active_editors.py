@@ -5,7 +5,7 @@ import matplotlib.font_manager
 import os
 from os.path import dirname
 import sys
-#local
+#py file
 from wikicharts import Wikichart, wmf_colors
 #jupyter notebook
 #%run wikicharts.ipynb
@@ -16,6 +16,8 @@ def main():
     #---PARAMETERS---
     #current path
     home_dir = os.getcwd()
+    #py file only (comment out next line in jupyter notebook)
+    home_dir = dirname(home_dir)
     #where file is saved
     outfile_name = "Active_Editors.png"
     save_file_name = home_dir + "/charts/" + outfile_name
@@ -29,7 +31,7 @@ def main():
     try:
         df = pd.read_csv(data_path, sep='\t')
     except:
-        df = pd.read_csv(home_dir + '/resources/data/editor_metrics.tsv', sep='\t')
+        df = pd.read_csv(home_dir + '/resources/data/pageviews_access_method.csv', sep=',')
     #df = pd.read_csv("../metrics/metrics.tsv', sep='\t')
     #note start and end dates may be different depending on chart_type
     start_date = "2019-01-01"

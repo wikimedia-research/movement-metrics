@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-#local
+#py file
 from wikicharts import Wikichart, wmf_colors, ca
 #jupyter notebook
 #%run wikicharts.ipynb
@@ -14,6 +14,8 @@ def main():
     #---PARAMETERS---
     #current path
     home_dir = os.getcwd()
+    #py file only (comment out next line in jupyter notebook)
+    home_dir = dirname(home_dir)
     #where file is saved
     outfile_name = "Pageviews_Access_Method.png"
     save_file_name = home_dir + "/charts/" + outfile_name
@@ -24,7 +26,10 @@ def main():
 
     #---CLEAN DATA--
     #Data Columns: "timestamp", "access_method", "sum_view_count"
-    df = pd.read_csv(home_dir + '/resources/data/pageviews_access_method.csv', sep=',')
+    #jupyter notebook
+    #df = pd.read_csv(home_dir + '/resources/data/pageviews_access_method.csv', sep=',')
+    #py file
+    df = pd.read_csv(home_dir + '../resources/data/pageviews_access_method.csv', sep=',')
     start_date = "2022-02-01"
     end_date = datetime.today()
     #convert string to datetime

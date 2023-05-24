@@ -7,7 +7,7 @@ import numpy as np
 import os
 from os.path import dirname
 import warnings
-#local
+#py file
 from wikicharts import Wikichart, wmf_colors, wmf_regions, split_df_by_col, gen_keys, roll
 #jupyter notebook
 #%run wikicharts.ipynb
@@ -20,6 +20,8 @@ def main():
 	#---PROMPT FOR INPUT---
 	#current path
 	home_dir = os.getcwd()
+	#py file only (comment out next line in jupyter notebook)
+    home_dir = dirname(home_dir)
 	#where file is saved
 	outfile_name = "Regional_Active_Editors"
 	save_file_name = home_dir + "/charts/" + outfile_name
