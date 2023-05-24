@@ -12,7 +12,7 @@ import shapely.ops
 import shapely.geometry
 import os
 from os.path import dirname
-#local
+#py file
 from wikicharts import Wikimap, wmf_colors, simple_num_format, wmf_regions, roll, format_perc
 #jupyter notebook
 #%run wikicharts.ipynb
@@ -25,6 +25,8 @@ def main():
     #---PARAMETERS---
     #current path
     home_dir = os.getcwd()
+    #py file only (comment out next line in jupyter notebook)
+    home_dir = dirname(home_dir)
     #display or note
     display_flag = True
     #current month for population data
