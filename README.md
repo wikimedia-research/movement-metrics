@@ -51,10 +51,6 @@ Data format is specified with "#Data Columns: ..." comments.
 
 ![Project Growth](wikicharts/charts/Project_Growth.png)
 
-## Country Breakdown
-
-![Country Breakdown](wikicharts/charts/triplevertical_blue.png)
-
 ## Regional Active Editors (8-Chart View)
 
 ![Regional Active Editors (8-Chart View)](wikicharts/charts/Regional_Active_Editors_0.jpeg)
