@@ -4,8 +4,12 @@ This repository has code for generating key product metrics charts using python/
 
 Examples of past Key Product Metrics Charts can be found here: https://docs.google.com/presentation/d/1D_MuQ4Cf23Agn1o_ausJtH5rrJysqtGIYzmK8xxEX7M/edit#slide=id.g1be0d48db42_0_336
 
-Run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for monthly metrics. 
-Data format is specified with "#Data Columns: ..." comments
+To run:
+1. specify 'data path' and 'save path' in parameters.json
+2. run any individual chart script or run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for monthly metrics. 
+Data format is specified with "#Data Columns: ..." comments.
+
+!!! Note that some charts may appear formatted incorrectely in the jupyter notebooks window but the saved image file will be correct. !!!
 
 ## Content Interactions
 
