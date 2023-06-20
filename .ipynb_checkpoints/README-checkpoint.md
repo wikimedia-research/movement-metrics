@@ -21,8 +21,7 @@ For a full list of metric definitions, see [mw:Wikimedia Product/Data glossary](
     
 3. once you've run 01-run.ipynb, commit and push the notebook changes to the Github repo to keep 'origin' updated; use the following commit message: Update MONTH YEAR metrics
 4. open your local version of this repo (which includes the json key) and git pull changes
-5. fronm your local, run notebook 03b
-6. commit and push the notebook changes to the Github repo to keep 'origin' updated   
+5. from your local, run notebook 03b   
     
 
 7. Do any analysis you need to understand major trends (drawing on the analysis notes in past months' slides if needed). The [analysis folder](analysis) has a variety of notebook you could reuse; if you do new analysis, considering keeping it in an existing or new notebook in this folder, so it can be reused in the future.
