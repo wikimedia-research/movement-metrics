@@ -66,3 +66,6 @@ timestamp,referer_class,sum_view_count,data loss %,corrected_pv
 2/1/2023,external (search engine),"6,543,612,152",1,"6,543,612,152"
 3/1/2023,external (search engine),8442557148,1,"8,442,557,148"
 04/01/2023,external (search engine),"7,910,999,743",1,"7,910,999,743"
+05/01/2023,none,"3,757,997,441",1,"3,757,997,441"
+05/01/2023,internal,"5,714,284,331",1,"5,714,284,331"
+05/01/2023,external (search engine),"9,665,535,651",1,"9,665,535,651"
