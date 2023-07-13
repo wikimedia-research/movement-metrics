@@ -4,6 +4,13 @@ This repository has code for generating key product metrics charts using python/
 
 Examples of past Key Product Metrics Charts can be found here: https://docs.google.com/presentation/d/1D_MuQ4Cf23Agn1o_ausJtH5rrJysqtGIYzmK8xxEX7M/edit#slide=id.g1be0d48db42_0_336
 
+## Setup
+Install the dependencies by running:
+```
+conda install --file=conda_requirements.txt
+```
+
+## Use
 To run:
 1. specify 'data path' and 'save path' in parameters.json — note these paths should be RELATIVE TO WHERE THE CHART SCRIPT IS LOCATED (so if the chart script is being called from another directory, you should still put the data_path relative to the chart script)
 2. run any individual chart script or run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for monthly metrics. 
