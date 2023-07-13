@@ -12,7 +12,7 @@ conda install --file=conda_requirements.txt
 
 ## Use
 To run:
-1. specify 'data path' and 'save path' in parameters.json — note these paths should be RELATIVE TO WHERE THE CHART SCRIPT IS LOCATED (so if the chart script is being called from another directory, you should still put the data_path relative to the chart script)
+1. specify 'data path' and 'save path' in parameters.py — note these paths should be RELATIVE TO WHERE THE CHART SCRIPT IS LOCATED (so if the chart script is being called from another directory, you should still put the data_path relative to the chart script)
 2. run any individual chart script or run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for monthly metrics. 
 Data format is specified with "#Data Columns: ..." comments.
 
