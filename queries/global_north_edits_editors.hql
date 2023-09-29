@@ -1,29 +1,25 @@
-with gs_editors as (
-    select 
-        sum(edit_count) as edit_count,
-        sum(namespace_zero_edit_count) as namespace_zero_edit_count,
+WITH gs_editors AS (
+    SELECT
+        SUM(edit_count) AS edit_count,
+        SUM(namespace_zero_edit_count) AS namespace_zero_edit_count,
         -- Treat the user as a bot if it matches on any wiki
-        --max(size(is_bot_by) > 0 or size(is_bot_by_historical) > 0) as bot
-        max(size(user_is_bot_by) > 0) as bot
-    from wmf.editors_daily gd
-    left join canonical_data.countries cdc
-    on gd.country_code = cdc.iso_code
-    --left join wmf.mediawiki_user_history muh
-    --on
-    --    gd.wiki_db = muh.wiki_db and
-    --    gd.user_fingerprint_or_id = muh.user_id and
-    --    muh.snapshot = "{mediawiki_history_snapshot}" and
-    --    muh.end_timestamp is null
-    where
-        month = "{metrics_month}" and
-        economic_region = "Global North" and
-        not user_is_anonymous and 
-        gd.action_type = 0
-    group by user_fingerprint_or_name
+        MAX(SIZE(user_is_bot_by) > 0) AS bot
+    FROM wmf.editors_daily gd
+    LEFT JOIN canonical_data.countries cdc
+    ON gd.country_code = cdc.iso_code
+    WHERE
+        month = '{metrics_month}'
+        AND economic_region = 'Global North'
+        AND NOT user_is_anonymous
+        AND gd.action_type = 0
+    GROUP BY user_fingerprint_or_name
 )
-select
-    "{metrics_month_first_day}" as month,
-    sum(edit_count) as global_north_edits,
-    sum(if(not bot, edit_count, 0)) as global_north_nonbot_edits,
-    sum(cast(namespace_zero_edit_count >= 5 and not bot as int)) as global_north_active_editors
-from gs_editors
+SELECT
+    '{metrics_month_first_day}' AS month,
+    SUM(edit_count) AS global_north_edits,
+    SUM(IF (NOT bot, edit_count, 0)) AS global_north_nonbot_edits,
+    SUM(CAST(
+        namespace_zero_edit_count >= 5
+        AND NOT bot
+    AS INT)) AS global_north_active_editors
+FROM gs_editors

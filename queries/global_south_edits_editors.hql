@@ -1,21 +1,24 @@
-with gs_editors as (
-    select 
-        sum(edit_count) as edit_count,
-        sum(namespace_zero_edit_count) as namespace_zero_edit_count,
-        max(size(user_is_bot_by) > 0) as bot
-    from wmf.editors_daily gd
-    left join canonical_data.countries cdc
-    on gd.country_code = cdc.iso_code
-    where
-        month = "{metrics_month}" and
-        economic_region = "Global South" and
-        not user_is_anonymous and 
-        gd.action_type = 0
-    group by user_fingerprint_or_name
+WITH gs_editors AS (
+    SELECT
+        SUM(edit_count) AS edit_count,
+        SUM(namespace_zero_edit_count) AS namespace_zero_edit_count,
+        MAX(SIZE(user_is_bot_by) > 0) AS bot
+    FROM wmf.editors_daily gd
+    LEFT JOIN canonical_data.countries cdc
+    ON gd.country_code = cdc.iso_code
+    WHERE
+        MONTH = '{metrics_month}'
+        AND economic_region = 'Global South'
+        AND NOT user_is_anonymous
+        AND gd.action_type = 0
+    GROUP BY user_fingerprint_or_name
 )
-select
-    "{metrics_month_first_day}" as month,
-    sum(edit_count) as global_south_edits,
-    sum(if(not bot, edit_count, 0)) as global_south_nonbot_edits,
-    sum(cast(namespace_zero_edit_count >= 5 and not bot as int)) as global_south_active_editors
-from gs_editors
+SELECT
+    '{metrics_month_first_day}' AS MONTH,
+    SUM(edit_count) AS global_south_edits,
+    SUM(IF(NOT bot, edit_count, 0)) AS global_south_nonbot_edits,
+    SUM(CAST(
+            namespace_zero_edit_count >= 5
+            AND NOT bot
+    AS INT)) AS global_south_active_editors
+FROM gs_editors

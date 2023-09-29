@@ -1,31 +1,44 @@
-select
-    date_format(event_timestamp, "yyyy-MM-01") as month,
-    count(*) as total_edits,
-    sum(cast(upload as int)) as uploads,
-    sum(cast(mobile_edit as int)) as mobile_edits,
-    sum(cast(data_edit as int)) as wikidata_edits,
-    sum(cast(nonbot_edit and not data_edit and not upload and not mobile_edit as int)) as other_nonbot_edits,
-    sum(cast(anonymous as int)) as anonymous_edits,
-    sum(cast(!anonymous as int)) as non_anonymous_edits,
-    sum(cast(reverted as int)) / sum(cast(nonbot_edit as int)) as revert_rate
-from (
-    select
+WITH edits AS (
+    SELECT
         event_timestamp,
         (
-            array_contains(revision_tags, "mobile edit") or
-            array_contains(revision_tags, "mobile app edit") or 
-            array_contains(revision_tags, "mobile web edit")
-        ) as mobile_edit,
-        size(event_user_is_bot_by) = 0 and size(event_user_is_bot_by_historical) = 0 as nonbot_edit,
-        (wiki_db = "wikidatawiki" and page_namespace_historical in (0, 120)) as data_edit,
-        revision_is_identity_reverted as reverted,
-        event_user_is_anonymous as anonymous,
-        (revision_parent_id = 0 and page_namespace_historical = 6) as upload
-    from wmf.mediawiki_history
-    where
-        event_entity = "revision" and
-        event_type = "create" and
-        event_timestamp between "{metrics_month_start}" and "{metrics_month_end}" and
-        snapshot = "{mediawiki_history_snapshot}"
-) edits
-group by date_format(event_timestamp, "yyyy-MM-01")
+            ARRAY_CONTAINS(revision_tags, 'mobile edit')
+            OR ARRAY_CONTAINS(revision_tags, 'mobile app edit')
+            OR ARRAY_CONTAINS(revision_tags, 'mobile web edit')
+        ) AS mobile_edit,
+        SIZE (event_user_is_bot_by) = 0
+            AND SIZE (event_user_is_bot_by_historical) = 0 AS nonbot_edit,
+        (
+            wiki_db = 'wikidatawiki'
+            AND page_namespace_historical IN (0, 120)
+        ) AS data_edit,
+        revision_is_identity_reverted AS reverted,
+        event_user_is_anonymous AS anonymous,
+        (
+            revision_parent_id = 0
+            AND page_namespace_historical = 6
+        ) AS upload
+    FROM wmf.mediawiki_history
+    WHERE
+        event_entity = 'revision'
+        AND event_type = 'create'
+        AND event_timestamp BETWEEN '{metrics_month_start}' AND '{metrics_month_end}'
+        AND snapshot = '{mediawiki_history_snapshot}'
+)
+SELECT
+    DATE_FORMAT(event_timestamp, 'yyyy-MM-01') AS month,
+    COUNT(*) AS total_edits,
+    SUM(CAST(upload AS INT)) AS uploads,
+    SUM(CAST(mobile_edit AS INT)) AS mobile_edits,
+    SUM(CAST(data_edit AS INT)) AS wikidata_edits,
+    SUM(CAST(
+        nonbot_edit
+        AND NOT data_edit
+        AND NOT upload
+        AND NOT mobile_edit
+    AS INT)) AS other_nonbot_edits,
+    SUM(CAST(anonymous AS INT)) AS anonymous_edits,
+    SUM(CAST(NOT anonymous AS INT)) AS non_anonymous_edits,
+    SUM(CAST(reverted AS INT)) / SUM(CAST(nonbot_edit AS INT)) AS revert_rate
+FROM edits
+GROUP BY DATE_FORMAT(event_timestamp, 'yyyy-MM-01')

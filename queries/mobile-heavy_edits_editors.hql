@@ -1,24 +1,25 @@
-
-
-with mh_editors as (
-    select
-        count(*) as edits,
-        sum(cast(page_namespace_is_content_historical as int)) as content_edits,
-        max(size(event_user_is_bot_by) > 0 or size(event_user_is_bot_by_historical) > 0) as bot
-    from wmf.mediawiki_history mh
-    inner join canonical_data.mobile_heavy_wikis mhw
-    on mh.wiki_db = mhw.database_code
-    where
-        event_timestamp between "{metrics_month_start}" and "{metrics_month_end}" and
-        not event_user_is_anonymous and
-        snapshot = "{mediawiki_history_snapshot}" and
-        event_entity = "revision" and
-        event_type = "create"
-    group by event_user_text
+WITH mh_editors AS (
+    SELECT
+        COUNT(*) AS edits,
+        SUM(CAST(page_namespace_is_content_historical AS INT)) AS content_edits,
+        MAX(
+            SIZE (event_user_is_bot_by) > 0
+            OR SIZE (event_user_is_bot_by_historical) > 0
+        ) AS bot
+    FROM wmf.mediawiki_history mh
+    INNER JOIN canonical_data.mobile_heavy_wikis mhw
+    ON mh.wiki_db = mhw.database_code
+    WHERE
+        event_timestamp BETWEEN '{metrics_month_start}' AND '{metrics_month_end}'
+        AND NOT event_user_is_anonymous
+        AND snapshot = '{mediawiki_history_snapshot}'
+        AND event_entity = 'revision'
+        AND event_type = 'create'
+    GROUP BY event_user_text
 )
-select
-    "{metrics_month_first_day}" as month,
-    sum(edits) as `mobile-heavy_wiki_edits`,
-    sum(if(not bot, edits, 0)) as `mobile-heavy_wiki_nonbot_edits`,
-    sum(cast(content_edits >= 5 as int)) as `mobile-heavy_wiki_active_editors`
-from mh_editors
+SELECT
+    '{metrics_month_first_day}' AS month,
+    SUM(edits) AS `mobile-heavy_wiki_edits`,
+    SUM(IF(NOT bot, edits, 0)) AS `mobile-heavy_wiki_nonbot_edits`,
+    SUM(CAST(content_edits >= 5 AS INT)) AS `mobile-heavy_wiki_active_editors`
+FROM mh_editors

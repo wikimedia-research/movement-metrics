@@ -1,8 +1,8 @@
-select 
-    "{metrics_month_first_day}" as month,
-    sum(cast(2nd_month_edits >= 1 as int)) / 
-        sum(cast(1st_month_edits >= 1 as int)) as `mobile-heavy_wiki_new_editor_retention`
-from wmf_product.new_editors  
-inner join canonical_data.mobile_heavy_wikis
-on wiki = database_code
-where cohort = "{retention_cohort}"
+SELECT
+    '{metrics_month_first_day}' AS month,
+    SUM(CAST(2nd_month_edits >= 1 AS INT))
+        / SUM(CAST(1st_month_edits >= 1 AS INT)) AS `mobile-heavy_wiki_new_editor_retention`
+FROM wmf_product.new_editors
+INNER JOIN canonical_data.mobile_heavy_wikis
+ON wiki = database_code
+WHERE cohort = '{retention_cohort}'
