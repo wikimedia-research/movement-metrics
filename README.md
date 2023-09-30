@@ -28,5 +28,5 @@ pip install -r requirements_pip.txt
 2. Run the notebook [02-report.ipynb](02-report.ipynb), which does a few simple transformations on the metrics and produces the table of values needed for the final report, as well as a graph of each metric.
 3. Commit and push the resulting changes to the GitHub repo with the commit message "Update MONTH YEAR metrics". 
 4. Clone this repo to your local machine (or pull the new changes if it is already cloned).
-5. Ensure that you have the JSON keys containing the Google service account credentials in the main directory of the repo.  
-5. Run notebooks 03a and 03b to update the metrics in the spreadsheets. 
+5. Ensure that you have the JSON key containing the Google service account credentials in the main directory of the repo. (There are two service accounts and either will work, if you point the code to the file.)
+5. Run the notebook [03-update-google-sheets.ipynb](03-update-google-sheets.ipynb).
