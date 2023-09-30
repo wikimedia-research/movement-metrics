@@ -1,0 +1,9 @@
+# Some packages (e.g. numpy, pandas) are pre-installed in a
+# conda-analytics-based environment, but are still included
+# here for completeness.
+google-auth
+matplotlib
+numpy
+pandas
+pillow
+shapely
