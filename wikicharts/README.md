@@ -1,15 +1,13 @@
-# Key Product Metrics
+This folder has code for generating key product metrics charts using Matplotlib. Current charts are below.
 
-This repository has code for generating key product metrics charts using python/matplotlib. Current charts are below.
-
-Examples of past Key Product Metrics Charts can be found here: https://docs.google.com/presentation/d/1D_MuQ4Cf23Agn1o_ausJtH5rrJysqtGIYzmK8xxEX7M/edit#slide=id.g1be0d48db42_0_336
-
+Examples of past movement metrics charts can be found here: https://docs.google.com/presentation/d/1D_MuQ4Cf23Agn1o_ausJtH5rrJysqtGIYzmK8xxEX7M/edit#slide=id.g1be0d48db42_0_336
 
 ## Use
-To run:
-1. specify 'data path' and 'save path' in parameters.py — note these paths should be RELATIVE TO WHERE THE CHART SCRIPT IS LOCATED (so if the chart script is being called from another directory, you should still put the data_path relative to the chart script)
-2. run any individual chart script or run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for monthly metrics. 
+You can run any individual chart script or run EDITOR_METRICS.ipynb and READER_METRICS.ipynb for standard monthly metrics charts
+
 Data format is specified with "#Data Columns: ..." comments.
+
+By default, charts are saved in this repository's `charts` directory. You can specify a different location by editing `parameters.py` in this directory.
 
 !!! Note that some charts may appear formatted incorrectely in the jupyter notebooks window but the saved image file will be correct. !!!
 
