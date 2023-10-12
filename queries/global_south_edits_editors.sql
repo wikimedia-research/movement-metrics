@@ -14,7 +14,7 @@ WITH gs_editors AS (
     GROUP BY user_fingerprint_or_name
 )
 SELECT
-    '{metrics_month_first_day}' AS MONTH,
+    '{metrics_month_first_day}' AS month,
     SUM(edit_count) AS global_south_edits,
     SUM(IF(NOT bot, edit_count, 0)) AS global_south_nonbot_edits,
     SUM(CAST(
