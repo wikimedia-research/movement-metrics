@@ -16,12 +16,10 @@ The calculation code is designed to run on one of the [analytics client servers]
 
 Clone this onto your chosen [analytics client server](https://wikitech.wikimedia.org/wiki/Analytics/Systems/Clients) server. 
 
-Install the dependencies by running both these commands:
+Install the dependencies by running the following command:
 ```
-conda install --file=requirements_conda.txt
-pip install -r requirements_pip.txt
+conda env update -f env.yaml
 ```
-(Two commands are necessary because not all packages are available up-to-date through Conda.)
 
 ## Use
 1. Run the notebook [01-calculate.ipynb](01-calculate.ipynb), which actually calculates the metrics and inserts them into several files in the `metrics` directory.
