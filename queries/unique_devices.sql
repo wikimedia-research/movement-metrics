@@ -7,7 +7,7 @@ WITH a AS (
     WHERE
         year >= 2014
         AND project_family = 'wikipedia'
-) a
+)
 SELECT
     CONCAT(year, '-', LPAD(month, 2, '0'), '-01') AS month,
     SUM(unique_devices) AS unique_devices
