@@ -1,6 +1,6 @@
 from numbers import Number
 from pathlib import Path
-
+from math import floor
 import numpy as np
 import pandas as pd
 
@@ -73,7 +73,6 @@ def calc_rpt(metric, reporting_period):
 
 def format_number(x):
     if isinstance(x, Number) and not pd.isnull(x):
-        x = sig_figs(x, 3)
         M = 1_000_000
         G = 1_000_000_000
         
@@ -91,6 +90,7 @@ def format_number(x):
             return f"{x_in_G} B"
     else:
         return x
+
 
 def format_report(df, metrics_type, reporting_period):
     """
@@ -111,7 +111,7 @@ def format_report(df, metrics_type, reporting_period):
     
     df = (
         df
-        .map(format_number)
+        .applymap(format_number) # changed to work with pandas series
         .fillna("–")
         .style
         .set_table_styles([{
@@ -121,3 +121,39 @@ def format_report(df, metrics_type, reporting_period):
     )
     
     return df
+
+
+
+def calc_rpt(metric, reporting_period):
+    """
+    * metric: a Pandas time series giving the values of a metric
+    * reporting_period: a Pandas period object indicating the
+      period we want to report about.
+      
+    Returns a Pandas series containing measurements of the metric (currently,
+    the value during the reporting period, the year-over-year change, and a naive
+    forecast for the next period.
+    """
+    # Use get rather than direct indexing so that missing data results in NaNs rather
+    # than errors. We want NaNs, not nulls, so that math on them results in NaNs rather
+    # than errors.
+    value = metric.get(reporting_period, np.nan)
+
+    year_ago = subtract_year(reporting_period)
+    year_ago_value = metric.get(year_ago, np.nan)
+    
+    period_after_year_ago = year_ago + 1
+    period_after_year_ago_value = metric.get(period_after_year_ago, np.nan)
+    
+    if year_ago_value != 0:
+        year_over_year_change = (value / year_ago_value) - 1
+        naive_forecast = period_after_year_ago_value / year_ago_value * value
+    else:
+        year_over_year_change = np.nan
+        naive_forecast = np.nan
+    
+    return pd.Series({
+        "value": value,
+        "year_over_year_change": year_over_year_change,
+        "naive_forecast": naive_forecast
+    })
