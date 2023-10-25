@@ -86,8 +86,6 @@ def calculate_mom(df):
     
     # Get the % of underrepresented out of total articles
     df[f'% of new articles {topic}'] =df[f'{minority_label}'] / df[f'{majority_label}']
-    
-    df = df.iloc[:-1] # Remove last row as it always contains partial data of the month the snapshot was taken.
    
     return df
 
