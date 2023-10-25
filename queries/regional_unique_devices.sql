@@ -1,15 +1,14 @@
 WITH country_ud AS (
     SELECT
-        CONCAT(year, '-', LPAD(month, 2, '0')) AS month,
+        day AS month,
         wmf_region AS region,
         uniques_estimate as unique_devices
-    FROM wmf.unique_devices_per_project_family_monthly ud
+    FROM wmf_readership.unique_devices_per_project_family_monthly ud
     LEFT JOIN gdi.country_meta_data cmd 
     ON ud.country_code = cmd.country_code_iso_2
     WHERE
         project_family = 'wikipedia'
-        AND year = {metrics_year}
-        AND month = {metrics_cur_month}
+        AND day = '{metrics_month_first_day}'
 )
 SELECT
     month,
