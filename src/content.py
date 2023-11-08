@@ -3,6 +3,7 @@ import numpy as np
 from pathlib import Path
 from src.utils import load_metric_file
 from src.utils import subtract_year
+import wmfdata
 
 # Define a function to group gender categories
 def map_gender_category(category):
@@ -65,6 +66,7 @@ def calculate_mom(df):
     # Compute the MoM difference only for the last value
     for column in df.columns:
         if 'total' in column:
+<<<<<<< HEAD
             mom_column_name = column.replace('total_', 'MoM_net_new_')
             df.at[df.index[-1], mom_column_name] = df[column].iloc[-1] - df[column].iloc[-2]
     
@@ -73,7 +75,7 @@ def calculate_mom(df):
     df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] = df.loc[df.index[-1], underrepresented_region].sum()
     df.at[df.index[-1], 'all_genders_net_new_articles_sum'] = df.loc[df.index[-1], all_genders].sum()
     df.at[df.index[-1], 'all_regions_net_new_articles_sum'] = df.loc[df.index[-1], all_regions].sum()
-
+=======
     # Calculate and update the last row for the percentage columns
     df.at[df.index[-1], '% of new articles about gender minorities'] = df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] / df.at[df.index[-1], 'all_genders_net_new_articles_sum']
     df.at[df.index[-1], '% of new articles about underrepresented regions'] = df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] / df.at[df.index[-1], 'all_regions_net_new_articles_sum']
