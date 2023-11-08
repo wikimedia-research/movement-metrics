@@ -4,98 +4,85 @@ from pathlib import Path
 from src.utils import load_metric_file
 from src.utils import subtract_year
 
-# Define a function to map categories to the new categories
+# Define a function to group gender categories
 def map_gender_category(category):
     if category in ['male', 'cisgender male']:
-        return 'male'
+        return 'males'
     elif category in ['female', 'cisgender female']:
-        return 'female'
+        return 'females'
     else:
         return 'gender_diverse'
-
-
-def filter_wikis(df, url):
-    df = pd.read_csv(url, parse_dates=["time_bucket"]).set_index('time_bucket').rename_axis('month').to_period(freq='M')    
-    wikis=pd.read_csv('data/wikis')
-    df = df[df['wiki_db'].isin(list(wikis['database_code']))]
     
 
-    return df 
+# Group by 'month' and 'category', then pivot the table
+def group_and_separate_categories(df):
+    grouped = df.groupby(['month', 'category'])['standard_quality_count_value'].sum().reset_index()
+    pivoted = grouped.pivot(index='month', columns='category', values='standard_quality_count_value')
+    pivoted.columns.name = None  # Remove the column name
+    return pivoted
 
-
-def process_quality_data(df, old):
-    if df['category'].isin(['female']).any():
-        df['category']=df['category'].apply(map_gender_category) # apply gender mapping correction for gender dataset
-
+# Clean up function to facilitate combine_first() with csv.
+def process_quality_data(df):
+    # Separate data based on 'content_gap'
+    df_gender = df[df['content_gap'] == 'gender'].copy()
+    df_geo = df[df['content_gap'] == 'geography_wmf_region'].copy()
+   
+    # Apply the gender mapping function to the 'category' column
+    df_gender['category'] = df_gender['category'].apply(map_gender_category)
     
-    df = df.groupby(['month', 'category'])['standard_quality_count_value'].sum().reset_index()
-    df = df.pivot(index='month', columns='category',  values='standard_quality_count_value')
-
+    # Group and separate data for gender and geography
+    df_gender_grouped = group_and_separate_categories(df_gender)
+    df_geo_grouped = group_and_separate_categories(df_geo)
     
-    # Filter and rename the columns
-    rename_dict = {col: f"{col} total" for col in df.columns}
-    df = df.rename(columns=rename_dict)
+    # Concatenate the two dataframes along columns
+    combined_df = pd.concat([df_gender_grouped, df_geo_grouped], axis=1)
 
-    # Identify the latest 'time' in old_geo_data
-
-    latest_time = old.index.max()
-    filtered_rows = df[df.index > latest_time]
-
-    #Append udpated rows
-    updated_df = pd.concat([old, filtered_rows], axis=0, sort=False)
-    
-    
-
-    return updated_df
+    # Rename the columns with a prefix
+    rename_dict = {col: f"total_quality_articles_about_{col}" for col in combined_df.columns}
+    combined_df = combined_df.rename(columns=rename_dict)
+ 
+    return combined_df
 
 
+# Calculate MoM and totals as well proportions
 def calculate_mom(df):
-    df = df.copy()
+    # Define column names using the categories
+    gender_categories = ['gender_diverse', 'males', 'females']
+    region_categories = [
+        'Central & Eastern Europe & Central Asia', 'East, Southeast Asia, & Pacific',
+        'Latin America & Caribbean', 'Middle East & North Africa',
+        'North America', 'Northern & Western Europe', 'South Asia',
+        'Sub-Saharan Africa', 'UNCLASSED'
+    ]
     
-    # Create list underrepresented categories based on which dataframe is being processed.
-    if 'female total' in df.columns:
-        
-        minority_label = 'female + gender_diverse'
-        majority_label = 'all_genders_sum'
-        topic = 'about gender minorities'
-        
-        underrepresented = ["female_MoM_difference", "gender_diverse_MoM_difference"]
+    # Create list of genders and regions using prefixes
+    all_genders = ['MoM_net_new_quality_articles_about_' + gender for gender in gender_categories]
+    all_regions = ['MoM_net_new_quality_articles_about_' + region for region in region_categories]
+    
+    underrepresented_gender = [name for name in all_genders if 'females' in name or 'gender_diverse' in name]
+    underrepresented_region = [name for name in all_regions if name.rsplit('_', 1)[-1] not in ['Central & Eastern Europe & Central Asia', 'North America', 'Northern & Western Europe', 'UNCLASSED']]
 
-    else:
-        minority_label = 'underrepresented_regions_sum'
-        majority_label = 'all_regions_sum'
-        topic = 'about underrepresented regions'
-        
-        underrepresented = ["East, Southeast Asia, & Pacific_MoM_difference", "Latin America & Caribbean_MoM_difference", "Middle East & North Africa_MoM_difference" , "South Asia_MoM_difference", "Sub-Saharan Africa_MoM_difference"]
-        
-    
-    # Compute the MoM difference
+    # Compute the MoM difference only for the last value
     for column in df.columns:
         if 'total' in column:
-            new_column_name = column.replace(' total', '_MoM_difference')
-            df[new_column_name] = df[column].diff()
+            mom_column_name = column.replace('total_', 'MoM_net_new_')
+            df.at[df.index[-1], mom_column_name] = df[column].iloc[-1] - df[column].iloc[-2]
+    
+    # Calculate and update the last row for the sum columns
+    df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] = df.loc[df.index[-1], underrepresented_gender].sum()
+    df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] = df.loc[df.index[-1], underrepresented_region].sum()
+    df.at[df.index[-1], 'all_genders_net_new_articles_sum'] = df.loc[df.index[-1], all_genders].sum()
+    df.at[df.index[-1], 'all_regions_net_new_articles_sum'] = df.loc[df.index[-1], all_regions].sum()
 
-    # Make a list of all the MoM columns
-    mom_total = [column for column in df.columns if 'MoM_difference' in column]
+    # Calculate and update the last row for the percentage columns
+    df.at[df.index[-1], '% of new articles about gender minorities'] = df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] / df.at[df.index[-1], 'all_genders_net_new_articles_sum']
+    df.at[df.index[-1], '% of new articles about underrepresented regions'] = df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] / df.at[df.index[-1], 'all_regions_net_new_articles_sum']
 
-    # Create sum column for MoM difference values across underrepresented categories
-    df[f'{minority_label}'] = df[underrepresented].sum(axis=1)
-    
-    # Create sum column of all MoM difference values across all regions
-    df[f'{majority_label}'] = df[mom_total].sum(axis=1)
-    
-    # Get the % of underrepresented out of total articles
-    df[f'% of new articles {topic}'] =df[f'{minority_label}'] / df[f'{majority_label}']
-    
-    df = df.iloc[:-1] # Remove last row as it always contains partial data of the month the snapshot was taken.
-   
     return df
 
 
-
-
+# Calculate monthly and quarterly reporting for content gap metrics
 def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
-    
     one_year_earlier = subtract_year(reporting_period)
     one_year_earlier_next_month = one_year_earlier + 1
 
@@ -129,9 +116,11 @@ def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
     return result_df
 
 
-
-def add_year(period):
-    freq = period.freqstr
-    year_later = period.to_timestamp() + pd.DateOffset(years=1)
-    return pd.Period(year_later, freq=freq)
-
+def check_for_incomplete_quarterly_data(df):
+    """
+    Checks if the last row of the '% new quality articles about regions that are underrepresented' 
+    column in the DataFrame is NaN and prints an error message if true.
+    """
+    column_name = "% new quality articles about regions that are underrepresented"
+    if pd.isna(df[column_name].iloc[-1]):
+        wmfdata.utils.print_err("The quarterly report is based on incomplete data as the final month's data is not available.")
