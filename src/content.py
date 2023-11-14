@@ -66,7 +66,7 @@ def calculate_mom(df):
     # Compute the MoM difference only for the last value
     for column in df.columns:
         if 'total' in column:
-<<<<<<< HEAD
+
             mom_column_name = column.replace('total_', 'MoM_net_new_')
             df.at[df.index[-1], mom_column_name] = df[column].iloc[-1] - df[column].iloc[-2]
     
@@ -75,7 +75,7 @@ def calculate_mom(df):
     df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] = df.loc[df.index[-1], underrepresented_region].sum()
     df.at[df.index[-1], 'all_genders_net_new_articles_sum'] = df.loc[df.index[-1], all_genders].sum()
     df.at[df.index[-1], 'all_regions_net_new_articles_sum'] = df.loc[df.index[-1], all_regions].sum()
-=======
+
     # Calculate and update the last row for the percentage columns
     df.at[df.index[-1], '% of new articles about gender minorities'] = df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] / df.at[df.index[-1], 'all_genders_net_new_articles_sum']
     df.at[df.index[-1], '% of new articles about underrepresented regions'] = df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] / df.at[df.index[-1], 'all_regions_net_new_articles_sum']
@@ -118,11 +118,21 @@ def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
     return result_df
 
 
-def check_for_incomplete_quarterly_data(df):
+def check_for_incomplete_quarterly_data(df, new_index):
     """
     Checks if the last row of the '% new quality articles about regions that are underrepresented' 
     column in the DataFrame is NaN and prints an error message if true.
     """
-    column_name = "% new quality articles about regions that are underrepresented"
+     # Resample and calculate quarterly averages
+    quarterly_averages = (
+        df
+        .reindex(new_index)
+        .resample("Q-JUN")
+        .aggregate(lambda x: x.mean())
+    )  
+    
+    column_name = '% of new articles about gender minorities'
     if pd.isna(df[column_name].iloc[-1]):
-        wmfdata.utils.print_err("The quarterly report is based on incomplete data as the final month's data is not available.")
+        wmfdata.utils.print_err("This quarterly report is based on incomplete data as some months' data is not available.")
+    
+    return quarterly_averages
