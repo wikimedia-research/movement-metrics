@@ -111,7 +111,7 @@ def format_report(df, metrics_type, reporting_period):
     
     df = (
         df
-        .map(format_number)
+        .applymap(format_number)
         .fillna("–")
         .style
         .set_table_styles([{
