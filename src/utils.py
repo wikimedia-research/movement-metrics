@@ -1,6 +1,6 @@
 from numbers import Number
 from pathlib import Path
-from math import floor
+
 import numpy as np
 import pandas as pd
 
@@ -73,6 +73,7 @@ def calc_rpt(metric, reporting_period):
 
 def format_number(x):
     if isinstance(x, Number) and not pd.isnull(x):
+        x = sig_figs(x, 3)
         M = 1_000_000
         G = 1_000_000_000
         
@@ -90,7 +91,6 @@ def format_number(x):
             return f"{x_in_G} B"
     else:
         return x
-
 
 def format_report(df, metrics_type, reporting_period):
     """
@@ -111,7 +111,7 @@ def format_report(df, metrics_type, reporting_period):
     
     df = (
         df
-        .applymap(format_number) # changed to work with pandas series
+        .applymap(format_number)
         .fillna("–")
         .style
         .set_table_styles([{
@@ -121,4 +121,3 @@ def format_report(df, metrics_type, reporting_period):
     )
     
     return df
-
