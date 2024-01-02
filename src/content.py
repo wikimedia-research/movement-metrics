@@ -104,6 +104,7 @@ def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
     current_ratios = {}
     forecasted_ratios = {}
     
+    
     for minor, total, index_name in zip(minorities, totals, index_names):
         current_ratios[index_name] = df.at[reporting_period, minor] / df.at[reporting_period, total]
         forecasted_ratios[index_name] = forecast_data[f"{minor}_forecast"] / forecast_data[f"{total}_forecast"]
@@ -118,7 +119,7 @@ def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
     return result_df
 
 
-def check_for_incomplete_quarterly_data(df, new_index):
+def check_for_incomplete_quarterly_data(df, new_index, quarterly):
     """
     Checks if the last row of the '% new quality articles about regions that are underrepresented' 
     column in the DataFrame is NaN and prints an error message if true.
@@ -132,7 +133,7 @@ def check_for_incomplete_quarterly_data(df, new_index):
     )  
     
     column_name = '% of new articles about gender minorities'
-    if pd.isna(df[column_name].iloc[-1]):
+    if pd.isna(quarterly[column_name].iloc[-1]):
         wmfdata.utils.print_err("This quarterly report is based on incomplete data as some months' data is not available.")
     
     return quarterly_averages
