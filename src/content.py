@@ -137,3 +137,12 @@ def check_for_incomplete_quarterly_data(df, new_index, quarterly):
         wmfdata.utils.print_err("This quarterly report is based on incomplete data as some months' data is not available.")
     
     return quarterly_averages
+
+
+# Saves quarterly metrics in a tsv file.
+def generate_quarterly_metric(quarterly_averages, core_metrics, index_names, quarterly_averages_content_gap):
+
+    quarterly_metrics = quarterly_averages[core_metrics].join(quarterly_averages_content_gap[index_names], how='left')
+    quarterly_metrics.to_csv('metrics/quarterly_metrics/quarterly_metrics.tsv', sep = '\t')
+
+
