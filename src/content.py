@@ -77,8 +77,8 @@ def calculate_mom(df):
     df.at[df.index[-1], 'all_regions_net_new_articles_sum'] = df.loc[df.index[-1], all_regions].sum()
 
     # Calculate and update the last row for the percentage columns
-    df.at[df.index[-1], '% of new articles about gender minorities'] = df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] / df.at[df.index[-1], 'all_genders_net_new_articles_sum']
-    df.at[df.index[-1], '% of new articles about underrepresented regions'] = df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] / df.at[df.index[-1], 'all_regions_net_new_articles_sum']
+    df.at[df.index[-1], '%_of_new_articles_about_gender_minorities'] = df.at[df.index[-1], 'gender_minorities_net_new_articles_sum'] / df.at[df.index[-1], 'all_genders_net_new_articles_sum']
+    df.at[df.index[-1], '%_of_new_articles_about_underrepresented_regions'] = df.at[df.index[-1], 'underrepresented_regions_net_new_articles_sum'] / df.at[df.index[-1], 'all_regions_net_new_articles_sum']
 
     return df
 
@@ -111,7 +111,7 @@ def calc_content_rpt(df, reporting_period, minorities, totals, index_names):
 
     # Convert the dictionaries to DataFrames
     current_df = pd.DataFrame(current_ratios, index=["value"])
-    forecast_df = pd.DataFrame(forecasted_ratios, index=["naive forecast"])
+    forecast_df = pd.DataFrame(forecasted_ratios, index=["naive_forecast"])
 
     # Concatenate the DataFrames vertically
     result_df = pd.concat([current_df, forecast_df])
@@ -132,8 +132,11 @@ def check_for_incomplete_quarterly_data(df, new_index, quarterly):
         .aggregate(lambda x: x.mean())
     )  
     
-    column_name = '% of new articles about gender minorities'
+    column_name = '%_of_new_articles_about_gender_minorities'
     if pd.isna(quarterly[column_name].iloc[-1]):
         wmfdata.utils.print_err("This quarterly report is based on incomplete data as some months' data is not available.")
     
     return quarterly_averages
+
+
+
