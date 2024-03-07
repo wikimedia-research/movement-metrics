@@ -37,7 +37,6 @@ FROM
     aggregated_edits
 WHERE
     content_edits >= 5
-    AND global_registration_month  = '{metrics_month_first_day}'
 GROUP BY month
 
 
